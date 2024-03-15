@@ -1,6 +1,7 @@
 import { Badge } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -9,6 +10,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import MiniCart from "./MiniCart";
+import FavoriteProducts from "./FavoriteProducts";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/callsAPI";
 import MiniCartImage from "./MiniCartImage";
@@ -219,6 +221,9 @@ const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
   margin-left: 25px;
+  display: flex; // Add display flex
+  align-items: center; // Align items vertically
+  width: 100px;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
@@ -272,6 +277,7 @@ const NavbarUser = styled.div`
   display: flex;
   justify-items: center;
   position: relative;
+  margin: 0 -100px;
   &:hover ${NavbarUserMenu} {
     display: block;
   }
@@ -576,6 +582,11 @@ const Navbar = () => {
               </Link>
             </>
           )}
+
+          <MenuItem>
+            <MiniCart></MiniCart>
+            <FavoriteProducts></FavoriteProducts>
+          </MenuItem>
         </Right>
         {/* <Link 
                         style={{ textDecoration: "none", color: "black" }}
@@ -617,9 +628,6 @@ const Navbar = () => {
                         </MiniCart>
                     </MenuItem>
                 </Right> */}
-        <MenuItem>
-          <MiniCart></MiniCart>
-        </MenuItem>
       </Wrapper>
     </Container>
   );
