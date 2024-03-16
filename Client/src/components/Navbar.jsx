@@ -241,7 +241,8 @@ const NavbarUserName = styled.span`
 `;
 const NavbarUserMenu = styled.ul`
   position: absolute;
-  z-index: 1;
+  z-index: 100000;
+  border-radius: 10px;
   padding-left: 0;
   top: calc(100% + 6px);
   right: 0;

@@ -9,20 +9,25 @@ import SliderHome from "../components/SliderHome";
 import SliderHomePage from "../components/SlideHomePage";
 import CategoriesSlide from "../components/Category_Slide";
 import CustomButtonWithDot from "../components/Button";
+import CustomBtn from "../components/ButtonTwo";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const Home = () => {
   return (
     <div>
-      <Navbar />
-      <Announcement />
-      {/* <SliderHome /> */}
-      <SliderHomePage />
-      <CategoriesSlide />
-      {/* <Categories /> */}
-      <Products />
-      <Newsletter />
-      <Footer />
-      <CustomButtonWithDot></CustomButtonWithDot>
+      <Scrollbars style={{ width: "100%", height: "100vh" }}>
+        <Navbar />
+        <Announcement />
+        {/* <SliderHome /> */}
+        <SliderHomePage />
+        <CategoriesSlide />
+        {/* <Categories /> */}
+        <Products />
+        <Newsletter />
+        <Footer />
+        <CustomButtonWithDot />
+        <CustomBtn />
+      </Scrollbars>
     </div>
   );
 };

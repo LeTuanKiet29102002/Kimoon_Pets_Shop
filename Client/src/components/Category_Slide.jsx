@@ -8,7 +8,6 @@ import CustomButtonWithDot from "./Button";
 import axios from "axios";
 import "./Category_Slide.css";
 
-
 const CategoriesSlide = () => {
   const [danhmuc, setDanhMuc] = useState([]);
 
@@ -60,7 +59,12 @@ const CategoriesSlide = () => {
             style={{ backgroundImage: `url(${item.hinhanhdanhmuc})` }}
           >
             <div className="item-desc ">
-              <h3>{item.tendanhmuc}</h3>
+              <div className="item-desc-head">
+                <h3>{item.tendanhmuc}</h3>
+                <Link to={`/products/${item.madanhmuc}`}>
+                  <CustomButtonWithDot />
+                </Link>
+              </div>
               <p>{item.tieudedanhmuc}</p>
             </div>
           </div>

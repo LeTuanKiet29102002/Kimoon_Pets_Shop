@@ -24,6 +24,7 @@ const CustomButton = styled.button`
   border: none;
   border-radius: 3px;
   height: 40px;
+  padding: 0 16px;
   margin-bottom: 16px;
   background: rgb(251, 33, 117);
   background: linear-gradient(
@@ -69,7 +70,7 @@ const Dot = styled.div`
 const CustomButtonWithDot = () => {
   return (
     <CustomButton>
-      Read More 11
+      See More
       <Dot />
     </CustomButton>
   );
