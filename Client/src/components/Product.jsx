@@ -69,7 +69,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 //     &:hover {
 //         background-color: #e9f5f5;
-//         transform: scale(1.1);
+//         transform: scale(1.1);DetailPric
 //     }
 // `
 
@@ -111,9 +111,18 @@ const Container = styled.div`
   justify-content: center;
   background-color: #f5fbfd;
   position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
 
   &:hover ${Info} {
     opacity: 1;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
   }
   &:hover ${DetailPrice} {
     top: -25px;
@@ -129,10 +138,13 @@ const Circle = styled.div`
 `;
 
 const Image = styled.img`
+  position: absolute;
+  top: 0;
   width: 100%;
-  height: 75%;
+  height: 87%;
   object-fit: cover;
   z-index: 2;
+  border-top-left-radius: 5px;
 `;
 
 const Icon = styled.div`
@@ -181,6 +193,7 @@ const DetailLike = styled.span`
   top: -295px;
   left: -4px;
   color: #fe6433;
+  overflow: initial;
   z-index: 2;
   background-color: currentColor;
   font-size: 1.2rem;
@@ -229,6 +242,7 @@ const Percent = styled.span`
   position: relative;
   top: 2px;
   right: -7px;
+  border-top-right-radius: 5px;
 `;
 const Label = styled.span`
   color: white;
@@ -236,8 +250,10 @@ const Label = styled.span`
   line-height: 0.9rem;
   position: relative;
   top: 20px;
-  right: 27px;
-  font-weight: 600;
+  right: 32px;
+  font-weight: 500;
+  border-top-right-radius: 5px;
+  overflow: hidden;
 `;
 
 const Product = ({ item }) => {
@@ -304,3 +320,44 @@ const Product = ({ item }) => {
 };
 
 export default Product;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

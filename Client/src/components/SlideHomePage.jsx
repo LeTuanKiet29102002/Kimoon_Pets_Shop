@@ -74,11 +74,11 @@ const Heading = styled.div`
 `;
 
 const Subhead = styled.div`
-  font-size: 1rem;
+  font-size: 18px;
   font-weight: 300;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: white;
-  letter-spacing: 4px;
+  letter-spacing: 1.6px;
   word-spacing: 0.1rem;
   margin-bottom: 2.5rem;
   display: block;

@@ -5,13 +5,16 @@ const con = require("../config/database.config");
 var nodemailer = require("nodemailer");
 var transporter = nodemailer.createTransport({
   service: "gmail",
+  port: 3000,
+  secure: true,
   // auth: {
   //   user: 'truonghoanglong588@gmail.com',
   //   pass: 'grkaaxhoeradbtop'
   // }
   auth: {
     user: "letuankiet29102k2@gmail.com",
-    pass: "grkaaxhoeradbtop",
+    // pass: "grkaaxhoeradbtop",
+    pass: "gxlz sdie qgpn byug",
   },
 });
 
@@ -151,9 +154,11 @@ router.post("/datMua", async (req, res) => {
               html: noidung,
             };
 
+            console.log("check email:", mailOptions.to);
+
             transporter.sendMail(mailOptions, function (error, info) {
               if (error) {
-                console.log(error);
+                console.log("check loi email:", error);
               } else {
                 console.log("Email sent: " + info.response);
               }

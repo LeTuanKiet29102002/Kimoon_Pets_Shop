@@ -44,7 +44,7 @@ const Input = styled.input`
 
   &:focus {
     transform: translateY(-3px) rotateX(5deg) scale(1.05);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -60,7 +60,7 @@ const SearchIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -196,6 +196,7 @@ const Logo = styled.h1`
   ${mobile({ fontSize: "24px" })}
   margin:0 20px;
   text-align: center;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
 `;
 const LogoIMG = styled.img`
   width: 100px;
@@ -252,7 +253,7 @@ const NavbarUserMenu = styled.ul`
   list-style: none;
   // box-shadow: 0 1px 2px #e0e0e0;
   display: none;
-  box-shadow: 0 1px 3rem 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3rem 0 rgba(0, 0, 0, 0.3);
   animation: fadeIn ease-in 0.2s;
   &::before {
     content: "";

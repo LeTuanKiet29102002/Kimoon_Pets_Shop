@@ -32,7 +32,8 @@ const MainPage = styled.div`
   //     ),
   //     url("https://i.pinimg.com/originals/6c/63/82/6c638291a66ddc93b86bf4f43c337701.jpg")
   //     center;
-  background-image: url("https://png.pngtree.com/background/20230616/original/pngtree-the-pet-at-the-beach-picture-image_3632925.jpg");
+  background-image: url("https://www.humanedecisions.com/wp-content/uploads/2020/03/Cats-and-Dogs-Pixabay.jpg");
+  /* background-image: url("https://png.pngtree.com/background/20230616/original/pngtree-the-pet-at-the-beach-picture-image_3632925.jpg"); */
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -34,7 +34,7 @@ const CategoriesSlide = () => {
         autoWidth: true,
         loop: true,
         autoplay: true,
-        autoplayTimeout: 5000,
+        autoplayTimeout: 3000,
         autoplayHoverPause: true,
         // Adjust this value as per your needs
       });

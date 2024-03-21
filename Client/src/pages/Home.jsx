@@ -10,12 +10,12 @@ import SliderHomePage from "../components/SlideHomePage";
 import CategoriesSlide from "../components/Category_Slide";
 import CustomButtonWithDot from "../components/Button";
 import CustomBtn from "../components/ButtonTwo";
-import { Scrollbars } from "react-custom-scrollbars";
+// import { Scrollbars } from "react-custom-scrollbars";
 
 const Home = () => {
   return (
     <div>
-      <Scrollbars style={{ width: "100%", height: "100vh" }}>
+      {/* <Scrollbars style={{ width: "100%", height: "100vh" }}> */}
         <Navbar />
         <Announcement />
         {/* <SliderHome /> */}
@@ -27,7 +27,7 @@ const Home = () => {
         <Footer />
         <CustomButtonWithDot />
         <CustomBtn />
-      </Scrollbars>
+      {/* </Scrollbars> */}
     </div>
   );
 };
