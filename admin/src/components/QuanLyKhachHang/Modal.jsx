@@ -190,6 +190,7 @@ const ButtonContainer = styled.div`
         width: 95%;
         height: 95%;
         z-index: -1;
+        border-radius: 5px;
     }
 `
 
@@ -200,6 +201,7 @@ const ButtonClick = styled.button`
     color: white;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 5px;
     &:hover {
         background-color: #fe6430;
     }

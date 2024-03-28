@@ -12,7 +12,7 @@ const Container = styled.div`
   padding: 30px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
 
 //Custom Filter product
@@ -165,28 +165,22 @@ const Products = ({ madanhmuc, filters, sort }) => {
             </Select>
           </Filter>
         </FilterContainer> */}
-        {madanhmuc
-          ? displayProducts
-          : products.slice(0, 20).map((item) => (
-              <Link to={`/product/${item.mathucung}`}>
-                <Product item={item} key={item.mathucung} />
-              </Link>
-            ))}
+        {madanhmuc ? displayProducts : <></>}
       </Container>
       {madanhmuc ? (
-      <ReactPaginate
-        previousLabel={"PREVIOUS"}
-        nextLabel={"NEXT"}
-        pageCount={pageCount}
-        onPageChange={changePage}
-        containerClassName={"paginationBttns"}
-        previousLinkClassName={"previousBttn"}
-        nextLinkClassName={"nextBttn"}
-        disabledClassName={"paginationDisabled"}
-        activeClassName={"paginationActive"}
-        nextClassName={"nextClassName"}
-        pageLinkClassName={"pageLinkClassName"}
-      />
+        <ReactPaginate
+          previousLabel={"PREVIOUS"}
+          nextLabel={"NEXT"}
+          pageCount={pageCount}
+          onPageChange={changePage}
+          containerClassName={"paginationBttns"}
+          previousLinkClassName={"previousBttn"}
+          nextLinkClassName={"nextBttn"}
+          disabledClassName={"paginationDisabled"}
+          activeClassName={"paginationActive"}
+          nextClassName={"nextClassName"}
+          pageLinkClassName={"pageLinkClassName"}
+        />
       ) : (
         <></>
       )}

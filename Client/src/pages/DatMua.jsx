@@ -165,6 +165,8 @@ const ButtonContainer = styled.div`
     float: right;
     margin: 10px 22px 22px 0;
     display: flex;
+    border-radius: 5px;
+
     &::after {
         content: "";
         border: 2px solid black;
@@ -175,6 +177,8 @@ const ButtonContainer = styled.div`
         width: 150px;
         height: 100%;
         z-index: 5;
+        border-radius: 5px;
+
     }
 `
 
@@ -187,6 +191,8 @@ const Button = styled.button`
     cursor: pointer;
     font-weight: 500;
     z-index: 10;
+    border-radius: 5px;
+
     &:hover {
         background-color: #fe6430;
     }
@@ -203,7 +209,7 @@ const DatMua = () => {
     const navigate = useNavigate();
 
     // ===== TOAST =====
-    const [dataToast, setDataToast] = useState({ message: "alo alo", type: "success" });
+    const [dataToast, setDataToast] = useState({ message: "aloeeee alo", type: "success" });
     const toastRef = useRef(null);  // useRef có thể gọi các hàm bên trong của Toast
     // bằng các dom event, javascript, ...
 

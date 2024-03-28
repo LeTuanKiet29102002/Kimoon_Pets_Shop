@@ -43,6 +43,8 @@ const ButtonContainer = styled.div`
         width: 300px;
         height: 100%;
         z-index: 5;
+        border-radius: 5px;
+
     }
 `
 
@@ -55,6 +57,7 @@ const Button = styled.button`
     cursor: pointer;
     font-weight: 500;
     z-index: 10;
+    border-radius: 5px;
     &:hover {
         background-color: #fe6430;
     }

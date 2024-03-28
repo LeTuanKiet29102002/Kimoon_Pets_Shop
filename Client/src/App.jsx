@@ -20,11 +20,36 @@ import DonMua from "./pages/DonMua";
 import LoginRegister from "./pages/LoginRegister";
 import DatMua from "./pages/DatMua";
 import ScrollToTop from "react-scroll-to-top";
+import NotFound from "./components/NotFound";
+import { AuthContextProvider } from "./context/AuthContext.js";
+import Protected from "./components/Protected.jsx";
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
   const cart = useSelector((state) => state.cart.products);
+
+  // const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+
+  // // Listen to the Firebase Auth state and set the local state.
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase
+  //     .auth()
+  //     .onAuthStateChanged(async (user) => {
+  //       if (!user) {
+  //         console.log('User is not logged in!!!');
+  //         return;
+  //       }
+  //       console.log("Logged in user :", user.displayName);
+
+  //       const token = await user.getIdToken();
+  //       console.log("Logged in user token: ", token);
+  //       setIsSignedIn(!!user);
+  //     });
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
+
   return (
+    <AuthContextProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -57,6 +82,8 @@ const App = () => {
             path="/donmua"
             element={user ? <DonMua /> : <Navigate to="/" />}
           />
+          {/* <Route path="/OTPInput" element={<ModalRePassWord />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <ScrollToTop
           smooth
@@ -69,6 +96,7 @@ const App = () => {
           }}
         />
       </Router>
+    </AuthContextProvider>
   );
 };
 

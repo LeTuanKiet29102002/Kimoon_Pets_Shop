@@ -16,6 +16,7 @@ import { logout } from "../redux/callsAPI";
 import MiniCartImage from "./MiniCartImage";
 import axios from "axios";
 import LogoShop from "../img/LogoKimoonhh.gif";
+import { UserAuth } from "../context/AuthContext";
 
 //center
 const SearchContainer = styled.div`
@@ -367,12 +368,26 @@ const ItemDescription = styled.span`
 `;
 
 const Navbar = () => {
+  //use context
+  const { userEmail, logOut } = UserAuth();
+  console.log("djbckhsdcvhdsvccheck", userEmail);
+
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
 
+  const combinedUser = {
+    ...userEmail,
+    ...user,
+  };
+
   // Gọi hàm đăng xuất - callAPI.js-redux
-  const handleDangXuat = () => {
+  const handleDangXuat = async () => {
     logout(dispatch, user);
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Tìm kiếm
@@ -534,17 +549,17 @@ const Navbar = () => {
           </Lannguage>
         </Center>
         <Right>
-          {user ? (
+          {userEmail || user ? (
             <MenuItem>
               <NavbarUser>
                 <NavbarUserImage
                   src={
-                    user.hinhdaidien
-                      ? user.hinhdaidien
+                    combinedUser.hinhdaidien
+                      ? combinedUser.hinhdaidien
                       : "https://avatars.githubusercontent.com/u/96277352?s=400&u=cad895ff2f6ae2bd57b90ad02c6077d89bc9d55d&v=4"
                   }
                 ></NavbarUserImage>
-                <NavbarUserName>{user.hotennguoimua}</NavbarUserName>
+                <NavbarUserName>{combinedUser.hotennguoimua}</NavbarUserName>
                 <NavbarUserMenu>
                   <NavbarUserItem>
                     <Link

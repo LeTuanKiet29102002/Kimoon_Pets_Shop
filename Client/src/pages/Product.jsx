@@ -129,6 +129,8 @@ const ButtonContainer = styled.div`
         width: 100%;
         height: 100%;
         z-index: -1;
+        border-radius: 5px;
+        
     }
 `
 
@@ -138,8 +140,9 @@ const Button = styled.button`
     background-color: white;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 5px;
     &:hover {
-        background-color: #f8f4f4;
+        background-color: #fe6430;
     }
     &:active {
         background-color: #f8f4f4;
@@ -226,7 +229,7 @@ const Product = () => {
     }
 
     // ===== TOAST =====
-    const [dataToast, setDataToast] = useState({ message: "alo alo", type: "success" });
+    const [dataToast, setDataToast] = useState({ message: "alo00000 alo", type: "success" });
     const toastRef = useRef(null);  // useRef có thể gọi các hàm bên trong của Toast
     // bằng các dom event, javascript, ...
 

@@ -69,6 +69,8 @@ const ChiTietWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 100vh; /* giới hạn chiều cao của modal */
+    overflow: auto; /* hiển thị thanh cuộn khi nội dung vượt quá kích thước */
 
     position: relative;
     z-index: 10;
@@ -186,6 +188,8 @@ const ButtonContainer = styled.div`
         width: 95%;
         height: 95%;
         z-index: -1;
+        border-radius: 5px;
+
     }
 `
 
@@ -196,6 +200,8 @@ const ButtonClick = styled.button`
     color: white;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 5px;
+    
     &:hover {
         background-color: #fe6430;
     }

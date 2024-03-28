@@ -148,6 +148,7 @@ const ButtonContainer = styled.div`
         width: 95%;
         height: 95%;
         z-index: -1;
+        border-radius: 5px;
     }
 `
 
@@ -158,6 +159,7 @@ const ButtonClick = styled.button`
     color: white;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 5px;
     &:hover {
         background-color: #fe6430;
     }
@@ -165,6 +167,7 @@ const ButtonClick = styled.button`
         background-color: #333;
         transform: translate(5px, 5px);
         transition: transform 0.25s;
+
     }
 `
 

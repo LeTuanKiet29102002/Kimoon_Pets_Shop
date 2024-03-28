@@ -4,9 +4,11 @@ import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import styled from "styled-components";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, register } from "../redux/callsAPI";
+import { UserAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = styled.div`
   width: 95%;
@@ -400,11 +402,26 @@ const LoginRegister = () => {
     setIsSignInGmail(false);
     setIsSignUp(true);
   };
-  const handleDangNhapGmail = () => {
-    setIsSignIn(false);
-    setIsSignInGmail(true);
-    setIsSignUp(false);
+
+  const { googleSignIn, userEmail } = UserAuth();
+  const navigate = useNavigate()
+  const handleDangNhapGmail = async () => {
+    // setIsSignIn(false);
+    // setIsSignInGmail(true);
+    // setIsSignUp(false);
+    // alert("hello gmail");
+    try {
+      await googleSignIn();
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(()=>{
+    if(userEmail != null){
+      navigate('/');
+    }
+  },[userEmail])
 
   // --Xử lý--
   // Đăng nhập

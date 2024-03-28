@@ -10,24 +10,26 @@ import SliderHomePage from "../components/SlideHomePage";
 import CategoriesSlide from "../components/Category_Slide";
 import CustomButtonWithDot from "../components/Button";
 import CustomBtn from "../components/ButtonTwo";
-// import { Scrollbars } from "react-custom-scrollbars";
+import AllProducts from "../components/AllProducts";
+import MultipleSelectCheckmarks from "../components/dropdowns";
+
 
 const Home = () => {
   return (
     <div>
-      {/* <Scrollbars style={{ width: "100%", height: "100vh" }}> */}
         <Navbar />
         <Announcement />
         {/* <SliderHome /> */}
         <SliderHomePage />
         <CategoriesSlide />
         {/* <Categories /> */}
-        <Products />
+        {/* <Products /> */}
+        <AllProducts/>
         <Newsletter />
         <Footer />
         <CustomButtonWithDot />
         <CustomBtn />
-      {/* </Scrollbars> */}
+        <MultipleSelectCheckmarks/>
     </div>
   );
 };

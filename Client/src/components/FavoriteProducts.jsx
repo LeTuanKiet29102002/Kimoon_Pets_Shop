@@ -181,6 +181,8 @@ const ButtonContainer = styled.div`
     width: 100%;
     height: 100%;
     z-index: -1;
+    border-radius: 5px;
+
   }
 `;
 
@@ -191,6 +193,8 @@ const Button = styled.button`
   color: white;
   cursor: pointer;
   font-weight: 500;
+  border-radius: 5px;
+
   &:hover {
     background-color: #fe6430;
   }

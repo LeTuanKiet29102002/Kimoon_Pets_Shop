@@ -195,6 +195,8 @@ const ButtonContainer = styled.div`
         width: 95%;
         height: 95%;
         z-index: -1;
+        border-radius: 5px;
+
     }
 `
 
@@ -205,6 +207,8 @@ const ButtonClick = styled.button`
     color: white;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 5px;
+
     &:hover {
         background-color: #fe6430;
     }
@@ -924,7 +928,7 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
                         <ChiTietWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Chi tiết Nhân viên</H1>
+                            <H1>Chi tiết nhân viên</H1>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px" }}>
                                     <ModalChiTietItem style={{ flex: "1" }}>
