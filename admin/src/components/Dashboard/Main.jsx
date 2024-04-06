@@ -499,7 +499,7 @@ const Main = () => {
       </Insights>
       {/* END OF INSIGHTS */}
       <RecentOrders>
-        <H2>Thống kê Doanh thu từng danh mục thú cưng theo tháng (2022)</H2>
+        <H2>Thống kê Doanh thu từng danh mục thú cưng theo tháng (2024)</H2>
         <Line
           data={{
             labels: [

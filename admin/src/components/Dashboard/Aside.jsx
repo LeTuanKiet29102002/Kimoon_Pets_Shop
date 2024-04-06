@@ -8,13 +8,14 @@ import {
   LogoutOutlined,
   CategoryOutlined,
 } from "@mui/icons-material";
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import styled from "styled-components";
 import { useState } from "react";
 import "../../css/main.css";
 import { Link } from "react-router-dom";
 import { logout } from "../../redux/callsAPI";
 import { useDispatch, useSelector } from "react-redux";
-import LogoKimoon from "../../image/LogoKimoonhh.gif";
+import LogoKimoon from "../../assets/image/LogoKimoon.gif";
 
 const Container = styled.aside`
   height: 100vh;
@@ -289,6 +290,18 @@ const Aside = (props) => {
                   />
                 </IconSpan>
                 <H3>Quản lý Đơn hàng</H3>
+              </LinkStyled>
+              <LinkStyled
+                to={"/quanlydonhang"}
+                className={isDonHangActive ? "active" : null}
+                onClick={handleClickDonHang}
+              >
+                <IconSpan>
+                  <ContentPasteGoIcon
+                    style={{ fontSize: "1.6rem", transition: "all 300ms ease" }}
+                  />
+                </IconSpan>
+                <H3>Quản lý Trạng thái thú</H3>
               </LinkStyled>
             </>
           ) : admin.machucvu === 4 ? (

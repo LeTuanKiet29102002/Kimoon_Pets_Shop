@@ -1,4 +1,5 @@
 import Product from "./pages/Product";
+import PetsIcon from "@mui/icons-material/Pets";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import Register from "./pages/Register";
@@ -87,13 +88,14 @@ const App = () => {
         </Routes>
         <ScrollToTop
           smooth
-          color="#ff6f00"
           style={{
             height: "48px",
             width: "48px",
             borderRadius: "50%",
             zIndex: "10000000",
           }}
+          
+          component={<PetsIcon  style={{color:"#ff6f00"}}/>}
         />
       </Router>
     </AuthContextProvider>

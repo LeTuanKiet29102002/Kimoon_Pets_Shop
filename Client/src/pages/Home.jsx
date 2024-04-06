@@ -12,6 +12,7 @@ import CustomButtonWithDot from "../components/Button";
 import CustomBtn from "../components/ButtonTwo";
 import AllProducts from "../components/AllProducts";
 import MultipleSelectCheckmarks from "../components/dropdowns";
+// import FindLostPets from "../components/FindLostPets";
 
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
         {/* <Categories /> */}
         {/* <Products /> */}
         <AllProducts/>
+        {/* <FindLostPets/> */}
         <Newsletter />
         <Footer />
         <CustomButtonWithDot />

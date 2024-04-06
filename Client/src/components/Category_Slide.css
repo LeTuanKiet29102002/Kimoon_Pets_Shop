@@ -75,6 +75,8 @@
         .line-title {
             position: relative;
             width: 200px;
+            padding: 0 30px;
+            margin: auto;
         }
 
         .line-title::before,

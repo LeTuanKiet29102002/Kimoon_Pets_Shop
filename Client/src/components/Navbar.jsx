@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/callsAPI";
 import MiniCartImage from "./MiniCartImage";
 import axios from "axios";
-import LogoShop from "../img/LogoKimoonhh.gif";
+import LogoShop from "../assets/img/LogoKimoonhh.gif";
 import { UserAuth } from "../context/AuthContext";
 
 //center
