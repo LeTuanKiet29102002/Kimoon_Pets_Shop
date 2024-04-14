@@ -278,10 +278,11 @@ const ImgDanhMuc = styled.img`
     object-fit: contain;
 `
 
-const ThuCungMain = ({ reRenderData, setReRenderData }) => {
+const ThuCungMain = ({ reRenderData, setReRenderData}) => {
+
     // Lấy admin từ Redux
     const admin = useSelector((state) => state.admin.currentAdmin);
-    
+
     const InputRef = useRef(null);
     const [isSearch, setIsSearch] = useState(false);
     const [timkiem, setTimKiem] = useState("");
@@ -367,7 +368,13 @@ const ThuCungMain = ({ reRenderData, setReRenderData }) => {
                     <Td>{thucungitem.tendanhmuc}</Td>
                     <Td>{thucungitem.tenthucung}</Td>
                     <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <ImgDanhMuc src={thucungitem.hinhanh} />
+                        <ImgDanhMuc src={thucungitem.hinhanh} style={{
+                            borderRadius: "20%",
+                            width: "36px",
+                            height: "36px",
+                            objectFit: "cover",
+                            margin: "5px",
+                        }} />
                     </Td>
                     <Td>{thucungitem.soluong}</Td>
                     <Td>{thucungitem.giaban ? format_money((thucungitem.giaban).toString()) : null}</Td>
@@ -484,7 +491,13 @@ const ThuCungMain = ({ reRenderData, setReRenderData }) => {
                                         <Td>{thucungitem.tendanhmuc}</Td>
                                         <Td>{thucungitem.tenthucung}</Td>
                                         <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                            <ImgDanhMuc src={thucungitem.hinhanh} />
+                                            <ImgDanhMuc src={thucungitem.hinhanh} style={{
+                                                borderRadius: "20%",
+                                                width: "36px",
+                                                height: "36px",
+                                                objectFit: "cover",
+                                                margin: "5px",
+                                            }} />
                                         </Td>
                                         <Td>{thucungitem.soluong}</Td>
                                         <Td>{thucungitem.giaban}</Td>
@@ -554,6 +567,8 @@ const ThuCungMain = ({ reRenderData, setReRenderData }) => {
                     nextClassName={"nextClassName"}
                     pageLinkClassName={"pageLinkClassName"}
                     forcePage={pageNumber}
+                    pageRangeDisplayed={2}
+                    marginPagesDisplayed={2}
                 />
 
             </RecentOrders>

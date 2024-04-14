@@ -8,7 +8,10 @@
   <link rel="icon" type="image/png" href="./favicon.ico">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <style>
     * {
       margin: 0;
@@ -21,6 +24,22 @@
 </head>
 
 <body>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger intent="WELCOME" chat-title="KimoonPets_aichat" agent-id="c185d80a-669e-4243-83c3-83165e85633e"
+    language-code="en" chat-icon="./img/chatbubble-ellipses-outline.svg">
+    <style>
+      df-messenger {
+        --df-messenger-bot-message: #fff;
+        --df-messenger-button-titlebar-color: #fe6433;
+        --df-messenger-button-titlebar-color: #fe6433;
+        --df-messenger-chat-background-color: #fafafa;
+        --df-messenger-font-color: #000;
+        --df-messenger-send-icon: #fe6433;
+        --df-messenger-user-message: #fe6433;
+        --df-messenger-chip-border-color: #fe6433;
+      }
+    </style>
+  </df-messenger>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root">
   </div>

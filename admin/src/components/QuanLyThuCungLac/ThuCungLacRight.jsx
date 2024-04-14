@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Modal from "./Modal";
 import Toast from "./Toast";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   margin-top: 1.4rem;
@@ -76,7 +77,10 @@ const ItemRight = styled.div`
   width: 100%;
 `;
 
-const NhanVienRight = ({ reRenderData, setReRenderData }) => {
+const ThuCungLacRight = ({ reRenderData, setReRenderData }) => {
+  // Lấy admin từ Redux
+  const admin = useSelector((state) => state.admin.currentAdmin);
+
   // Thứ ngày tháng
   let today = new Date();
   let todayday = today.getDay();
@@ -117,21 +121,21 @@ const NhanVienRight = ({ reRenderData, setReRenderData }) => {
     today.getFullYear();
 
   // Số lượng thú cưng
-  const [soLuongNhanVien, setSoLuongNhanVien] = useState();
+  const [soLuongThuCungLac, setSoLuongThuCungLac] = useState();
   useEffect(() => {
-    const getSoLuongNhanVien = async () => {
+    const getSoLuongThuCungLac = async () => {
       try {
-        const soluongnhanvienres = await axios.post(
-          "http://localhost:3001/api/user/getSoLuongNhanVien"
+        const soluongthucunglacres = await axios.get(
+          "http://localhost:3001/api/lostpets/getSoLuongThuCungLac"
         );
-        setSoLuongNhanVien(soluongnhanvienres.data[0].soluongnhanvien);
+        setSoLuongThuCungLac(soluongthucunglacres.data[0].soluongthucunglac);
       } catch (err) {
         console.log("Lỗi: ", err);
       }
     };
-    getSoLuongNhanVien();
+    getSoLuongThuCungLac();
   }, [reRenderData]);
-  console.log("Số lượng nhân viên: ", soLuongNhanVien);
+  console.log("Số lượng thú cưng lạc: ", soLuongThuCungLac);
 
   // ===== Modal =====
   const [showModal, setShowModal] = useState(false);
@@ -160,28 +164,41 @@ const NhanVienRight = ({ reRenderData, setReRenderData }) => {
     <Container>
       <RightTop />
       <SalesAnalytics>
-        <H2>Staff Analytics</H2>
+        <H2>Lost Pets Analytics</H2>
         <Item className="online">
           <Icon>
             <CategoryOutlined />
           </Icon>
           <ItemRight>
             <Info>
-              <h3>SỐ LƯỢNG NHÂN VIÊN</h3>
+              <h3>SỐ LƯỢNG THÚ CƯNG LẠC</h3>
               <small className="text-muted">{ngaythangnam}</small>
             </Info>
             <h3 className="success" style={{ fontSize: "1.2rem" }}>
-              {soLuongNhanVien}
+              {soLuongThuCungLac}
             </h3>
           </ItemRight>
         </Item>
-        <Item
-          className="add-product"
-          onClick={() => openModal({ type: "themnhanvien" })}
-        >
-          <Add />
-          <h3>Thêm nhân viên</h3>
-        </Item>
+        {admin ? (
+          // Chỉ admin với nv bán hàng mới được thêm thú cưng
+          admin.machucvu === 5 || admin.machucvu === 1 ? (
+            <>
+              <Item
+                className="add-product"
+                onClick={() => openModal({ type: "themthucunglac" })}
+              >
+                <Add />
+                <h3>Thêm thú cưng lạc</h3>
+              </Item>
+            </>
+          ) : null
+        ) : null}
+        {/* <Item className="add-product"
+                    onClick={() => openModal({ type: "themthucung" })}
+                >
+                    <Add />
+                    <h3>Thêm thú cưng</h3>
+                </Item> */}
       </SalesAnalytics>
 
       {/* ==== MODAL ==== */}
@@ -202,4 +219,4 @@ const NhanVienRight = ({ reRenderData, setReRenderData }) => {
   );
 };
 
-export default NhanVienRight;
+export default ThuCungLacRight;

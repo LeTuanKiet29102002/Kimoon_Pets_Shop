@@ -483,6 +483,8 @@ const DonHangMain = ({ reRenderData, setReRenderData }) => {
                     nextClassName={"nextClassName"}
                     pageLinkClassName={"pageLinkClassName"}
                     forcePage={pageNumber}
+                    pageRangeDisplayed={2}
+                    marginPagesDisplayed={2}
                 />
 
             </RecentOrders>

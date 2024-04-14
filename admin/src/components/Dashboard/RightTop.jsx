@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { LightMode, DarkMode } from "@mui/icons-material";
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import Toggle from "./DarkMode";
+import { useDarkMode } from './DarkModeContext';
 
 
 
@@ -9,6 +11,7 @@ const Top = styled.div`
     display: flex;
     justify-content: end;
     gap: 2rem;
+    height:40px;
 `
 
 const Button = styled.button`
@@ -24,6 +27,7 @@ const ThemeToggler = styled.div`
     width: 4.2rem;
     cursor: pointer;
     border-radius: var(--border-radius-1);
+    
 `
 
 const LightSpan = styled.span`
@@ -84,28 +88,51 @@ const Small = styled.small`
 const RightTop = () => {
     // Lấy admin từ Redux
     const admin = useSelector((state) => state.admin.currentAdmin);
+    const { isDarkMode, toggleDarkMode } = useDarkMode();
 
-    const light = useRef(null);
-    const dark = useRef(null);
-    const handleChangeTheme = () => {
-        document.body.classList.toggle('dark-theme-variables');
-        light.current.classList.toggle('active');
-        dark.current.classList.toggle('active');
-    }
+    // const [isNight, setIsNight] = useState(false);
+
+    // const handleToggle = (e) => {
+    //     const isChecked = e.target.checked;
+    //     setIsNight(isChecked);
+    //     if (isChecked) {
+    //         // Thực hiện hành động chỉ khi isChecked là true
+    //         document.querySelector("body").classList.add("night");
+    //         document.getElementById("toggle-div").classList.add("night");
+    //         document.body.classList.add('dark-theme-variables');
+    //     } else {
+    //         document.querySelector("body").classList.remove("night");
+    //         document.getElementById("toggle-div").classList.remove("night");
+    //         document.body.classList.remove('dark-theme-variables');
+    //     }
+    // };
+
+
+    // useEffect(() => {
+    //     if (isNight) {
+    //         // Thực hiện hành động chỉ khi isNight là true
+    //         document.querySelector("body").classList.add("night");
+    //         document.getElementById("toggle-div").classList.add("night");
+    //         document.body.classList.add('dark-theme-variables');
+
+    //     } else {
+    //         document.querySelector("body").classList.remove("night");
+    //         document.getElementById("toggle-div").classList.remove("night");
+    //         document.body.classList.remove('dark-theme-variables');
+
+    //     }
+    // }, [isNight]);
+
+    // const handleToggle = (e) => {
+    //     const isChecked = e.target.checked;
+    //     setIsNight(isChecked);
+    // };
     return (
-        <Top>
-            <Button>
-                <DarkMode />
-            </Button>
-            <ThemeToggler onClick={handleChangeTheme}>
-                {/* useRef() lấy phần tử span để thêm class */}
-                <LightSpan ref={light} className="active">
-                    <LightMode />
-                </LightSpan>
-                <DarkSpan ref={dark} className={null}>
-                    <DarkMode />
-                </DarkSpan>
-            </ThemeToggler>
+        <Top >
+            <Toggle onChange={toggleDarkMode} isChecked={isDarkMode} />
+            {/* <button onClick={toggleDarkMode}>
+                {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            </button> */}
             <Profile>
                 <Info>
                     <p>Hey, <b>{admin.hotennhanvien}</b></p>
@@ -120,3 +147,16 @@ const RightTop = () => {
 };
 
 export default RightTop;
+
+
+
+
+
+
+
+
+
+
+
+
+

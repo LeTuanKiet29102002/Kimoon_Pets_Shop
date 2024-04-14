@@ -9,7 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { popularProducts } from "../data";
-import Product from "./Product";
+import CardProduct from "./CardProduct";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "../css/main.css";
@@ -151,9 +151,12 @@ const AllProducts = () => {
     pageVisited + productPerPage
   ).map((item, index) => {
     return (
-      <Link to={`/product/${item.mathucung}`}>
-        <Product item={item} key={item.mathucung ? item.mathucung : index} />
-      </Link>
+      <>
+        <Link to={`/product/${item.mathucung}`}>
+          <CardProduct item={item} key={item.mathucung ? item.mathucung : index} />
+        </Link>
+      </>
+
     );
   });
 

@@ -128,20 +128,20 @@ router.post("/datMua", async (req, res) => {
               ' <table border="1px" cellpadding="10px" cellspacing="1px"width="100%"><tr><td align="center" bgcolor="#fd5d32" colspan="4"><fontcolor="white"><b>ĐƠN ĐẶT MUA CỦA BẠN</b></fontcolor=></td></tr><tr id="invoice-bar"><td width="45%"><b>Tiêu đề</b></td><td width="20%"><b>Giá</b></td><td width="15%"><b>Số lượng</b></td><td width="20%"><b>Thành tiền</b></td></tr>';
             req.body.giohang.map((thucung, key) => {
               noidung +=
-                '<tr><td class="prd-name">' +
+                '<tr><td className="prd-name">' +
                 thucung.data[0].tieude +
-                '</td><td class="prd-price"><font color="#C40000">' +
+                '</td><td className="prd-price"><font color="#C40000">' +
                 thucung.data[0].giamgia +
-                'VNĐ</font></td><td class="prd-number">' +
+                'VNĐ</font></td><td className="prd-number">' +
                 thucung.soluongmua +
-                '</td><td class="prd-total"><font color="#C40000">' +
+                '</td><td className="prd-total"><font color="#C40000">' +
                 format_money(
                   (thucung.data[0].giamgia * thucung.soluongmua).toString()
                 ) +
                 "VNĐ</font></td></tr>";
             });
             noidung +=
-              '<tr><td class="prd-name">Tổng giá trị đơn hàng là:</td><td colspan="2"></td><td class="prd-total"><b><font color="#C40000">' +
+              '<tr><td className="prd-name">Tổng giá trị đơn hàng là:</td><td colspan="2"></td><td className="prd-total"><b><font color="#C40000">' +
               format_money(req.body.tongtiendathang.toString()) +
               "VNĐ</font></b></td></tr></table>";
             noidung +=

@@ -89,13 +89,15 @@ const App = () => {
         <ScrollToTop
           smooth
           style={{
-            height: "48px",
-            width: "48px",
+            height: "56px",
+            width: "56px",
             borderRadius: "50%",
             zIndex: "10000000",
+            right: "20px",
+            bottom: "20px",
           }}
-          
-          component={<PetsIcon  style={{color:"#ff6f00"}}/>}
+
+          component={<PetsIcon style={{ color: "#ff6f00", fontSize: "24px" }} />}
         />
       </Router>
     </AuthContextProvider>

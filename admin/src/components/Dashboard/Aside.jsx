@@ -127,6 +127,8 @@ const Aside = (props) => {
     setKhachHangIsActive(false);
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
+    setThuCungLacIsActive(false);
+
   };
 
   // Quản lý Danh mục
@@ -140,6 +142,8 @@ const Aside = (props) => {
     setKhachHangIsActive(false);
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
+    setThuCungLacIsActive(false);
+
   };
 
   // Quản lý Thú cưng
@@ -153,6 +157,8 @@ const Aside = (props) => {
     setKhachHangIsActive(false);
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
+    setThuCungLacIsActive(false);
+
   };
 
   // Quản lý Khách hàng
@@ -166,6 +172,8 @@ const Aside = (props) => {
     setKhachHangIsActive(true);
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
+    setThuCungLacIsActive(false);
+
   };
 
   // Quản lý Nhân viên
@@ -179,6 +187,8 @@ const Aside = (props) => {
     setKhachHangIsActive(false);
     setNhanVienIsActive(true);
     setDonHangIsActive(false);
+    setThuCungLacIsActive(false);
+
   };
 
   // Quản lý Đơn hàng
@@ -192,6 +202,21 @@ const Aside = (props) => {
     setKhachHangIsActive(false);
     setNhanVienIsActive(false);
     setDonHangIsActive(true);
+    setThuCungLacIsActive(false);
+  };
+
+  //Quản lý Thú cưng lạc
+  const [isThuCungLacActive, setThuCungLacIsActive] = useState(
+    props.active === "quanlythucunglac" ? true : false
+  );
+  const handleClickThuCungLac = () => {
+    setDashBoardIsActive(false);
+    setDanhMucIsActive(false);
+    setThuCungIsActive(false);
+    setKhachHangIsActive(false);
+    setNhanVienIsActive(false);
+    setDonHangIsActive(false);
+    setThuCungLacIsActive(true);
   };
 
   // Đăng xuất
@@ -292,16 +317,16 @@ const Aside = (props) => {
                 <H3>Quản lý Đơn hàng</H3>
               </LinkStyled>
               <LinkStyled
-                to={"/quanlydonhang"}
-                className={isDonHangActive ? "active" : null}
-                onClick={handleClickDonHang}
+                to={"/quanlythucunglac"}
+                className={isThuCungLacActive ? "active" : null}
+                onClick={handleClickThuCungLac}
               >
                 <IconSpan>
                   <ContentPasteGoIcon
                     style={{ fontSize: "1.6rem", transition: "all 300ms ease" }}
                   />
                 </IconSpan>
-                <H3>Quản lý Trạng thái thú</H3>
+                <H3>Quản lý Thú cưng lạc</H3>
               </LinkStyled>
             </>
           ) : admin.machucvu === 4 ? (

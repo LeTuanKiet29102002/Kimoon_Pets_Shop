@@ -368,7 +368,16 @@ const NhanVienMain = ({ reRenderData, setReRenderData }) => {
               alignItems: "center",
             }}
           >
-            <ImgDanhMuc src={nhanvienitem.hinhdaidiennhanvien} />
+            <ImgDanhMuc
+              src={nhanvienitem.hinhdaidiennhanvien}
+              style={{
+                borderRadius: "20%",
+                width: "36px",
+                height: "36px",
+                objectFit: "cover",
+                margin: "5px",
+              }}
+            />
           </Td>
           <Td>{nhanvienitem.hotennhanvien}</Td>
           <Td>{nhanvienitem.tenchucvu}</Td>
@@ -467,7 +476,10 @@ const NhanVienMain = ({ reRenderData, setReRenderData }) => {
                         alignItems: "center",
                       }}
                     >
-                      <ImgDanhMuc src={nhanvienitem.hinhdaidiennhanvien} />
+                      <ImgDanhMuc
+                        src={nhanvienitem.hinhdaidiennhanvien}
+                        style={{ borderRadius: "20%" }}
+                      />
                     </Td>
                     <Td>{nhanvienitem.hotennhanvien}</Td>
                     <Td>{nhanvienitem.tenchucvu}</Td>
@@ -526,6 +538,8 @@ const NhanVienMain = ({ reRenderData, setReRenderData }) => {
           nextClassName={"nextClassName"}
           pageLinkClassName={"pageLinkClassName"}
           forcePage={pageNumber}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
         />
       </RecentOrders>
       <Modal

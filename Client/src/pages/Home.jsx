@@ -12,26 +12,30 @@ import CustomButtonWithDot from "../components/Button";
 import CustomBtn from "../components/ButtonTwo";
 import AllProducts from "../components/AllProducts";
 import MultipleSelectCheckmarks from "../components/dropdowns";
+// import Table from "../components/stickyTable";
+import Toggle from "../components/Darkmode";
 // import FindLostPets from "../components/FindLostPets";
 
 
 const Home = () => {
   return (
     <div>
-        <Navbar />
-        <Announcement />
-        {/* <SliderHome /> */}
-        <SliderHomePage />
-        <CategoriesSlide />
-        {/* <Categories /> */}
-        {/* <Products /> */}
-        <AllProducts/>
-        {/* <FindLostPets/> */}
-        <Newsletter />
-        <Footer />
-        <CustomButtonWithDot />
-        <CustomBtn />
-        <MultipleSelectCheckmarks/>
+      <Navbar />
+      <Announcement />
+      {/* <SliderHome /> */}
+      <SliderHomePage />
+      <CategoriesSlide />
+      {/* <Categories /> */}
+      {/* <Products /> */}
+      <AllProducts />
+      {/* <FindLostPets/> */}
+      <Newsletter />
+      <Footer />
+      <CustomButtonWithDot />
+      <CustomBtn />
+      <MultipleSelectCheckmarks />
+      {/* <Table /> */}
+      <Toggle />
     </div>
   );
 };

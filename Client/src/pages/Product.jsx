@@ -106,7 +106,7 @@ const AmountContainer = styled.div`
 `
 
 const Amount = styled.span`
-    width: 30px;
+    min-width: 30px;
     height: 30px;
     border-radius: 10px;
     border: 1px solid teal;
@@ -118,6 +118,25 @@ const Amount = styled.span`
 
 const ButtonContainer = styled.div`
     position: relative;
+    &::after {
+        content: "";
+        border: 2px solid teal;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 20px;
+        background-color: transperent;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        border-radius: 5px;
+        
+    }
+`
+
+const ButtonContainerSoldOut = styled.div`
+    position: relative;
+    right: 150px;
     &::after {
         content: "";
         border: 2px solid teal;
@@ -151,6 +170,8 @@ const Button = styled.button`
     }
 `
 
+
+
 const MoreImage = styled.div`
     width: 650px;
 `
@@ -169,7 +190,7 @@ const DetailInfo = styled.div`
 
 `
 
-const Product = () => {
+const Product = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const mathucung = location.pathname.split("/")[2];
@@ -288,25 +309,31 @@ const Product = () => {
         navigate("/datmua");
     }
 
+    const handleSoldOut = () => {
+        const dataShow = { message: "Sorry! Mặt hàng này đã hết ạ!", type: "danger" };
+        showToastFromOut(dataShow);
+    }
+
     console.log(cart);
     return (
-        <Container>
-            <Navbar />
-            <Announcement />
-            <Wrapper>
-                <ImgContainer>
-                    {/* <Image src={image[0]} /> */}
-                    <MoreImage >
-                        <SliderImage image={image} />
-                    </MoreImage>
-                </ImgContainer>
-                <InfoContainer>
-                    <Title>{tieude}</Title>
-                    <Desc>
-                        {mota}
-                    </Desc>
-                    <Price>{giamgiastring}<u>đ</u></Price>
-                    {/* <FilterContainer>
+        <>
+            <Container>
+                <Navbar />
+                <Announcement />
+                <Wrapper>
+                    <ImgContainer>
+                        {/* <Image src={image[0]} /> */}
+                        <MoreImage >
+                            <SliderImage image={image} />
+                        </MoreImage>
+                    </ImgContainer>
+                    <InfoContainer>
+                        <Title>{tieude}</Title>
+                        <Desc>
+                            {mota}
+                        </Desc>
+                        <Price>{giamgiastring}<u>đ</u></Price>
+                        {/* <FilterContainer>
                         <Filter>
                             <FilterTitle>Color</FilterTitle>
                             <FilterColor color="black" />
@@ -325,66 +352,77 @@ const Product = () => {
                         </Filter>
                     </FilterContainer> */}
 
-                    {/* Chi tiết */}
-                    <DetailProduct>
-                        <DetailHeader>Thông tin chi tiết</DetailHeader>
-                        <DetailInfo>
-                            <Row style={{ margin: "20px 0px" }}>
-                                <Col xl="6"><BorderColorOutlined /><span style={{ marginLeft: "10px" }}>Tên thú cưng</span></Col>
-                                <Col xl="6">{tenthucung}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px" }}>
-                                <Col xl="6"><PetsOutlined /><span style={{ marginLeft: "10px" }}>Danh mục</span></Col>
-                                <Col xl="6">{tendanhmuc}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px" }}>
-                                <Col xl="6"><WcOutlined /><span style={{ marginLeft: "10px" }}>Giới tính</span></Col>
-                                <Col xl="6">{gioitinhthucung}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px" }}>
-                                <Col xl="6"><CakeOutlined /><span style={{ marginLeft: "10px" }}>Tuổi</span></Col>
-                                <Col xl="6">{tuoithucung}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px" }}>
-                                <Col xl="6"><HealingOutlined /><span style={{ marginLeft: "10px" }}>Tiêm chủng</span></Col>
-                                <Col xl="6">{datiemchung}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px 50px 0px" }}>
-                                <Col xl="6"><AssignmentTurnedInOutlined /><span style={{ marginLeft: "10px" }}>Bảo hành</span></Col>
-                                <Col xl="6">{baohanhsuckhoe}</Col>
-                            </Row>
-                            <Row style={{ margin: "20px 0px 50px 0px", fontSize: "18px" }}>
-                                <Col xl="3"></Col>
-                                <Col xl="6">Hiện có <span style={{ fontWeight: "500", fontSize: "20px", color: "#fe6433" }}>{soluong}</span> thú cưng tại shop</Col>
-                                <Col xl="3"></Col>
+                        {/* Chi tiết */}
+                        <DetailProduct>
+                            <DetailHeader>Thông tin chi tiết</DetailHeader>
+                            <DetailInfo>
+                                <Row style={{ margin: "20px 0px" }}>
+                                    <Col xl="6"><BorderColorOutlined /><span style={{ marginLeft: "10px" }}>Tên thú cưng</span></Col>
+                                    <Col xl="6">{tenthucung}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px" }}>
+                                    <Col xl="6"><PetsOutlined /><span style={{ marginLeft: "10px" }}>Danh mục</span></Col>
+                                    <Col xl="6">{tendanhmuc}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px" }}>
+                                    <Col xl="6"><WcOutlined /><span style={{ marginLeft: "10px" }}>Giới tính</span></Col>
+                                    <Col xl="6">{gioitinhthucung}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px" }}>
+                                    <Col xl="6"><CakeOutlined /><span style={{ marginLeft: "10px" }}>Tuổi</span></Col>
+                                    <Col xl="6">{tuoithucung}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px" }}>
+                                    <Col xl="6"><HealingOutlined /><span style={{ marginLeft: "10px" }}>Tiêm chủng</span></Col>
+                                    <Col xl="6">{datiemchung}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px 50px 0px" }}>
+                                    <Col xl="6"><AssignmentTurnedInOutlined /><span style={{ marginLeft: "10px" }}>Bảo hành</span></Col>
+                                    <Col xl="6">{baohanhsuckhoe}</Col>
+                                </Row>
+                                <Row style={{ margin: "20px 0px 50px 0px", fontSize: "18px" }}>
+                                    <Col xl="3"></Col>
+                                    <Col xl="6">Hiện có <span style={{ fontWeight: "500", fontSize: "20px", color: "#fe6433" }}>{soluong}</span> thú cưng tại shop</Col>
+                                    <Col xl="3"></Col>
 
-                            </Row>
-                        </DetailInfo>
-                    </DetailProduct>
+                                </Row>
+                            </DetailInfo>
+                        </DetailProduct>
+                        <AddContainer>
+                            <AmountContainer>
+                                <Remove onClick={() => handleSoLuongMua("giam")} />
+                                <Amount>{soluongmua}</Amount>
+                                <Add onClick={() => handleSoLuongMua("tang")} />
+                            </AmountContainer>
+                            {soluong !== 0 ?
+                                <>
+                                    <ButtonContainer>
+                                        <Button onClick={handleAddCart}>Thêm vào giỏ hàng</Button>
+                                    </ButtonContainer>
+                                    <ButtonContainer>
+                                        <Button onClick={handleMuaNgay}>Mua ngay</Button>
+                                    </ButtonContainer>
+                                </>
+                                :
+                                <>
+                                    <ButtonContainerSoldOut>
+                                        <Button onClick={handleSoldOut}>Mặt hàng này đã hết</Button>
+                                    </ButtonContainerSoldOut>
+                                </>
 
-                    <AddContainer>
-                        <AmountContainer>
-                            <Remove onClick={() => handleSoLuongMua("giam")} />
-                            <Amount>{soluongmua}</Amount>
-                            <Add onClick={() => handleSoLuongMua("tang")} />
-                        </AmountContainer>
-                        <ButtonContainer>
-                            <Button onClick={handleAddCart}>Thêm vào giỏ hàng</Button>
-                        </ButtonContainer>
-                        <ButtonContainer>
-                            <Button onClick={handleMuaNgay}>Mua ngay</Button>
-                        </ButtonContainer>
-                    </AddContainer>
-                </InfoContainer>
-            </Wrapper>
-            <Newsletter />
-            {/* === TOAST === */}
-            <Toast
-                ref={toastRef}
-                dataToast={dataToast}   // Thông tin cần hiện lên: Đối tượng { message,type }
-            />
-            <Footer />
-        </Container>
+                            }
+                        </AddContainer>
+                    </InfoContainer>
+                </Wrapper>
+                <Newsletter />
+                {/* === TOAST === */}
+                <Toast
+                    ref={toastRef}
+                    dataToast={dataToast}   // Thông tin cần hiện lên: Đối tượng { message,type }
+                />
+                <Footer />
+            </Container>
+        </>
     )
 }
 

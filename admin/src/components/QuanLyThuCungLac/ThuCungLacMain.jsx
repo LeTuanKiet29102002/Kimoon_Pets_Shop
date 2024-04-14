@@ -1,3 +1,4 @@
+import format_money from "../../utils";
 import styled from "styled-components";
 import "../../css/main.css";
 import { useEffect, useRef, useState } from "react";
@@ -277,7 +278,7 @@ const ImgDanhMuc = styled.img`
     object-fit: contain;
 `
 
-const KhachHangMain = ({ reRenderData, setReRenderData }) => {
+const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
     // Lấy admin từ Redux
     const admin = useSelector((state) => state.admin.currentAdmin);
 
@@ -300,43 +301,45 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
         setTimKiem("");
     }
 
-    // Lấy khách hàng
-    const [khachhang, setKhachHang] = useState([]);
+    // Lấy danh mục
+    const [thucunglac, setThuCungLac] = useState([]);
     useEffect(() => {
-        const getKhachHang = async () => {
+        const getThuCungLac = async () => {
             try {
-                const khachhangres = await axios.post("http://localhost:3001/api/user/getKhachHang", {});
-                setKhachHang(khachhangres.data);
+                const thucunglacres = await axios.post("http://localhost:3001/api/lostpets/getThuCungLac", {});
+                console.log("check thu cung lac: ", thucunglacres);
+
+                setThuCungLac(thucunglacres.data);
             } catch (err) {
-                console.log("Lỗi lấy khách hàng: ", err);
+                console.log("Lỗi lấy thú cưng lạc: ", err);
             }
         }
-        getKhachHang();
+        getThuCungLac();
     }, [reRenderData]);
-    useEffect(() => {
-        const timKhachHang = async () => {
-            try {
-                const ketquares = await axios.post("http://localhost:3001/api/user/findKhachHang", { hotennguoimua: timkiem });
-                setKhachHang(ketquares.data);
-                console.log("Kết quả tìm Khách hàng trong effect: ", ketquares.data);
-            } catch (err) {
-                console.log("Lỗi tìm kiếm Khách hàng: ", err);
-            }
-        }
-        timKhachHang();
-        setPageNumber(0);
-    }, [timkiem])
-    console.log("Khách hàng: ", khachhang);
+    // useEffect(() => {
+    //     const timThuCungLac = async () => {
+    //         try {
+    //             const ketquares = await axios.post("http://localhost:3001/api/products/findThuCung", { tenthulac: timkiem });
+    //             setThuCungLac(ketquares.data);
+    //             console.log("Kết quả tìm trong effect: ", ketquares.data);
+    //         } catch (err) {
+    //             console.log("Lỗi tìm kiếm: ", err);
+    //         }
+    //     }
+    //     timThuCungLac();
+    //     setPageNumber(0);
+    // }, [timkiem])
+    console.log("Thú cưng lạc: ", thucunglac);
 
     // Modal
     const [showModal, setShowModal] = useState(false);
     const [typeModal, setTypeModal] = useState("")
-    const [khachHangModal, setKhachHangModal] = useState(null);
+    const [thuCungModal, setThuCungModal] = useState(null);
 
     const openModal = (modal) => {
         setShowModal(prev => !prev);
         setTypeModal(modal.type);
-        setKhachHangModal(modal.khachhang);
+        setThuCungModal(modal.thucung);
     }
 
     // ===== TOAST =====
@@ -354,17 +357,19 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
 
     const [pageNumber, setPageNumber] = useState(0);
 
-    const khachHangPerPage = 12;
-    const pageVisited = pageNumber * khachHangPerPage;
+    const thuCungPerPage = 12;
+    const pageVisited = pageNumber * thuCungPerPage;
 
-    const khachHangChuyenTrang = khachhang
-        .slice(pageVisited, pageVisited + khachHangPerPage)
-        .map(khachhangitem => {
+    const thuCungChuyenTrang = thucunglac
+        .slice(pageVisited, pageVisited + thuCungPerPage)
+        .map(thucungitem => {
             return (
                 <Tr>
-                    <Td>{khachhangitem.manguoimua}</Td>
+                    <Td>{thucungitem.mathulac}</Td>
+                    <Td>{thucungitem.tenthulac}</Td>
+                    <Td>{thucungitem.hotennguoimua}</Td>
                     <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <ImgDanhMuc src={khachhangitem.hinhdaidien} style={{
+                        <ImgDanhMuc src={thucungitem.hinhdaidien} style={{
                             borderRadius: "20%",
                             width: "36px",
                             height: "36px",
@@ -372,13 +377,37 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                             margin: "5px",
                         }} />
                     </Td>
-                    <Td>{khachhangitem.hotennguoimua}</Td>
-                    <Td>{khachhangitem.gioitinhnguoimua}</Td>
-                    <Td>{khachhangitem.emailnguoimua}</Td>
-                    <Td>{khachhangitem.sdtnguoimua}</Td>
+                    <Td>{thucungitem.sdtnguoimua}</Td>
+                    <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <ImgDanhMuc src={thucungitem.hinhanhthulac} style={{
+                            borderRadius: "20%",
+                            width: "36px",
+                            height: "36px",
+                            objectFit: "cover",
+                            margin: "5px",
+                        }} />
+                    </Td>
+                    {
+                        thucungitem.tentrangthaithucung === "Chờ duyệt"
+                            ?
+                            <Td style={{ backgroundColor: "var(--color-warning)" }}>{thucungitem.tentrangthaithucung}</Td>
+                            :
+                            thucungitem.tentrangthaithucung === "Đang duyệt"
+                                ?
+                                <Td style={{ backgroundColor: "var(--color-info)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                :
+                                thucungitem.tentrangthaithucung === "Đã duyệt"
+                                    ?
+                                    <Td style={{ backgroundColor: "var(--color-success)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                    :
+                                    thucungitem.tentrangthaithucung === "Đã hủy"
+                                        ?
+                                        <Td style={{ backgroundColor: "var(--color-danger)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                        : null
+                    }
                     <Td className="info">
                         <ButtonInfo
-                            onClick={() => openModal({ type: "chitietkhachhang", khachhang: khachhangitem })}
+                            onClick={() => openModal({ type: "chitietthucung", thucunglac: thucungitem })}
                         >
                             <RemoveRedEyeOutlined />
                         </ButtonInfo>
@@ -386,13 +415,20 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                     {
                         admin
                             ?
-                            // Chỉ admin mới được xóa khách hàng
-                            admin.machucvu === 5
+                            // Chỉ admin với nv bán hàng mới được chỉnh sửa và xóa thú cưng
+                            admin.machucvu === 5 || admin.machucvu === 1
                                 ?
                                 <>
+                                    <Td className="warning">
+                                        <ButtonFix
+                                            onClick={() => openModal({ type: "chinhsuathucung", thucunglac: thucungitem })}
+                                        >
+                                            <DriveFileRenameOutlineOutlined />
+                                        </ButtonFix>
+                                    </Td>
                                     <Td className="primary">
                                         <ButtonDelete
-                                            onClick={() => openModal({ type: "xoakhachhang", khachhang: khachhangitem })}
+                                            onClick={() => openModal({ type: "xoathucung", thucunglac: thucungitem })}
                                         >
                                             <DeleteSweepOutlined />
                                         </ButtonDelete>
@@ -401,9 +437,16 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                                 : null
                             : null
                     }
-                    {/* <Td className="primary">
+                    {/* <Td className="warning">
+                        <ButtonFix
+                            onClick={() => openModal({ type: "chinhsuathucung", thucung: thucungitem })}
+                        >
+                            <DriveFileRenameOutlineOutlined />
+                        </ButtonFix>
+                    </Td>
+                    <Td className="primary">
                         <ButtonDelete
-                            onClick={() => openModal({ type: "xoakhachhang", khachhang: khachhangitem })}
+                            onClick={() => openModal({ type: "xoathucung", thucung: thucungitem })}
                         >
                             <DeleteSweepOutlined />
                         </ButtonDelete>
@@ -414,62 +457,67 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
         );
 
 
-    const pageCount = Math.ceil(khachhang.length / khachHangPerPage);
+    const pageCount = Math.ceil(thucunglac.length / thuCungPerPage);
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     }
 
     return (
         <Container>
-            <H2>Quản lý khách hàng</H2>
+            <H2>Quản lý thú cưng lạc</H2>
 
             {/* Tìm kiếm */}
             <SearchWrapper className={isSearch ? "active" : null}>
                 <InputHolder>
-                    <Input ref={InputRef} type="text" placeHolder="Nhập vào Tên khách hàng" onChange={(e) => setTimKiem(e.target.value)} />
+                    <Input ref={InputRef} type="text" placeHolder="Nhập vào mã thú cưng lạc" onChange={(e) => setTimKiem(e.target.value)} />
                     <Button onClick={(e) => { handleSeach(e) }}><Span></Span></Button>
                 </InputHolder>
                 <CloseSpan onClick={() => { handleClose() }}></CloseSpan>
             </SearchWrapper>
 
             <RecentOrders>
-                <H2>Danh sách khách hàng hiện tại</H2>
+                <H2>Danh sách thú cưng lạc hiện tại</H2>
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th>Mã khách hàng</Th>
+                            <Th>Mã thú cưng lạc</Th>
+                            <Th>Tên thú cưng lạc</Th>
+                            <Th>Tên người mua</Th>
                             <Th>Hình đại diện</Th>
-                            <Th>Họ tên</Th>
-                            <Th>Giới tính</Th>
-                            <Th>Email</Th>
-                            <Th>Số điện thoại</Th>
+                            <Th>SĐT người mua</Th>
+                            <Th>Hình thú lạc</Th>
+                            <Th>Trạng thái thú cưng</Th>
                             <Th>Chi tiết</Th>
                             {
                                 admin
                                     ?
-                                    // Chỉ admin mới được xóa khách hàng
-                                    admin.machucvu === 5
+                                    // Chỉ admin với nv bán hàng mới được chỉnh sửa và xóa thú cưng
+                                    admin.machucvu === 5 || admin.machucvu === 1
                                         ?
                                         <>
+                                            <Th>Chỉnh sửa</Th>
                                             <Th>Xóa</Th>
                                         </>
                                         : null
                                     : null
                             }
-                            {/* <Th>Xóa</Th> */}
+                            {/* <Th>Chỉnh sửa</Th>
+                            <Th>Xóa</Th> */}
                         </Tr>
                     </Thead>
                     <Tbody>
                         {
-                            khachhang !== null
+                            thucunglac !== null
                                 ?
-                                khachHangChuyenTrang
+                                thuCungChuyenTrang
                                 :
-                                (khachhang.slice(0, 12).map(khachhangitem => (
+                                (thucunglac.slice(0, 12).map(thucungitem => (
                                     <Tr>
-                                        <Td>{khachhangitem.manguoimua}</Td>
+                                        <Td>{thucungitem.mathulac}</Td>
+                                        <Td>{thucungitem.tenthulac}</Td>
+                                        <Td>{thucungitem.hotennguoimua}</Td>
                                         <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                            <ImgDanhMuc src={khachhangitem.hinhdaidien} style={{
+                                            <ImgDanhMuc src={thucungitem.hinhdaidien} style={{
                                                 borderRadius: "20%",
                                                 width: "36px",
                                                 height: "36px",
@@ -477,13 +525,37 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                                                 margin: "5px",
                                             }} />
                                         </Td>
-                                        <Td>{khachhangitem.hotennguoimua}</Td>
-                                        <Td>{khachhangitem.gioitinhnguoimua}</Td>
-                                        <Td>{khachhangitem.emailnguoimua}</Td>
-                                        <Td>{khachhangitem.sdtnguoimua}</Td>
+                                        <Td>{thucungitem.sdtnguoimua}</Td>
+                                        <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                            <ImgDanhMuc src={thucungitem.hinhanhthulac} style={{
+                                                borderRadius: "20%",
+                                                width: "36px",
+                                                height: "36px",
+                                                objectFit: "cover",
+                                                margin: "5px",
+                                            }} />
+                                        </Td>
+                                        {
+                                            thucungitem.tentrangthaithucung === "Chờ duyệt"
+                                                ?
+                                                <Td style={{ backgroundColor: "var(--color-warning)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                :
+                                                thucungitem.tentrangthaithucung === "Đang duyệt"
+                                                    ?
+                                                    <Td style={{ backgroundColor: "var(--color-info)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                    :
+                                                    thucungitem.tentrangthaithucung === "Đã duyệt"
+                                                        ?
+                                                        <Td style={{ backgroundColor: "var(--color-success)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                        :
+                                                        thucungitem.tentrangthaithucung === "Đã hủy"
+                                                            ?
+                                                            <Td style={{ backgroundColor: "var(--color-danger)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                            : null
+                                        }
                                         <Td className="info">
                                             <ButtonInfo
-                                                onClick={() => openModal({ type: "chitietkhachhang", khachhang: khachhangitem })}
+                                                onClick={() => openModal({ type: "chitietthucung", thucunglac: thucungitem })}
                                             >
                                                 <RemoveRedEyeOutlined />
                                             </ButtonInfo>
@@ -491,13 +563,20 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                                         {
                                             admin
                                                 ?
-                                                // Chỉ admin mới được xóa khách hàng
-                                                admin.machucvu === 5
+                                                // Chỉ admin với nv bán hàng mới được chỉnh sửa và xóa thú cưng
+                                                admin.machucvu === 5 || admin.machucvu === 1
                                                     ?
                                                     <>
+                                                        <Td className="warning">
+                                                            <ButtonFix
+                                                                onClick={() => openModal({ type: "chinhsuathucung", thucunglac: thucungitem })}
+                                                            >
+                                                                <DriveFileRenameOutlineOutlined />
+                                                            </ButtonFix>
+                                                        </Td>
                                                         <Td className="primary">
                                                             <ButtonDelete
-                                                                onClick={() => openModal({ type: "xoanguoimua", khachhang: khachhangitem })}
+                                                                onClick={() => openModal({ type: "xoathucung", thucunglac: thucungitem })}
                                                             >
                                                                 <DeleteSweepOutlined />
                                                             </ButtonDelete>
@@ -506,9 +585,17 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                                                     : null
                                                 : null
                                         }
-                                        {/* <Td className="primary">
+
+                                        {/* <Td className="warning">
+                                            <ButtonFix
+                                                onClick={() => openModal({ type: "chinhsuathucung", thucung: thucungitem })}
+                                            >
+                                                <DriveFileRenameOutlineOutlined />
+                                            </ButtonFix>
+                                        </Td>
+                                        <Td className="primary">
                                             <ButtonDelete
-                                                onClick={() => openModal({ type: "xoanguoimua", khachhang: khachhangitem })}
+                                                onClick={() => openModal({ type: "xoathucung", thucung: thucungitem })}
                                             >
                                                 <DeleteSweepOutlined />
                                             </ButtonDelete>
@@ -540,7 +627,7 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
                 showModal={showModal}   //state Đóng mở modal
                 setShowModal={setShowModal} //Hàm Đóng mở modal
                 type={typeModal}    //Loại modal
-                khachhang={khachHangModal}  //Dữ liệu bên trong modal
+                thucung={thuCungModal}  //Dữ liệu bên trong modal
                 setReRenderData={setReRenderData}   //Hàm rerender khi dữ liệu thay đổi
                 handleClose={handleClose}   //Đóng tìm kiếm
                 showToastFromOut={showToastFromOut} //Hàm hiện toast
@@ -557,4 +644,4 @@ const KhachHangMain = ({ reRenderData, setReRenderData }) => {
 
 
 
-export default KhachHangMain;
+export default ThuCungLacMain;

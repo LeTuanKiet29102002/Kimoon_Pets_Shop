@@ -8,6 +8,7 @@ const cors = require("cors");
 const stripeRoute = require("./routes/stripe");
 const productRoute = require("./routes/product");
 const orderRoute = require("./routes/order");
+const lostpetsRoute = require("./routes/lostpets");
 
 dotenv.config();
 app.use(cors({
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/checkout", stripeRoute);
 app.use("/api/products", productRoute);
+app.use("/api/lostpets", lostpetsRoute);
 // app.use("/api/products", productRoute);
 app.use("/api/order", orderRoute);
 

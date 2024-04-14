@@ -208,7 +208,7 @@ const Right = () => {
                     <Message>
                       {/* <p><b>Monkey D Luffy</b> received his order of Tuan Kiet tech GPS drone</p> */}
                       <p>{log.noidunglog}</p>
-                      <Small class="text-muted">2 Minutes Ago</Small>
+                      <Small className="text-muted">2 Minutes Ago</Small>
                     </Message>
                   </Update>
                 );
@@ -227,7 +227,7 @@ const Right = () => {
           <ItemRight>
             <Info>
               <h3>TODAY ORDERS</h3>
-              <small class="text-muted">Last 24 Hours</small>
+              <small className="text-muted">Last 24 Hours</small>
             </Info>
             <h5 className="success">+39%</h5>
             <h3>{soDonHang === "" ? "Chưa có" : soDonHang}</h3>
@@ -240,7 +240,7 @@ const Right = () => {
           <ItemRight>
             <Info>
               <h3>TODAY SALES</h3>
-              <small class="text-muted">Last 24 Hours</small>
+              <small className="text-muted">Last 24 Hours</small>
             </Info>
             <h5 className="danger">-17%</h5>
             <h3>
@@ -258,7 +258,7 @@ const Right = () => {
           <ItemRight>
             <Info>
               <h3>ĐƠN CẦN DUYỆT</h3>
-              <small class="text-muted">Last 24 Hours</small>
+              <small className="text-muted">Last 24 Hours</small>
             </Info>
             <h5 className="success">+25%</h5>
             <h3>{donCanDuyetHomNay === "" ? "Chưa có" : donCanDuyetHomNay}</h3>

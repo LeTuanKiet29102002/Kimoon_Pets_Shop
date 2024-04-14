@@ -20,7 +20,6 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
 
   top: 0;
   right: 0;
@@ -268,7 +267,7 @@ const FormOption = styled.option`
 
 const FormLabel = styled.label`
   display: flex;
-  flex-directory: row;
+  flex-direction: row;
   // justify-content: center;
   align-items: center;
 `;
@@ -1080,7 +1079,7 @@ const Modal = ({
   //  =============== Thêm thú cưng ===============
   console.log("daTiemChungMoi: ", daTiemChungMoi);
   console.log("baoHanhSucKhoeMoi: ", baoHanhSucKhoeMoi);
-  if (type === "themthucung") {
+  if (type === "themthucunglac") {
     return (
       <>
         {showModal ? (

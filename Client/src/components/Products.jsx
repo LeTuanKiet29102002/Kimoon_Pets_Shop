@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { popularProducts } from "../data";
-import Product from "./Product";
+import CardProduct from "./CardProduct";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "../css/main.css";
@@ -104,7 +104,7 @@ const Products = ({ madanhmuc, filters, sort }) => {
   ).map((item) => {
     return (
       <Link to={`/product/${item.mathucung}`}>
-        <Product item={item} key={item.mathucung} />
+        <CardProduct item={item} key={item.mathucung} />
       </Link>
     );
   });

@@ -6,9 +6,9 @@ import {
 } from "@material-ui/icons";
 import styled from "styled-components";
 import format_money from "../utils";
-import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 // const Info = styled.div`
 //     opacity: 0;
@@ -85,6 +85,18 @@ const DetailPrice = styled.span`
   padding: 0 3px;
 `;
 
+const DetailPriceSoldOut = styled.span`
+  font-size: 14px;
+  display: block;
+  position: absolute;
+  top: -20px;
+  left: 6px;
+  background-color: #cccc;
+  color: black;
+  z-index: 2;
+  padding: 0 3px;
+`;
+
 const Info = styled.div`
   opacity: 0;
   width: 100%;
@@ -101,8 +113,39 @@ const Info = styled.div`
   cursor: pointer;
 `;
 
+
+const ContainerSoldOut = styled.div`
+  flex: 1;
+  scale: 0.9;
+  margin: 5px;
+  width: 280px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5e6466;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.3);
+  &:hover {
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:hover ${Info} {
+    opacity: 1;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
+  }
+  &:hover ${DetailPriceSoldOut} {
+    top: -25px;
+    transition: top 0.18s;
+  }
+`;
+
 const Container = styled.div`
   flex: 1;
+  scale: 0.9;
   margin: 5px;
   width: 280px;
   height: 350px;
@@ -135,6 +178,19 @@ const Circle = styled.div`
   border-radius: 50%;
   background-color: white;
   position: absolute;
+  z-index: 100;
+  background-color: #bebaba;
+  opacity: 0.7;
+`;
+const H2 = styled.h2`
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 85px;
+  font-weight: bold;
+  color: #f7f7f7;
+
 `;
 
 const Image = styled.img`
@@ -146,6 +202,18 @@ const Image = styled.img`
   z-index: 2;
   border-top-left-radius: 5px;
 `;
+
+const ImageSoldOut = styled.img`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 87%;
+  object-fit: cover;
+  z-index: 2;
+  border-top-left-radius: 5px;
+  filter: grayscale(100%);
+`;
+
 
 const Icon = styled.div`
   width: 40px;
@@ -170,6 +238,14 @@ const Detail = styled.div`
   background-color: white;
   top: 305px;
 `;
+
+const DetailSoldOut = styled.div`
+  position: absolute;
+  width: 100%;
+  background-color: #cccc;
+  top: 305px;
+`;
+
 const DetailTitle = styled.span`
   line-height: 1.8rem;
   height: 1.4rem;
@@ -256,108 +332,92 @@ const Label = styled.span`
   overflow: hidden;
 `;
 
-const Product = ({ item }) => {
-  console.log(item);
-  return (
-    // <Container>
-    //     <Circle/>
-    //     <Image src={item.hinhanh}/>
-    //     <Info>
-    //         <Icon>
-    //             <ShoppingCartOutlined/>
-    //         </Icon>
-    //         <Icon>
-    //             <SearchOutlined/>
-    //         </Icon>
-    //         <Icon>
-    //             <FavoriteBorderOutlined/>
-    //         </Icon>
-    //     </Info>
-    // </Container>
+const CardProduct = ({ item }) => {
+  console.log("check so luong:", item.soluong);
+  //Add cart then click icon
+  const handleAddCart = () => {
+    alert('hello');
+  }
 
-    <Container styled={{ display: "flex" }}>
-      <Circle />
-      <Image src={item.hinhanh} />
-      <Info>
-        <Icon>
-          <ShoppingCartOutlined />
-        </Icon>
-        <Icon>
-          <SearchOutlined />
-        </Icon>
-        <Icon>
-          <FavoriteBorderOutlined />
-        </Icon>
-      </Info>
-      <Detail>
-        <DetailPrice>
-          <strike style={{ color: "#878788" }}>
-            <span style={{ color: "#767677" }}>
-              {format_money(item.giaban.toString())}
-              <u>đ</u>
-            </span>
-          </strike>
-          <span style={{ color: "#fe6433", marginLeft: "6px" }}>
-            {format_money(item.giamgia.toString())}
-            <u>đ</u>
-          </span>{" "}
-        </DetailPrice>
-        <DetailTitle>{item.tieude}</DetailTitle>
-        <DetailType>{item.tenthucung}</DetailType>
-        <DetailLike>
-          <span>V</span>
-          <span style={{ color: "white" }}>
-            <FontAwesomeIcon icon={faCheck} fontSize={"16px"} /> Yêu thích
-          </span>
-        </DetailLike>
-        <DetailSale>
-          <Percent>10%</Percent>
-          <Label>GIẢM</Label>
-        </DetailSale>
-      </Detail>
-    </Container>
+  return (
+    <>
+      {item && item.soluong !== 0 ? (
+        <Container styled={{ display: "flex" }}>
+          <Image src={item.hinhanh} />
+          <Info>
+            <Icon>
+              <ShoppingCartOutlined onClick={handleAddCart} />
+            </Icon>
+            <Icon>
+              <SearchOutlined />
+            </Icon>
+            <Icon>
+              <FavoriteBorderOutlined />
+            </Icon>
+          </Info>
+          <Detail>
+            <DetailPrice>
+              <strike style={{ color: "#878788" }}>
+                <span style={{ color: "#767677" }}>
+                  {format_money(item.giaban.toString())}
+                  <u>đ</u>
+                </span>
+              </strike>
+              <span style={{ color: "#fe6433", marginLeft: "6px" }}>
+                {format_money(item.giamgia.toString())}
+                <u>đ</u>
+              </span>{" "}
+            </DetailPrice>
+            <DetailTitle>{item.tieude}</DetailTitle>
+            <DetailType>{item.tenthucung}</DetailType>
+            <DetailLike>
+              <span>V</span>
+              <span style={{ color: "white" }}>
+                <FontAwesomeIcon icon={faCheck} fontSize={"16px"} /> Yêu thích
+              </span>
+            </DetailLike>
+            <DetailSale>
+              <Percent>10%</Percent>
+              <Label>GIẢM</Label>
+            </DetailSale>
+          </Detail>
+        </Container>
+      ) : (
+        <ContainerSoldOut>
+          <Circle>    
+            <H2>Hết Hàng</H2>
+          </Circle>
+          <ImageSoldOut src={item.hinhanh} />
+          <DetailSoldOut>
+            <DetailPriceSoldOut>
+              <strike style={{ color: "#878788" }}>
+                <span style={{ color: "#767677" }}>
+                  {format_money(item.giaban.toString())}
+                  <u>đ</u>
+                </span>
+              </strike>
+              <span style={{ color: "#fe6433", marginLeft: "6px" }}>
+                {format_money(item.giamgia.toString())}
+                <u>đ</u>
+              </span>{" "}
+            </DetailPriceSoldOut>
+            <DetailTitle>{item.tieude}</DetailTitle>
+            <DetailType>{item.tenthucung}</DetailType>
+            <DetailLike>
+              <span>V</span>
+              <span style={{ color: "white" }}>
+                <FontAwesomeIcon icon={faCheck} fontSize={"16px"} /> Yêu thích
+              </span>
+            </DetailLike>
+            <DetailSale>
+              <Percent>10%</Percent>
+              <Label>GIẢM</Label>
+            </DetailSale>
+          </DetailSoldOut>
+        </ContainerSoldOut>
+      )}
+    </>
   );
 };
 
-export default Product;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default CardProduct;

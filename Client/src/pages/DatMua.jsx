@@ -61,11 +61,11 @@ background: #ccc;
 border-radius: 50%;
 margin-right: 15px;
 border: 4px solid transparent;
-display: inline-block
+display: inline-block;
 `
 
 const Course = styled.div`
-width: 100%
+width: 100%;
 `
 
 const Content = styled.div`
@@ -81,6 +81,7 @@ const InfomationTitle = styled.div`
 const InfomationForm = styled.div`
 
 `
+
 
 const ModalChiTietItem = styled.div`
 margin: 2px 0px;
