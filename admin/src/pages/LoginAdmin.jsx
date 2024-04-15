@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, register } from "../redux/callsAPI";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const SignIn = styled.div`
   width: 95%;
@@ -165,7 +167,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 220px;
+  width: 320px;
   height: 40px;
   margin: 5px 0px;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -183,6 +185,16 @@ const Input = styled.input`
     box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.1);
   }
 `;
+
+const Pass = styled.div`
+  position: relative;
+`
+
+const Span = styled.span`
+  position: absolute;
+  top: 14px ;
+  right: 10px;
+`
 
 const Button = styled.button`
   width: 220px;
@@ -231,6 +243,16 @@ const LoginAdmin = () => {
   const { isFetching, error } = useSelector((state) => state.admin);
   // Giao diện
   const [isSignIn, setIsSignIn] = useState(false);
+  const [isShowPassword, setisShowPassword] = useState(false);
+  // const [isReShowPassword, setisReShowPassword] = useState(false);
+
+  const handleShowHidePassword = () => {
+    setisShowPassword(!isShowPassword);
+  }
+  // const handleShowHideRePassword = () => {
+  //   setisReShowPassword(!isReShowPassword);
+
+  // }
   const handleClose = () => {
     setIsSignIn(false);
   };
@@ -280,11 +302,20 @@ const LoginAdmin = () => {
             onChange={(e) => setEmailNhanVien(e.currentTarget.value)}
           />
           {/* Mật khẩu */}
-          <Input
-            type="password"
-            placeholder="Mật khẩu của bạn"
-            onChange={(e) => setMatKhauNhanVien(e.currentTarget.value)}
-          />
+          <Pass>
+            <Input
+              type={isShowPassword ? 'text' : 'password'}
+              placeholder="Mật khẩu của bạn"
+              onChange={(e) => setMatKhauNhanVien(e.currentTarget.value)}
+            />
+            <Span onClick={handleShowHidePassword}>
+              {isShowPassword ?
+                <VisibilityIcon />
+                :
+                <VisibilityOffIcon />
+              }
+            </Span>
+          </Pass>
           {/* Nút đăng nhập */}
           <Button onClick={(e) => handleClickDangNhap(e)} disabled={isFetching}>
             Đăng nhập

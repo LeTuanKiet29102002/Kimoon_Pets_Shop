@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, register } from "../redux/callsAPI";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const SignIn = styled.div`
   width: 95%;
@@ -296,7 +298,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 220px;
+  width: 320px;
   height: 40px;
   margin: 5px 0px;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -314,6 +316,16 @@ const Input = styled.input`
     box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.1);
   }
 `;
+
+const Pass = styled.div`
+  position: relative;
+`
+
+const Span = styled.span`
+  position: absolute;
+  top: 10px ;
+  right: 10px;
+`
 
 const Button = styled.button`
   width: 220px;
@@ -384,6 +396,16 @@ const LoginRegister = () => {
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isSignInGmail, setIsSignInGmail] = useState(false);
+  const [isShowPassword, setisShowPassword] = useState(false);
+  const [isReShowPassword, setisReShowPassword] = useState(false);
+
+  const handleShowHidePassword = () => {
+    setisShowPassword(!isShowPassword);
+  }
+  const handleShowHideRePassword = () => {
+    setisReShowPassword(!isReShowPassword);
+
+  }
 
   const handleClose = () => {
     setIsSignIn(false);
@@ -417,11 +439,11 @@ const LoginRegister = () => {
     }
   };
 
-  useEffect(()=>{
-    if(userEmail != null){
+  useEffect(() => {
+    if (userEmail != null) {
       navigate('/');
     }
-  },[userEmail])
+  }, [userEmail])
 
   // --Xử lý--
   // Đăng nhập
@@ -485,10 +507,10 @@ const LoginRegister = () => {
         isSignIn
           ? "active-sign-in"
           : isSignUp
-          ? "active-sign-up"
-          : isSignInGmail
-          ? "active-sign-in-gmail"
-          : null
+            ? "active-sign-up"
+            : isSignInGmail
+              ? "active-sign-in-gmail"
+              : null
       }
     >
       <MainPage>
@@ -531,11 +553,20 @@ const LoginRegister = () => {
             onChange={(e) => setEmailNguoiMua(e.target.value)}
           />
           {/* Mật khẩu */}
-          <Input
-            type="password"
-            placeholder="Mật khẩu của bạn"
-            onChange={(e) => setMatKhau(e.target.value)}
-          />
+          <Pass>
+            <Input
+              type={isShowPassword ? 'text' : 'password'}
+              placeholder="Mật khẩu của bạn"
+              onChange={(e) => setMatKhau(e.target.value)}
+            />
+            <Span onClick={handleShowHidePassword}>
+              {isShowPassword ?
+                <VisibilityIcon />
+                :
+                <VisibilityOffIcon />
+              }
+            </Span>
+          </Pass>
           {/* Nút đăng nhập */}
           <Button onClick={handleClickDangNhap} disabled={isFetching}>
             Đăng nhập
@@ -560,17 +591,35 @@ const LoginRegister = () => {
             onChange={(e) => handleChangeEmail(e)}
           />
           {/* Mật khẩu */}
-          <Input
-            type="password"
-            placeholder="Mật khẩu của bạn"
-            onChange={(e) => handleChangePassword(e)}
-          />
+          <Pass>
+            <Input
+              type={isShowPassword ? 'text' : 'password'}
+              placeholder="Mật khẩu của bạn"
+              onChange={(e) => handleChangePassword(e)}
+            />
+            <Span onClick={handleShowHidePassword}>
+              {isShowPassword ?
+                <VisibilityIcon />
+                :
+                <VisibilityOffIcon />
+              }
+            </Span>
+          </Pass>
           {/* Re Mật khẩu */}
-          <Input
-            type="password"
-            placeholder="Re-Mật khẩu của bạn"
-            onChange={(e) => handleChangeRePassword(e)}
-          />
+          <Pass>
+            <Input
+              type={isReShowPassword ? 'text' : 'password'}
+              placeholder="Re-Mật khẩu của bạn"
+              onChange={(e) => handleChangeRePassword(e)}
+            />
+            <Span onClick={handleShowHideRePassword}>
+              {isReShowPassword ?
+                <VisibilityIcon />
+                :
+                <VisibilityOffIcon />
+              }
+            </Span>
+          </Pass>
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
@@ -595,7 +644,7 @@ const LoginRegister = () => {
           />
           {/* Mật khẩu */}
           <Input
-            type="password"
+            type={isShowPassword ? 'text' : 'password'}
             placeholder="Mật khẩu email của bạnbdbdbbet"
             onChange={(e) => setMatKhau(e.target.value)}
           />

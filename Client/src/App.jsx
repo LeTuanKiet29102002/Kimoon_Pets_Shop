@@ -50,57 +50,60 @@ const App = () => {
   // }, []);
 
   return (
-    <AuthContextProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
+    <>
 
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/favorite" element={<Favorite />} />
-          <Route
-            path="/register"
-            element={user ? <Navigate to="/" /> : <LoginRegister />}
-          />
-          <Route
-            path="/login"
-            element={user ? <Navigate to="/" /> : <LoginRegister />}
-          />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/products/:tendanhmuc" element={<ProductList />} />
-          <Route path="/pay" element={<Pay />} />
-          {/* <Route path="/success" element={<Success />} /> */}
-          <Route path="/success" element={<Success />} />
-          <Route
-            path="/datmua"
-            element={cart.length > 0 ? <DatMua /> : <Home />}
-          />
+      <AuthContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route
-            path="/capnhatthongtin"
-            element={user ? <CapNhatThongTin /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/donmua"
-            element={user ? <DonMua /> : <Navigate to="/" />}
-          />
-          {/* <Route path="/OTPInput" element={<ModalRePassWord />} /> */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ScrollToTop
-          smooth
-          style={{
-            height: "56px",
-            width: "56px",
-            borderRadius: "50%",
-            zIndex: "10000000",
-            right: "20px",
-            bottom: "20px",
-          }}
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/favorite" element={<Favorite />} />
+            <Route
+              path="/register"
+              element={user ? <Navigate to="/" /> : <LoginRegister />}
+            />
+            <Route
+              path="/login"
+              element={user ? <Navigate to="/" /> : <LoginRegister />}
+            />
+            <Route path="/product/:id" element={<Product />} />
+            <Route path="/products/:tendanhmuc" element={<ProductList />} />
+            <Route path="/pay" element={<Pay />} />
+            {/* <Route path="/success" element={<Success />} /> */}
+            <Route path="/success" element={<Success />} />
+            <Route
+              path="/datmua"
+              element={cart.length > 0 ? <DatMua /> : <Home />}
+            />
 
-          component={<PetsIcon style={{ color: "#ff6f00", fontSize: "24px" }} />}
-        />
-      </Router>
-    </AuthContextProvider>
+            <Route
+              path="/capnhatthongtin"
+              element={user ? <CapNhatThongTin /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/donmua"
+              element={user ? <DonMua /> : <Navigate to="/" />}
+            />
+            {/* <Route path="/OTPInput" element={<ModalRePassWord />} /> */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <ScrollToTop
+            smooth
+            style={{
+              height: "56px",
+              width: "56px",
+              borderRadius: "50%",
+              zIndex: "10000000",
+              right: "20px",
+              bottom: "20px",
+            }}
+
+            component={<PetsIcon style={{ color: "#ff6f00", fontSize: "24px" }} />}
+          />
+        </Router>
+      </AuthContextProvider>
+    </>
   );
 };
 
