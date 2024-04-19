@@ -130,6 +130,14 @@ const Circle = styled.circle`
   transform: translate(5px, 5px);
 `;
 
+const CircleNaN = styled.circle`
+  fill: none;
+  stroke: var(--color-dark-variant);
+  stroke-width: 14;
+  stroke-linecap: round;
+  transform: translate(5px, 5px);
+`;
+
 const ProgressNumber = styled.div`
   position: absolute;
   top: 0;
@@ -315,6 +323,8 @@ const Main = () => {
     }),
   ];
 
+  console.log('check doanh thu cho:', doanhThuCho);
+
   // -----------------------------------TEST-----------------------------------
   // console.log("Ngày, tháng, năm: ", ngay, thang, nam, ngayThangNam);
   console.log("DATASET: ", dataset);
@@ -377,9 +387,9 @@ const Main = () => {
           </Icon>
           <Middle>
             <Left>
-              <H3>Total Chó</H3>
+              <H3>Doanh thu Chó</H3>
               <H1>
-                {hienThiDoanhThuCho}
+                {hienThiDoanhThuCho ? hienThiDoanhThuCho : 0}
                 <span style={{ textDecoration: "underline" }}>
                   <b>đ</b>
                 </span>
@@ -387,19 +397,31 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
-                <Circle
-                  cx="38"
-                  cy="38"
-                  r="36"
-                  strokeDasharray="315"
-                  strokeDashoffset={Math.round(
-                    315 - ((doanhThuCho * 100) / tongDoanhThu) * 2 * (360 / 315)
-                  )}
-                ></Circle>
+                {doanhThuCho&&doanhThuCho!==0 ?
+                  <Circle
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 - ((doanhThuCho * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></Circle> :
+                  <CircleNaN
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 - ((doanhThuCho * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></CircleNaN>
+
+                }
               </Svg>
               <ProgressNumber>
                 <ProgressNumberP>
-                  {Math.round((doanhThuCho * 100) / tongDoanhThu)}%
+                  {doanhThuCho ? Math.round((doanhThuCho * 100) / tongDoanhThu) : 0}%
                 </ProgressNumberP>
               </ProgressNumber>
             </Progress>
@@ -421,9 +443,9 @@ const Main = () => {
           </Icon>
           <Middle>
             <Left>
-              <H3>Total Mèo</H3>
+              <H3>Doanh thu Mèo</H3>
               <H1>
-                {hienThiDoanhThuMeo}
+                {hienThiDoanhThuMeo ? hienThiDoanhThuMeo : 0}
                 <span style={{ textDecoration: "underline" }}>
                   <b>đ</b>
                 </span>
@@ -431,19 +453,30 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
-                <Circle
-                  cx="38"
-                  cy="38"
-                  r="36"
-                  strokeDasharray="315"
-                  strokeDashoffset={Math.round(
-                    315 - ((doanhThuMeo * 100) / tongDoanhThu) * 2 * (360 / 315)
-                  )}
-                ></Circle>
+                {doanhThuMeo&&doanhThuMeo!==0 ?
+                  <Circle
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 - ((doanhThuMeo * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></Circle> :
+                  <CircleNaN
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 - ((doanhThuMeo * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></CircleNaN>
+                }
               </Svg>
               <ProgressNumber>
                 <ProgressNumberP>
-                  {Math.round((doanhThuMeo * 100) / tongDoanhThu)}%
+                  {doanhThuMeo?Math.round((doanhThuMeo * 100) / tongDoanhThu):0}%
                 </ProgressNumberP>
               </ProgressNumber>
             </Progress>
@@ -465,9 +498,9 @@ const Main = () => {
           </Icon>
           <Middle>
             <Left>
-              <H3>Total Thú cưng khác</H3>
+              <H3>Doanh thu thú cưng khác</H3>
               <H1>
-                {hienThiDoanhThuKhac}
+                {hienThiDoanhThuKhac?hienThiDoanhThuKhac:0}
                 <span style={{ textDecoration: "underline" }}>
                   <b>đ</b>
                 </span>
@@ -475,6 +508,7 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
+              {doanhThuKhac&&doanhThuKhac!==0?
                 <Circle
                   cx="38"
                   cy="38"
@@ -482,13 +516,26 @@ const Main = () => {
                   strokeDasharray="315"
                   strokeDashoffset={Math.round(
                     315 -
-                      ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
                   )}
                 ></Circle>
+                :
+                <CircleNaN
+                  cx="38"
+                  cy="38"
+                  r="36"
+                  strokeDasharray="315"
+                  strokeDashoffset={Math.round(
+                    315 -
+                    ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
+                  )}
+                ></CircleNaN>
+              }
+                
               </Svg>
               <ProgressNumber>
                 <ProgressNumberP>
-                  {Math.round((doanhThuKhac * 100) / tongDoanhThu)}%
+                  {doanhThuKhac?Math.round((doanhThuKhac * 100) / tongDoanhThu):0}%
                 </ProgressNumberP>
               </ProgressNumber>
             </Progress>

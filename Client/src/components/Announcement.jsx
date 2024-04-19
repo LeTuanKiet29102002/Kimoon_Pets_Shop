@@ -168,6 +168,15 @@ const Title = styled.div`
   font-weight: bold;
   z-index: 200;
   height: 44px;
+  &::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -10px;
+    border-width: 22px 10px 22px 0;
+    border-style: solid;
+    border-color: #fe6433 transparent #fe6433 transparent;
+  }
 `;
 const scroll = keyframes`
     from {

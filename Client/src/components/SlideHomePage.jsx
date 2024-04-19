@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import CustomBtn from "./ComponentNoUsing/ButtonTwo"
 // import { slide_data } from "../data";
+import { Link } from "react-router-dom";
 
 const slide_data = [
   {
@@ -187,7 +189,7 @@ const NavItem = styled.li`
     top: 50%;
     transform: translateY(-50%);
     transition: all 0.3s ease;
-    z-index: 1000;
+    z-index: 99;
     &:hover {
       transform: scale(1.1);
     }
@@ -245,6 +247,106 @@ const SlideDown = styled.div`
   z-index: 99;
   animation: ${slideDownAnimation} 0.5s forwards;
 `;
+
+const GroupButton = styled.div`
+  width: 500px;
+  height: 50px;
+  position:absolute;
+  z-index:100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  bottom: 40px;
+  right: 80px;
+`
+
+const CustomButton = styled.button`
+  background: linear-gradient(
+    0deg,
+    rgba(255, 151, 0, 1) 0%,
+    rgba(251, 75, 2, 1) 100%
+  );
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  position: relative;
+  border-radius: 5px;
+  color: #ffffff;
+
+  &:hover {
+    color: rgba(251, 75, 2, 1);
+    background: transparent;
+
+    &:before {
+      height: 100%;
+    }
+
+    &:after {
+      width: 100%;
+    }
+  }
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+    right: 0;
+    bottom: 0;
+    background: rgba(251, 75, 2, 1);
+    box-shadow: -7px -7px 20px 0px rgba(255, 255, 255, 0.9),
+      -4px -4px 5px 0px rgba(255, 255, 255, 0.9),
+      7px 7px 20px 0px rgba(0, 0, 0, 0.2), 4px 4px 5px 0px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  &:before {
+    height: 0%;
+    width: 2px;
+  }
+
+  &:after {
+    width: 0%;
+    height: 2px;
+  }
+`;
+
+const ButtonSpan = styled.span`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    background: rgba(251, 75, 2, 1);
+    box-shadow: -7px -7px 20px 0px rgba(255, 255, 255, 0.9),
+      -4px -4px 5px 0px rgba(255, 255, 255, 0.9),
+      7px 7px 20px 0px rgba(0, 0, 0, 0.2), 4px 4px 5px 0px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  &:before {
+    width: 2px;
+    height: 0%;
+  }
+
+  &:after {
+    height: 2px;
+    width: 0%;
+  }
+
+  &:hover:before {
+    height: 100%;
+  }
+
+  &:hover:after {
+    width: 100%;
+  }
+`;
 // const SlideUp = styled.div`
 //     display: block;
 //     position: absolute;
@@ -290,6 +392,18 @@ const SlideHomePage = () => {
 
   return (
     <Container id="container">
+      <GroupButton>
+        <Link to="/ContactShop">
+          <CustomButton className="custom-btn btn-7">
+            <ButtonSpan>&nbsp;Chính sách hỗ trợ trả góp 0%&nbsp;</ButtonSpan>
+          </CustomButton>
+        </Link>
+        <Link to="/WarrantyPolicy">
+          <CustomButton className="custom-btn btn-7">
+            <ButtonSpan>&nbsp;Chi tiết chính sách bảo hành&nbsp;</ButtonSpan>
+          </CustomButton>
+        </Link>
+      </GroupButton>
       {slide_data.map((slide, index) => (
         <Caption
           key={index}
@@ -298,8 +412,8 @@ const SlideHomePage = () => {
               ? "current-caption"
               : index ===
                 (currentSlideIndex - 1 + slide_data.length) % slide_data.length
-              ? "previous-caption"
-              : ""
+                ? "previous-caption"
+                : ""
           }
         >
           <Heading>
@@ -319,11 +433,11 @@ const SlideHomePage = () => {
                 ? "current"
                 : index ===
                   (currentSlideIndex - 1 + slide_data.length) %
-                    slide_data.length
-                ? "previous"
-                : index === (currentSlideIndex + 1) % slide_data.length
-                ? "next"
-                : ""
+                  slide_data.length
+                  ? "previous"
+                  : index === (currentSlideIndex + 1) % slide_data.length
+                    ? "next"
+                    : ""
             }
             style={{ backgroundImage: `url(${slide.src})` }}
           ></Slide>

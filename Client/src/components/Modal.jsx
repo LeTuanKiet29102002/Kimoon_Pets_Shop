@@ -1,5 +1,5 @@
 import format_money from "../utils";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../css/main.css";
@@ -24,6 +24,15 @@ const Background = styled.div`
     animation: fadeIn linear 0.1s;
 `
 
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
+
 const ModalWrapper = styled.div`
     width: 500px;
     height: auto;
@@ -37,9 +46,7 @@ const ModalWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ThemThuCungWrapper = styled.div`
@@ -55,9 +62,7 @@ const ThemThuCungWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ChiTietWrapper = styled.div`
@@ -75,9 +80,7 @@ const ChiTietWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ModalImg = styled.img`
@@ -402,7 +405,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                 setEmailDatHangModal(chitietdonhangres.data[0].emaildathang);
                 setSoDienThoaiDatHangModal(chitietdonhangres.data[0].sodienthoaidathang);
                 setHoTenDatHangModal(chitietdonhangres.data[0].hotendathang);
-                setDiaChiDatHangModal(chitietdonhangres.data[0].diachidathang + ", " + chitietdonhangres.data[0].tenxa  + ", " + chitietdonhangres.data[0].tenquanhuyen + ", " + chitietdonhangres.data[0].tenthanhpho);
+                setDiaChiDatHangModal(chitietdonhangres.data[0].diachidathang + ", " + chitietdonhangres.data[0].tenxa + ", " + chitietdonhangres.data[0].tenquanhuyen + ", " + chitietdonhangres.data[0].tenthanhpho);
                 setGhiChuDatHangModal(chitietdonhangres.data[0].ghichudathang);
                 setTongTienDatHangModal(format_money((chitietdonhangres.data[0].tongtiendathang).toString()));
             } catch (err) {

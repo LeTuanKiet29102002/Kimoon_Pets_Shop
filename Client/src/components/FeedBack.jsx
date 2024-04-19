@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import ButtonThree from "./ComponentNoUsing/ButtonThree";
 
 const Container = styled.div`
   height: 40vh;
@@ -14,36 +13,21 @@ const Container = styled.div`
   justify-content: center; */
   padding: 0 20px;
   position: relative;
-  margin: 60px 20px;
-  /* box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 30px; */
+  margin: 20px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
 `;
 
 const Letter = styled.div`
   flex: 1;
   padding: 20px;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 30px;
-  margin-right: 10px;
-  color: rgba(255, 255, 255,1);
-  background-color: #ffe6c7;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url("https://www.colorfil.com/cdn/shop/articles/Pet_Holiday_Header.png?v=1679673153");
-  background-position: center;
+  border: 1px solid red;
 `;
 
 const LostPet = styled.div`
   flex: 1;
   padding: 20px;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 30px;
-  margin-left: 10px;
-  color: rgba(255, 255, 255,1);
-  background-color: #e0e5ec;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url("https://i.vietgiaitri.com/2020/11/19/hanh-trinh-24-gio-tim-kiem-meo-cung-di-lac-cua-co-gai-sai-gon-cam-on-nhung-nguoi-hang-xom-tot-bung-857bb-5386296_default.jpg");
+  border: 1px solid red;
 `;
 
 const Title = styled.h3`
@@ -58,25 +42,12 @@ const Desc = styled.div`
   font-size: 18px;
   font-weight: 300;
   margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   ${mobile({ textAlign: "center" })}
-`;
-
-const ButtonCss = styled.div`
-  position: absolute;
-  top: 170px;
-  right: 250px;
 `;
 
 const InputContainer = styled.div`
   width: 100%;
   max-width: 600px;
-  /* width: 600px; */
-  position: absolute;
-  top: 150px;
-  left: 74px;
   height: 40px;
   background-color: white;
   display: flex;
@@ -178,7 +149,7 @@ const InputEffect = styled.div`
     ${rotateZ} 5s linear infinite alternate;
 `;
 
-const Newsletter = () => {
+const FeedBack = () => {
   const navigate = useNavigate();
   return (
     <Container>
@@ -201,16 +172,13 @@ const Newsletter = () => {
       </Letter>
       <LostPet>
         <Title>Lost Pets</Title>
-        {/* <img src="https://i.vietgiaitri.com/2020/11/19/hanh-trinh-24-gio-tim-kiem-meo-cung-di-lac-cua-co-gai-sai-gon-cam-on-nhung-nguoi-hang-xom-tot-bung-857bb-5386296_default.jpg" alt="meo lac"></img> */}
         <Desc>
           Nếu bạn muốn tìm thú cưng của mình bị lạc hãy nhấp vào nút sau!!!
         </Desc>
-        <ButtonCss>
-          <ButtonThree />
-        </ButtonCss>
+        <button>Open modal Thu Lac</button>
       </LostPet>
     </Container>
   );
 };
 
-export default Newsletter;
+export default FeedBack;

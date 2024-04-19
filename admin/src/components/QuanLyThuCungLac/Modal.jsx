@@ -1,5 +1,5 @@
 import format_money from "../../utils";
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -28,6 +28,15 @@ const Background = styled.div`
   animation: fadeIn linear 0.1s;
 `;
 
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
+
 const ModalWrapper = styled.div`
   width: 500px;
   height: auto;
@@ -41,9 +50,7 @@ const ModalWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const ThemThuCungWrapper = styled.div`
@@ -61,9 +68,7 @@ const ThemThuCungWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const ChiTietWrapper = styled.div`
@@ -79,9 +84,7 @@ const ChiTietWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const ModalImg = styled.img`
@@ -123,7 +126,7 @@ const Button = styled.div`
   flex-direction: row;
 `;
 
-const H1 = styled.h1`
+const H2 = styled.h2`
   margin-top: 30px;
 `;
 
@@ -948,7 +951,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Chi tiết thú cưng</H1>
+              <H2>Chi tiết thú cưng</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1088,7 +1091,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Thêm thú cưng mới</H1>
+              <H2>Thêm thú cưng mới</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1230,7 +1233,7 @@ const Modal = ({
                       //Khi mảng hình trống thì hiện No Available Image
                       <ChiTietHinhAnh
                         src={
-                          "https://firebasestorage.googleapis.com/v0/b/longpets-50c17.appspot.com/o/1650880603321No-Image-Placeholder.svg.png?alt=media&token=2a1b17ab-f114-41c0-a00d-dd81aea80d3e"
+                          "https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c"
                         }
                       />
                     )}
@@ -1289,7 +1292,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Cập nhật thông tin thú cưng</H1>
+              <H2>Cập nhật thông tin thú cưng</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1388,7 +1391,7 @@ const Modal = ({
                   <ModalChiTietItem style={{ flex: "1" }}>
                     <FormLabel>
                       {thuCungModalBaoHanhSucKhoe ===
-                      "Được bảo hành sức khỏe" ? (
+                        "Được bảo hành sức khỏe" ? (
                         <FormCheckbox
                           type="checkbox"
                           checked={true}
@@ -1474,15 +1477,15 @@ const Modal = ({
                   <ImageWrapper>
                     {thuCungModalHinhAnhChange.length > 0 //Khi mảng hình có hình thì hiện các hình trong mảng
                       ? thuCungModalHinhAnhChange.map(
-                          (hinhanhupdate, index) => {
-                            return <ChiTietHinhAnh src={hinhanhupdate} />;
-                          }
-                        )
+                        (hinhanhupdate, index) => {
+                          return <ChiTietHinhAnh src={hinhanhupdate} />;
+                        }
+                      )
                       : thuCungModalHinhAnh.length > 0
-                      ? thuCungModalHinhAnh.map((hinhanh, index) => {
+                        ? thuCungModalHinhAnh.map((hinhanh, index) => {
                           return <ChiTietHinhAnh src={hinhanh} />;
                         })
-                      : null}
+                        : null}
                   </ImageWrapper>
                 </ModalChiTietItem>
               </ModalForm>
@@ -1548,13 +1551,13 @@ const Modal = ({
               }}
             >
               <ModalContent>
-                <h1>
+                <h2>
                   Bạn muốn xóa thú cưng có mã{" "}
                   <span style={{ color: `var(--color-primary)` }}>
                     {thucung.mathucung}
                   </span>{" "}
                   này?
-                </h1>
+                </h2>
                 <p>Thông tin thú cưng không thể khôi phục. Bạn có chắc chắn?</p>
                 <Button>
                   <ButtonContainer>

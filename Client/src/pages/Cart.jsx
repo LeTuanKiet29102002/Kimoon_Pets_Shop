@@ -36,6 +36,7 @@ const Top = styled.div`
 const TopButton = styled.button`
   padding: 10px;
   font-weight: 600;
+  border-radius:5px;
   cursor: pointer;
   border: ${props => props.type === "filled" && "none"};
   background-color: ${props =>
@@ -170,6 +171,7 @@ const Button = styled.button`
     background-color: black;
     color: white;
     font-weight: 600;
+    border-radius: 5px;
 `
 
 const RemoveProduct = styled.div`

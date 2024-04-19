@@ -545,7 +545,7 @@ const CapNhatThongTin = () => {
           hinhDaiDienNguoiMua != "" ? (
             <Avatar src={hinhDaiDienNguoiMua} />
           ) : (
-            <Avatar src="https://firebasestorage.googleapis.com/v0/b/longpets-50c17.appspot.com/o/1651671554060%5Bobject%20File%5D?alt=media&token=a08b5233-bc37-491a-8211-b33cb58ae0c3" />
+            <Avatar src="https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c" />
           )}
           <p style={{ fontWeight: "500", marginTop: "10px" }}>
             Hình đại diện của bạn:

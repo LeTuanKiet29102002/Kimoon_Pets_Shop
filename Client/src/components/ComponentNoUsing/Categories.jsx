@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { categories } from "../data";
-import { mobile } from "../responsive";
-import CategoryItem from "./CategoryItem";
+import { categories } from "../../data";
+import { mobile } from "../../responsive";
+import CategoryItem from "../CategoryItem";
 
 const Container = styled.div`
   background-color: #ebe2aa;

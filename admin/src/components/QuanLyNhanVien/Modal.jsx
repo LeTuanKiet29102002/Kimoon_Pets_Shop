@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../../firebase";
 import { async } from "@firebase/util";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 const CryptoJS = require("crypto-js");  //Thư viện mã hóa mật khẩu
 
 
@@ -26,7 +27,14 @@ const Background = styled.div`
 
     animation: fadeIn linear 0.1s;
 `
-
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
 const ModalWrapper = styled.div`
     width: 500px;
     height: auto;
@@ -40,46 +48,95 @@ const ModalWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
-const ThemThuCungWrapper = styled.div`
-    width: auto;
-    height: auto;
+const ThemNhanVienWrapper = styled.div`
+    width: 80%;
+    height: 90%;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: var(--color-white);
     color: var(--color-dark);
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ChiTietWrapper = styled.div`
-    width: 70%;
-    height: auto;
+    width: 80%;
+    height: 80%;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: var(--color-white);
     color: var(--color-dark);
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-
+    overflow-x: hidden;
+    position: relative;
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
+
+const Label = styled.label`
+
+`
+
+const FormLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+`
+
+const ButtonImage = styled.div`
+margin-left: 20px;
+    padding: 10px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+    transition: transform 0.25s;
+  }
+
+`
+
+const ButtonImageContainer = styled.div`
+  position: relative;
+  float: right;
+  margin: 0 22px 22px 0;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    left: 26px;
+    right: 20px;
+    background-color: transperent;
+    width: 86%;
+    height: 95%;
+    z-index: -1;
+    border-radius: 5px;
+  }
+`
+
 
 const ModalImg = styled.img`
     width: 100%;
@@ -120,7 +177,7 @@ const Button = styled.div`
     flex-direction: row;
 `
 
-const H1 = styled.h1`
+const H2 = styled.h2`
 margin-top: 30px;
 `
 
@@ -139,12 +196,6 @@ height: 100%;
 `
 
 const ModalFormItem = styled.div`
-margin: 10px 30px;
-display: flex;
-flex-direction: column;
-`
-
-const ModalChiTietItem = styled.div`
 margin: 2px 30px;
 display: flex;
 flex-direction: column;
@@ -227,10 +278,11 @@ const FormImg = styled.img`
 `
 
 const ChiTietHinhAnh = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
     margin: auto;
+    border-radius: 5px;
 `
 
 const ImageWrapper = styled.div`
@@ -261,12 +313,12 @@ const FormOption = styled.option`
     margin: auto;
 `
 
-const FormLabel = styled.label`
-    display: flex;
-    flex-directory: row;
-    // justify-content: center;
-    align-items: center;
-`
+// const FormLabel = styled.label`
+//     display: flex;
+//     flex-directory: row;
+//     // justify-content: center;
+//     align-items: center;
+// `
 
 const FormCheckbox = styled.input`
     appearance: auto;
@@ -287,6 +339,22 @@ const FormTextArea = styled.textarea`
         border: 1px solid var(--color-success);
         box-shadow: var(--color-success) 0px 1px 4px, var(--color-success) 0px 0px 0px 3px;
     }
+`
+
+const Position = styled.div`
+    position: absolute;
+    position: absolute;
+    top: 200px;
+    left: 160px;
+    width: 85%;
+`
+
+const PositionTwo = styled.div`
+    position: absolute;
+    position: absolute;
+    top: 300px;
+    left: 160px;
+    width: 85%;
 `
 
 const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handleClose, showToastFromOut }) => {
@@ -515,8 +583,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
 
                 // Giải mã mật khẩu trong CSDL để so sánh với mật khẩu được nhập
                 setNhanVienModalMatKhau(CryptoJS.AES.decrypt(
-                        nhanvienres.data[0].matkhau,
-                        "khoabimat"
+                    nhanvienres.data[0].matkhau,
+                    "khoabimat"
                 ).toString(CryptoJS.enc.Utf8));
 
                 setNhanVienModalHoTenNhanVien(nhanvienres.data[0].hotennhanvien);
@@ -928,53 +996,53 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
                         <ChiTietWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Chi tiết nhân viên</H1>
+                            <H2>Chi tiết nhân viên</H2>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <ImageWrapper>
                                             <ChiTietHinhAnh src={nhanvien.hinhdaidiennhanvien} />
                                         </ImageWrapper>
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                     <div style={{ display: "flex", flex: "1" }}>
-                                        <ModalChiTietItem style={{ flex: "1" }}>
+                                        <ModalFormItem style={{ flex: "1" }}>
                                             <FormSpan>Họ tên nhân viên:</FormSpan>
                                             <FormInput type="text" value={nhanvien.hotennhanvien} readOnly />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem style={{ flex: "1" }}>
+                                        </ModalFormItem>
+                                        <ModalFormItem style={{ flex: "1" }}>
                                             <FormSpan>Ngày sinh:</FormSpan>
                                             <FormInput type="text" value={nhanvien.ngaysinhnhanvien.substring(0, 10)} readOnly />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem style={{ flex: "1" }}>
+                                        </ModalFormItem>
+                                        <ModalFormItem style={{ flex: "1" }}>
                                             <FormSpan>Giới tính:</FormSpan>
                                             <FormInput type="text" value={nhanvien.gioitinhnhanvien} readOnly />
-                                        </ModalChiTietItem>
+                                        </ModalFormItem>
                                     </div>
                                 </div>
-                                <div style={{ display: "flex", flex: "1" }}>
-                                    <ModalChiTietItem style={{ flex: "1", marginLeft: "265px" }}>
+                                <Position style={{ display: "flex", flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
                                         <FormSpan>Địa chỉ nhân viên:</FormSpan>
                                         <FormInput type="text" value={nhanvien.diachinhanvien + ", " + nhanvien.tenxa + ", " + nhanvien.tenquanhuyen + ", " + nhanvien.tenthanhpho} readOnly />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Email:</FormSpan>
                                         <FormInput type="text" value={nhanvien.emailnhanvien} readOnly />
-                                    </ModalChiTietItem>
-                                </div>
-                                <div style={{ display: "flex", flex: "1", marginTop: "15px", marginBottom: "10px" }}>
-                                    <ModalChiTietItem style={{ flex: "1", marginLeft: "265px" }}>
+                                    </ModalFormItem>
+                                </Position>
+                                <PositionTwo style={{ display: "flex", flex: "1", marginTop: "15px", marginBottom: "10px" }}>
+                                    <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
                                         <FormSpan>Mã nhân viên:</FormSpan>
                                         <FormInput type="text" value={nhanvien.manhanvien} readOnly />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Chức vụ:</FormSpan>
                                         <FormInput type="text" value={nhanvien.tenchucvu} readOnly />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Số điện thoại:</FormSpan>
                                         <FormInput type="text" value={nhanvien.sdtnhanvien} readOnly />
-                                    </ModalChiTietItem>
-                                </div>
+                                    </ModalFormItem>
+                                </PositionTwo>
                             </ModalForm>
                             <ButtonUpdate>
                                 <ButtonContainer>
@@ -1001,15 +1069,15 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
             <>
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
-                        <ThemThuCungWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Thêm nhân viên mới</H1>
+                        <ThemNhanVienWrapper showModal={showModal} style={{ flexDirection: `column` }}>
+                            <H2>Thêm nhân viên mới</H2>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Tên nhân viên:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setHoTenNhanVienMoi(e.target.value)} placeholder="Tên của Nhân viên" />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Chức vụ:</FormSpan>
                                         <FormSelect onChange={(e) => { setMaChucVuMoi(e.target.value) }}>
                                             {chucVu.map((chucvu, key) => {
@@ -1018,21 +1086,21 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                 )
                                             })}
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Giới tính:</FormSpan>
                                         <FormSelect onChange={(e) => { setGioiTinhNhanVienMoi(e.target.value) }}>
                                             <FormOption value="Nam"> Nam </FormOption>
                                             <FormOption value="Nữ"> Nữ </FormOption>
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Ngày sinh:</FormSpan>
                                         <FormInput type="date" onChange={(e) => setNgaySinhNhanVienMoi(e.target.value)} />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc tỉnh:</FormSpan>
                                         <FormSelect onChange={(e) => { setTinhThanhPho(e.target.value) }}>
                                             <FormOption value="">-- Chọn thành phố --</FormOption>
@@ -1042,8 +1110,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                 )
                                             })}
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc huyện:</FormSpan>
                                         <FormSelect onChange={(e) => { setQuanHuyen(e.target.value) }}>
                                             {
@@ -1058,8 +1126,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                     <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
                                             }
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc xã:</FormSpan>
                                         <FormSelect onChange={(e) => { setXaPhuongThiTran(e.target.value) }}>
                                             {
@@ -1074,45 +1142,60 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                     <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
                                             }
                                         </FormSelect>
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Địa chỉ:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setDiaChiNhanVienMoi(e.target.value)} placeholder="Địa chỉ của nhân viên" />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Số điện thoại:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setSdtNhanVienMoi(e.target.value)} placeholder="Số điện thoại của nhân viên" />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Email:</FormSpan>
                                         <FormInput type="email" onChange={(e) => setEmailNhanVienMoi(e.target.value)} placeholder="Email của nhân viên" />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Mật khẩu:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setMatKhauMoi(e.target.value)} placeholder="Mật khẩu" />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Nhập lại mật khẩu:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setReMatKhauMoi(e.target.value)} placeholder="Nhập lại mật khẩu" />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
-                                <ModalChiTietItem>
-                                    <FormSpan>Hình ảnh:</FormSpan>
-                                    <FormInput type="file" onChange={(e) => handleShowImg(e.target.files[0])} />
+                                <ModalFormItem>
+                                    {/* <FormSpan>Hình ảnh:</FormSpan> */}
                                     <ImageWrapper>
                                         {
                                             hinhAnhMoi != ""   //Khi mảng hình có hình thì hiện các hình trong mảng
                                                 ?
                                                 <ChiTietHinhAnh src={hinhAnhMoi} />
                                                 :   //Khi mảng hình trống thì hiện No Available Image
-                                                <ChiTietHinhAnh src={"https://firebasestorage.googleapis.com/v0/b/longpets-50c17.appspot.com/o/1650880603321No-Image-Placeholder.svg.png?alt=media&token=2a1b17ab-f114-41c0-a00d-dd81aea80d3e"} />
+                                                <ChiTietHinhAnh src={"https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c"} />
                                         }
                                     </ImageWrapper>
-                                </ModalChiTietItem>
+                                    <FormLabel>
+                                        <Label htmlFor="imageInput">
+                                            <ButtonImageContainer>
+                                                <ButtonImage>
+                                                    <AddPhotoAlternateIcon />
+                                                    Thêm hình ảnh
+                                                </ButtonImage>
+                                            </ButtonImageContainer>
+                                        </Label>
+                                        <FormInput
+                                            type="file"
+                                            onChange={(e) => handleShowImg(e.target.files[0])}
+                                            id="imageInput"
+                                            style={{ display: 'none' }}
+                                        />
+                                    </FormLabel>
+                                </ModalFormItem>
                             </ModalForm>
                             <ButtonUpdate>
                                 <ButtonContainer>
@@ -1144,7 +1227,7 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                             >
                                 <CloseOutlined />
                             </CloseModalButton>
-                        </ThemThuCungWrapper>
+                        </ThemNhanVienWrapper>
                     </Background>
                 ) : null}
             </>
@@ -1156,15 +1239,15 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
             <>
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
-                        <ThemThuCungWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Cập nhật thông tin nhân viên</H1>
+                        <ThemNhanVienWrapper showModal={showModal} style={{ flexDirection: `column` }}>
+                            <H2>Cập nhật thông tin nhân viên</H2>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Tên nhân viên:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setNhanVienModalHoTenNhanVien(e.target.value)} value={nhanVienModalHoTenNhanVien} />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Chức vụ:</FormSpan>
                                         <FormSelect onChange={(e) => { setNhanVienModalMaChucVu(e.target.value) }}>
                                             {chucVu.map((chucvu, key) => {
@@ -1179,8 +1262,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                 }
                                             })}
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Giới tính:</FormSpan>
                                         <FormSelect onChange={(e) => { setNhanVienModalGioiTinhNhanVien(e.target.value) }}>
                                             {
@@ -1198,14 +1281,14 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                     <FormOption value="Nữ"> Nữ </FormOption>
                                             }
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Ngày sinh:</FormSpan>
                                         <FormInput type="date" onChange={(e) => setNhanVienModalNgaySinhNhanVien(e.target.value)} value={nhanVienModalNgaySinhNhanVien} />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc tỉnh:</FormSpan>
                                         <FormSelect onChange={(e) => { setNhanVienModalMaThanhPho(e.target.value) }}>
                                             <FormOption value="">-- Chọn thành phố --</FormOption>
@@ -1221,8 +1304,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                 }
                                             })}
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc huyện:</FormSpan>
                                         <FormSelect onChange={(e) => { setNhanVienModalMaQuanHuyen(e.target.value) }}>
                                             {
@@ -1243,8 +1326,8 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                     <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
                                             }
                                         </FormSelect>
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Thuộc xã:</FormSpan>
                                         <FormSelect onChange={(e) => { setNhanVienModalMaXa(e.target.value) }}>
                                             {
@@ -1265,40 +1348,39 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                     <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
                                             }
                                         </FormSelect>
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Địa chỉ:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setNhanVienModalDiaChiNhanVien(e.target.value)} value={nhanVienModalDiaChiNhanVien} />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Số điện thoại:</FormSpan>
                                         <FormInput type="text" onChange={(e) => setNhanVienModalSdtNhanVien(e.target.value)} value={nhanVienModalSdtNhanVien} />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Email:</FormSpan>
                                         <FormInput type="email" value={nhanVienModalEmailNhanVien} disabled />
-                                    </ModalChiTietItem>
-                                    <ModalChiTietItem style={{ flex: "1" }}>
+                                    </ModalFormItem>
+                                    <ModalFormItem style={{ flex: "1" }}>
                                         <FormSpan>Mật khẩu:</FormSpan>
                                         <FormInput type="text" onChange={(e) => { setNhanVienModalMatKhau(e.target.value) }} value={nhanVienModalMatKhau} />
-                                    </ModalChiTietItem>
+                                    </ModalFormItem>
                                     {
                                         nhanVienModalMatKhau !== nhanVienModalMatKhauOld
                                             ?
-                                            <ModalChiTietItem style={{ flex: "1" }}>
+                                            <ModalFormItem style={{ flex: "1" }}>
                                                 <FormSpan>Nhập lại mật khẩu:</FormSpan>
                                                 <FormInput type="text" onChange={(e) => { setNhanVienModalReMatKhau(e.target.value) }} placeholder="Hãy nhập lại mật khẩu" />
-                                            </ModalChiTietItem>
+                                            </ModalFormItem>
                                             : null
                                     }
                                 </div>
-                                <ModalChiTietItem>
-                                    <FormSpan>Hình ảnh:</FormSpan>
-                                    <FormInput type="file" onChange={(e) => handleChangeImg(e.target.files[0])} />
+                                <ModalFormItem>
+                                    {/* <FormSpan>Hình ảnh:</FormSpan> */}
                                     <ImageWrapper>
                                         {
                                             nhanVienModalHinhDaiDienNhanVienChange != ""   //Khi mảng hình có hình thì hiện các hình trong mảng
@@ -1308,7 +1390,23 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                                                 <ChiTietHinhAnh src={nhanVienModalHinhDaiDienNhanVien} />
                                         }
                                     </ImageWrapper>
-                                </ModalChiTietItem>
+                                    <FormLabel>
+                                        <Label htmlFor="imageInput">
+                                            <ButtonImageContainer>
+                                                <ButtonImage>
+                                                    <AddPhotoAlternateIcon />
+                                                    Thêm hình ảnh
+                                                </ButtonImage>
+                                            </ButtonImageContainer>
+                                        </Label>
+                                        <FormInput
+                                            type="file"
+                                            onChange={(e) => handleChangeImg(e.target.files[0])}
+                                            id="imageInput"
+                                            style={{ display: 'none' }}
+                                        />
+                                    </FormLabel>
+                                </ModalFormItem>
                             </ModalForm>
                             <ButtonUpdate>
                                 <ButtonContainer>
@@ -1360,7 +1458,7 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                             >
                                 <CloseOutlined />
                             </CloseModalButton>
-                        </ThemThuCungWrapper>
+                        </ThemNhanVienWrapper>
                     </Background>
                 ) : null}
             </>
@@ -1374,7 +1472,7 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                     <Background ref={modalRef} onClick={closeModal}>
                         <ModalWrapper showModal={showModal} style={{ backgroundImage: `url("https://img.freepik.com/free-vector/alert-safety-background_97886-3460.jpg?w=1060")`, backgroundPosition: `center center`, backgroundRepeat: `no-repeat`, backgroundSize: `cover`, width: `600px`, height: `400px` }} >
                             <ModalContent>
-                                <h1>Bạn muốn xóa nhân viên có mã <span style={{ color: `var(--color-primary)` }}>{nhanvien.manhanvien}</span> này?</h1>
+                                <h2>Bạn muốn xóa nhân viên có mã <span style={{ color: `var(--color-primary)` }}>{nhanvien.manhanvien}</span> này?</h2>
                                 <p>Thông tin nhân viên không thể khôi phục. Bạn có chắc chắn?</p>
                                 <Button>
                                     <ButtonContainer>

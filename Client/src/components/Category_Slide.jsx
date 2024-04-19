@@ -4,7 +4,7 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import "owl.carousel";
 import { Link } from "react-router-dom";
-import CustomButtonWithDot from "./Button";
+import CustomButtonWithDot from "./ComponentNoUsing/Button";
 import axios from "axios";
 import "./Category_Slide.css";
 

@@ -26,11 +26,11 @@ const CustomButton = styled.button`
   height: 40px;
   padding: 0 16px;
   margin-bottom: 16px;
-  background: rgb(251, 33, 117);
+  background: var(--color-primary);
   background: linear-gradient(
     0deg,
-    rgba(251, 33, 117, 1) 0%,
-    rgba(234, 76, 137, 1) 100%
+    var(--color-primary) 0%,
+    rgb(196, 142, 47) 100%
   );
   color: #fff;
   overflow: hidden;

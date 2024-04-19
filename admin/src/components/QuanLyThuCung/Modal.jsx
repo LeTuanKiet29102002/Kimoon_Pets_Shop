@@ -1,5 +1,5 @@
 import format_money from "../../utils";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -11,6 +11,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../firebase";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
 
 const Background = styled.div`
   width: 100%;
@@ -28,10 +30,17 @@ const Background = styled.div`
   left: 0;
   animation: fadeIn linear 0.1s;
 `;
-
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
 const ModalWrapper = styled.div`
   width: 500px;
-  height: auto;
+  min-height: 50%;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
@@ -42,19 +51,18 @@ const ModalWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
+
 const ThemThuCungWrapper = styled.div`
-  width: auto;
+  width: 80%;
   height: auto;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   /* transform: scale(0.8, 0.8); */
   max-height: 80vh; /* giới hạn chiều cao của modal */
@@ -62,27 +70,24 @@ const ThemThuCungWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const ChiTietWrapper = styled.div`
-  width: 70%;
-  height: auto;
+  width: 80%;
+  height: 90%;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-
+  overflow-y: auto; 
+  overflow-x: hidden;
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const ModalImg = styled.img`
@@ -124,7 +129,7 @@ const Button = styled.div`
   flex-direction: row;
 `;
 
-const H1 = styled.h1`
+const H2 = styled.h2`
   margin-top: 30px;
 `;
 
@@ -153,6 +158,55 @@ const ModalChiTietItem = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const Label = styled.label
+  ``
+const FormLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+`
+
+const ButtonImage = styled.div`
+    padding: 10px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+    transition: transform 0.25s;
+  }
+
+`
+
+const ButtonImageContainer = styled.div`
+  position: relative;
+  float: right;
+  margin: 0 22px 22px 0;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    right: 20px;
+    background-color: transperent;
+    width: 95%;
+    height: 95%;
+    z-index: -1;
+    border-radius: 5px;
+  }
+`
+
 
 const FormSpan = styled.span`
   font-size: 1.2rem;
@@ -234,12 +288,16 @@ const ChiTietHinhAnh = styled.img`
   width: 100px;
   height: 100px;
   object-fit: cover;
-  margin: auto;
+  margin: 10px;
+  border-radius: 3px;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  overflow: auto;
+  border: 1px dashed #000;
+  border-radius:5px;
   &img {
     margin: 0px 20px;
   }
@@ -266,12 +324,12 @@ const FormOption = styled.option`
   margin: auto;
 `;
 
-const FormLabel = styled.label`
-  display: flex;
-  flex-directory: row;
-  // justify-content: center;
-  align-items: center;
-`;
+// const FormLabel = styled.label`
+//   display: flex;
+//   flex-directory: row;
+//   // justify-content: center;
+//   align-items: center;
+// `;
 
 const FormCheckbox = styled.input`
   appearance: auto;
@@ -949,7 +1007,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Chi tiết thú cưng</H1>
+              <H2>Chi tiết thú cưng</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1089,7 +1147,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Thêm thú cưng mới</H1>
+              <H2>Thêm thú cưng mới</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1216,12 +1274,6 @@ const Modal = ({
                   </ModalChiTietItem>
                 </div>
                 <ModalChiTietItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    multiple
-                    onChange={(e) => handleShowImg(e.target.files)}
-                  />
                   <ImageWrapper>
                     {hinhAnhMoi.length > 0 ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
                       hinhAnhMoi.map((hinhanh, index) => {
@@ -1231,11 +1283,28 @@ const Modal = ({
                       //Khi mảng hình trống thì hiện No Available Image
                       <ChiTietHinhAnh
                         src={
-                          "https://firebasestorage.googleapis.com/v0/b/longpets-50c17.appspot.com/o/1650880603321No-Image-Placeholder.svg.png?alt=media&token=2a1b17ab-f114-41c0-a00d-dd81aea80d3e"
+                          "https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c"
                         }
                       />
                     )}
                   </ImageWrapper>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Thêm hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleShowImg(e.target.files)}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                      multiple="true"
+                    />
+                  </FormLabel>
                 </ModalChiTietItem>
               </ModalForm>
               <ButtonUpdate>
@@ -1290,7 +1359,7 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Cập nhật thông tin thú cưng</H1>
+              <H2>Cập nhật thông tin thú cưng</H2>
               <ModalForm>
                 <div style={{ display: "flex" }}>
                   <ModalChiTietItem style={{ flex: "1" }}>
@@ -1389,7 +1458,7 @@ const Modal = ({
                   <ModalChiTietItem style={{ flex: "1" }}>
                     <FormLabel>
                       {thuCungModalBaoHanhSucKhoe ===
-                      "Được bảo hành sức khỏe" ? (
+                        "Được bảo hành sức khỏe" ? (
                         <FormCheckbox
                           type="checkbox"
                           checked={true}
@@ -1465,26 +1534,36 @@ const Modal = ({
                   </ModalChiTietItem>
                 </div>
                 <ModalChiTietItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    multiple
-                    onChange={(e) => handleChangeImg(e.target.files)}
-                    placeholder="Nhập vào tên danh mục thú cưng"
-                  />
                   <ImageWrapper>
                     {thuCungModalHinhAnhChange.length > 0 //Khi mảng hình có hình thì hiện các hình trong mảng
                       ? thuCungModalHinhAnhChange.map(
-                          (hinhanhupdate, index) => {
-                            return <ChiTietHinhAnh src={hinhanhupdate} />;
-                          }
-                        )
+                        (hinhanhupdate, index) => {
+                          return <ChiTietHinhAnh src={hinhanhupdate} />;
+                        }
+                      )
                       : thuCungModalHinhAnh.length > 0
-                      ? thuCungModalHinhAnh.map((hinhanh, index) => {
+                        ? thuCungModalHinhAnh.map((hinhanh, index) => {
                           return <ChiTietHinhAnh src={hinhanh} />;
                         })
-                      : null}
+                        : null}
                   </ImageWrapper>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Cập nhật hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleChangeImg(e.target.files)}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                      multiple="true"
+                    />
+                  </FormLabel>
                 </ModalChiTietItem>
               </ModalForm>
               <ButtonUpdate>
@@ -1549,13 +1628,13 @@ const Modal = ({
               }}
             >
               <ModalContent>
-                <h1>
+                <h2>
                   Bạn muốn xóa thú cưng có mã{" "}
                   <span style={{ color: `var(--color-primary)` }}>
                     {thucung.mathucung}
                   </span>{" "}
                   này?
-                </h1>
+                </h2>
                 <p>Thông tin thú cưng không thể khôi phục. Bạn có chắc chắn?</p>
                 <Button>
                   <ButtonContainer>

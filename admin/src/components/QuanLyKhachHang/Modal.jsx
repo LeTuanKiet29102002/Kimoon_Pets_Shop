@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -22,7 +22,14 @@ const Background = styled.div`
 
     animation: fadeIn linear 0.1s;
 `
-
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
 const ModalWrapper = styled.div`
     width: 500px;
     height: auto;
@@ -36,9 +43,7 @@ const ModalWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ThemThuCungWrapper = styled.div`
@@ -54,27 +59,23 @@ const ThemThuCungWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ChiTietWrapper = styled.div`
-    width: 70%;
+    width: 80%;
     height: auto;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: var(--color-white);
     color: var(--color-dark);
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ModalImg = styled.img`
@@ -116,7 +117,7 @@ const Button = styled.div`
     flex-direction: row;
 `
 
-const H1 = styled.h1`
+const H2 = styled.h2`
 margin-top: 30px;
 `
 
@@ -221,10 +222,11 @@ const FormImg = styled.img`
 `
 
 const ChiTietHinhAnh = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     margin: auto;
+    border-radius: 5px;
 `
 
 const ImageWrapper = styled.div`
@@ -283,6 +285,12 @@ const FormTextArea = styled.textarea`
     }
 `
 
+const Position = styled.div`
+    position: absolute;
+    top: 180px;
+    left: 227px;
+`
+
 const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, handleClose, showToastFromOut }) => {
     const modalRef = useRef();
     const closeModal = (e) => {
@@ -333,9 +341,9 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
     useEffect(() => {
         const getXaPhuongThanhPho = async () => {
             try {
-                const xaphuongthanhphores = await axios.post("http://localhost:3001/api/user/getXaPhuongThanhPho", {maxa: khachhang.maxa});
+                const xaphuongthanhphores = await axios.post("http://localhost:3001/api/user/getXaPhuongThanhPho", { maxa: khachhang.maxa });
                 setTenXaHuyenThanhPho(", " + xaphuongthanhphores.data.tenxa + ", " + xaphuongthanhphores.data.tenquanhuyen + ", " + xaphuongthanhphores.data.tenthanhpho);
-            } catch(err) {
+            } catch (err) {
                 console.log("Lấy xã phường thị trấn, tp thất bại");
             }
         }
@@ -349,7 +357,7 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
                         <ChiTietWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Chi tiết khách hàng</H1>
+                            <H2>Chi tiết khách hàng</H2>
                             <ModalForm>
                                 <div style={{ display: "flex" }}>
                                     <ModalChiTietItem style={{ flex: "1" }}>
@@ -364,7 +372,7 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
                                         </ModalChiTietItem>
                                         <ModalChiTietItem style={{ flex: "1" }}>
                                             <FormSpan>Ngày sinh:</FormSpan>
-                                            <FormInput type="text" value={khachhang.ngaysinhnguoimua.substring(0,10)} readOnly />
+                                            <FormInput type="text" value={khachhang.ngaysinhnguoimua.substring(0, 10)} readOnly />
                                         </ModalChiTietItem>
                                         <ModalChiTietItem style={{ flex: "1" }}>
                                             <FormSpan>Giới tính:</FormSpan>
@@ -372,7 +380,7 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
                                         </ModalChiTietItem>
                                     </div>
                                 </div>
-                                <div style={{ display: "flex", flex: "1" }}>
+                                <Position style={{ display: "flex", flex: "1" }}>
                                     <ModalChiTietItem style={{ flex: "1", marginLeft: "26%" }}>
                                         <FormSpan>Địa chỉ khách hàng:</FormSpan>
                                         <FormInput type="text" value={khachhang.diachinguoimua + tenXaHuyenThanhPho} readOnly />
@@ -385,7 +393,7 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
                                         <FormSpan>Số điện thoại:</FormSpan>
                                         <FormInput type="text" value={khachhang.sdtnguoimua} readOnly />
                                     </ModalChiTietItem>
-                                </div>
+                                </Position>
 
                             </ModalForm>
                             <ButtonUpdate>
@@ -415,7 +423,7 @@ const Modal = ({ showModal, setShowModal, type, khachhang, setReRenderData, hand
                     <Background ref={modalRef} onClick={closeModal}>
                         <ModalWrapper showModal={showModal} style={{ backgroundImage: `url("https://img.freepik.com/free-vector/alert-safety-background_97886-3460.jpg?w=1060")`, backgroundPosition: `center center`, backgroundRepeat: `no-repeat`, backgroundSize: `cover`, width: `600px`, height: `400px` }} >
                             <ModalContent>
-                                <h1>Bạn muốn xóa khách hàng <span style={{ color: `var(--color-primary)` }}>{khachhang.hotennguoimua}</span></h1>
+                                <h2>Bạn muốn xóa khách hàng <span style={{ color: `var(--color-primary)` }}>{khachhang.hotennguoimua}</span></h2>
                                 <p>Thông tin khách hàng không thể khôi phục. Bạn có chắc chắn?</p>
                                 <Button>
                                     <ButtonContainer>

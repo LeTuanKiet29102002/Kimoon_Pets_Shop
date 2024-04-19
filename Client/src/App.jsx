@@ -21,8 +21,10 @@ import DonMua from "./pages/DonMua";
 import LoginRegister from "./pages/LoginRegister";
 import DatMua from "./pages/DatMua";
 import ScrollToTop from "react-scroll-to-top";
-import NotFound from "./components/NotFound";
+import NotFound from "./pages/NotFound.jsx";
 import { AuthContextProvider } from "./context/AuthContext.js";
+import WarrantyPolicy from "./pages/WarrantyPolicy.jsx";
+import ContactShop from "./pages/ContactShop.jsx";
 import Protected from "./components/Protected.jsx";
 
 const App = () => {
@@ -56,9 +58,11 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-
             <Route path="/cart" element={<Cart />} />
             <Route path="/favorite" element={<Favorite />} />
+            <Route path="/ContactShop" element={<ContactShop />} />
+            <Route path="/WarrantyPolicy" element={<WarrantyPolicy />} />
+
             <Route
               path="/register"
               element={user ? <Navigate to="/" /> : <LoginRegister />}
@@ -99,7 +103,7 @@ const App = () => {
               bottom: "20px",
             }}
 
-            component={<PetsIcon style={{ color: "#ff6f00", fontSize: "24px" }} />}
+            component={<PetsIcon style={{ color: "#ff6f00", fontSize: "30px" }} />}
           />
         </Router>
       </AuthContextProvider>

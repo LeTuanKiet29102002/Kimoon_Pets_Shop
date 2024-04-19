@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -10,6 +10,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../firebase";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const Background = styled.div`
   width: 100%;
@@ -28,9 +29,16 @@ const Background = styled.div`
 
   animation: fadeIn linear 0.1s;
 `;
-
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
 const ModalWrapper = styled.div`
-  width: 500px;
+  width: 900px;
   height: auto;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
@@ -42,9 +50,7 @@ const ModalWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
-  --growth-from: 0.7;
-  --growth-to: 1;
-  animation: growth linear 0.1s;
+  animation: ${growAnimation} linear 0.5s;
 `;
 
 const FormTextArea = styled.textarea`
@@ -103,7 +109,7 @@ const Button = styled.div`
   flex-direction: row;
 `;
 
-const H1 = styled.h1`
+const H2 = styled.h2`
   margin-top: 30px;
 `;
 
@@ -111,7 +117,7 @@ const ModalForm = styled.form`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
   box-shadow: var(--box-shadow);
@@ -121,11 +127,68 @@ const ModalForm = styled.form`
   }
 `;
 
+const FormText = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 const ModalFormItem = styled.div`
   margin: 10px 30px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
 `;
+
+const Label = styled.label`
+
+`;
+const FormLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+`
+
+const ButtonImage = styled.div`
+    padding: 10px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+    transition: transform 0.25s;
+  }
+
+`
+
+const ButtonImageContainer = styled.div`
+  position: relative;
+  float: right;
+  margin: 0 22px 22px 0;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    right: 20px;
+    background-color: transperent;
+    width: 95%;
+    height: 95%;
+    z-index: -1;
+    border-radius: 5px;
+  }
+`
+
+
 const FormSpan = styled.span`
   font-size: 1.2rem;
   height: 600;
@@ -194,10 +257,12 @@ const ButtonClick = styled.button`
 `;
 
 const FormImg = styled.img`
-  margin: auto;
+  margin: 20px;
   width: 50%;
   object-fit: cover;
   height: 200px;
+  width: 200px;
+  border-radius: 5px;
 `;
 
 const Modal = ({
@@ -578,41 +643,54 @@ const Modal = ({
               style={{ flexDirection: `column` }}
             >
               {/* <ModalImg src="https://scontent.fsgn5-8.fna.fbcdn.net/v/t39.30808-6/278270298_565881528230362_2335941423796450487_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=730e14&_nc_ohc=1csEjacjr-cAX9nRW6x&_nc_ht=scontent.fsgn5-8.fna&oh=00_AT-At5LL1aaL1GnAjuZnxBtccvQ-qUOvbj-LYussaVFg8w&oe=625E2D98" alt="img nè"></ModalImg> */}
-              <H1>Thêm danh mục mới</H1>
+              <H2>Thêm danh mục mới</H2>
               <ModalForm>
                 <ModalFormItem>
-                  <FormSpan>Tên danh mục:</FormSpan>
-                  <FormInput
-                    type="text"
-                    onChange={(e) => setTenDanhMucMoi(e.target.value)}
-                    placeholder="Nhập vào tên danh mục thú cưng"
-                  />
-                </ModalFormItem>
-                <ModalFormItem>
-                  <FormSpan>Tiêu đề:</FormSpan>
-                  <FormTextArea
-                    rows="4"
-                    cols="50"
-                    onChange={(e) => setTenTieuDeMoi(e.target.value)}
-                    placeholder="Nhập vào tiêu đề hiển thị thú cưng"
-                  />
-                </ModalFormItem>
-                <ModalFormItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    onChange={(e) => handleShowImg(e.target.files[0])}
-                    placeholder="Nhập vào tên danh mục thú cưng"
-                  />
+                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
                   <FormImg
                     src={
                       linkHinhAnh !== null
                         ? linkHinhAnh
-                        : "https://firebasestorage.googleapis.com/v0/b/longpets-50c17.appspot.com/o/1650880603321No-Image-Placeholder.svg.png?alt=media&token=2a1b17ab-f114-41c0-a00d-dd81aea80d3e"
+                        : "https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c"
                     }
                     key={linkHinhAnh}
                   ></FormImg>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Thêm hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleShowImg(e.target.files[0])}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                    />
+                  </FormLabel>
                 </ModalFormItem>
+                <FormText>
+                  <ModalFormItem>
+                    <FormSpan>Tên danh mục:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setTenDanhMucMoi(e.target.value)}
+                      placeholder="Nhập vào tên danh mục thú cưng"
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem>
+                    <FormSpan>Tiêu đề:</FormSpan>
+                    <FormTextArea
+                      rows="4"
+                      cols="50"
+                      onChange={(e) => setTenTieuDeMoi(e.target.value)}
+                      placeholder="Nhập vào tiêu đề hiển thị thú cưng"
+                    />
+                  </ModalFormItem>
+                </FormText>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
@@ -656,31 +734,10 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H1>Chỉnh sửa danh mục</H1>
+              <H2>Chỉnh sửa danh mục</H2>
               <ModalForm>
                 <ModalFormItem>
-                  <FormSpan>Tên danh mục:</FormSpan>
-                  <FormInput
-                    type="text"
-                    onChange={(e) => setDanhMucModalTenDanhMuc(e.target.value)}
-                    value={danhMucModalTenDanhMuc}
-                  />
-                </ModalFormItem>
-                <ModalFormItem>
-                  <FormSpan>Tiêu đề:</FormSpan>
-                  <FormTextArea
-                    rows="4"
-                    cols="50"
-                    onChange={(e) => setDanhMucModalTenTieuDe(e.target.value)}
-                    value={danhMucModalTenTieuDe}
-                  />
-                </ModalFormItem>
-                <ModalFormItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    onChange={(e) => handleChangeImg(e.target.files[0])}
-                  />
+                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
                   <FormImg
                     src={
                       danhMucModalHinhAnh !== danhMucModalHinhAnhOld
@@ -689,7 +746,42 @@ const Modal = ({
                     }
                     key={danhMucModalHinhAnh}
                   ></FormImg>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Cập nhật hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleChangeImg(e.target.files[0])}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                    />
+                  </FormLabel>
                 </ModalFormItem>
+                <FormText>
+                  <ModalFormItem>
+                    <FormSpan>Tên danh mục:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setDanhMucModalTenDanhMuc(e.target.value)}
+                      value={danhMucModalTenDanhMuc}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem>
+                    <FormSpan>Tiêu đề:</FormSpan>
+                    <FormTextArea
+                      rows="4"
+                      cols="50"
+                      onChange={(e) => setDanhMucModalTenTieuDe(e.target.value)}
+                      value={danhMucModalTenTieuDe}
+                    />
+                  </ModalFormItem>
+                </FormText>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
@@ -743,13 +835,13 @@ const Modal = ({
             >
               {/* <ModalImg src="https://img.freepik.com/free-vector/alert-safety-background_97886-3460.jpg?w=1060" alt="img nè"></ModalImg> */}
               <ModalContent>
-                <h1>
+                <h2>
                   Bạn muốn xóa danh mục{" "}
                   <span style={{ color: `var(--color-primary)` }}>
                     {danhMucModalTenDanhMuc}
                   </span>{" "}
                   này?
-                </h1>
+                </h2>
                 <p>Toàn bộ thú cưng của danh mục này cũng sẽ bị xóa</p>
                 <Button>
                   <ButtonContainer>

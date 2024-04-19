@@ -1,4 +1,62 @@
+// import React, { useContext, createContext, useEffect, useState } from "react";
+// import {
+//   GoogleAuthProvider,
+//   signInWithPopup,
+//   signInWithRedirect,
+//   signOut,
+//   onAuthStateChanged,
+// } from "firebase/auth";
+// import { auth } from "../firebase";
+
+// const AuthContext = createContext();
+
+// export const AuthContextProvider = ({ children }) => {
+//   const [userEmail, setUserEmail] = useState({});
+//   const googleSignIn = () => {
+//     const provider = new GoogleAuthProvider();
+//     signInWithRedirect(auth, provider);
+//   };
+//   const logOut = () => {
+//     signOut(auth);
+//   };
+//   useEffect(() => {
+//     // const getRandomNumber = () => {
+//     //   // Tạo một số ngẫu nhiên trong khoảng từ 100000 đến 999999
+//     //   return Math.floor(Math.random() * 900000) + 100000;
+//     // };
+//     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+//       if (currentUser) {
+//         // Nếu người dùng đã đăng nhập, lấy thông tin người dùng
+//         setUserEmail({
+//           emailnguoimua: currentUser.email,
+//           hotennguoimua: currentUser.displayName,
+//           hinhdaidien: currentUser.photoURL,
+//           // manguoimua: getRandomNumber(),
+//         });
+//       } else {
+//         // Nếu không có người dùng đăng nhập, đặt user state về null
+//         setUserEmail(null);
+//       }
+//     });
+//     return () => {
+//       unsubscribe();
+//     };
+//   }, []);
+//   return (
+//     <AuthContext.Provider value={{ googleSignIn, logOut, userEmail }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const UserAuth = () => {
+//   return useContext(AuthContext);
+// };
+
+
+
 import React, { useContext, createContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -12,36 +70,48 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState({});
+
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
     signInWithRedirect(auth, provider);
   };
+
   const logOut = () => {
     signOut(auth);
   };
+
   useEffect(() => {
-    const getRandomNumber = () => {
-      // Tạo một số ngẫu nhiên trong khoảng từ 100000 đến 999999
-      return Math.floor(Math.random() * 900000) + 100000;
-    };
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // Nếu người dùng đã đăng nhập, lấy thông tin người dùng
         setUserEmail({
+          maxa: "00001",
           emailnguoimua: currentUser.email,
           hotennguoimua: currentUser.displayName,
           hinhdaidien: currentUser.photoURL,
-          manguoimua: getRandomNumber(),
         });
+
+        // Gửi thông tin người dùng lên máy chủ bằng Axios
+        try {
+          const response = await axios.post('http://localhost:3001/api/auth/LoginEmail', {
+            maxa: "00001", // Giả sử maxa là cố định là '00001'
+            emailnguoimua: currentUser.email,
+            hotennguoimua: currentUser.displayName,
+            hinhdaidien: currentUser.photoURL,
+          });
+          console.log("Đăng ký thành công", response.data);
+        } catch (error) {
+          console.error("Đăng ký thất bại: ", error);
+        }
       } else {
-        // Nếu không có người dùng đăng nhập, đặt user state về null
         setUserEmail(null);
       }
     });
+
     return () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <AuthContext.Provider value={{ googleSignIn, logOut, userEmail }}>
       {children}
@@ -52,6 +122,23 @@ export const AuthContextProvider = ({ children }) => {
 export const UserAuth = () => {
   return useContext(AuthContext);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { useContext, createContext, useEffect, useState } from "react";
 // import axios from "axios";

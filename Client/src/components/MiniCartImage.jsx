@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Image = styled.img`
-    min-width: 55px;
-    width: 55px;
-    height: 55px;
+    min-width: 50px;
+    width: 50px;
+    height: 50px;
     margin: 12px;
     border: 1px solid #E8E8E8;
+    border-radius:5px;
 `
 const MiniCartImage = ({ item }) => {
     const [hinhanh, setHinhAnh] = useState([]);

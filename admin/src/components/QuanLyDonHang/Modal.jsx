@@ -1,5 +1,5 @@
 import format_money from "../../utils";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -24,6 +24,14 @@ const Background = styled.div`
 
     animation: fadeIn linear 0.1s;
 `
+const growAnimation = keyframes`
+    from {
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }
+`;
 
 const ModalWrapper = styled.div`
     width: 500px;
@@ -38,9 +46,7 @@ const ModalWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    animation: ${growAnimation} linear 0.5s;
 `
 
 const ThemThuCungWrapper = styled.div`
@@ -56,27 +62,27 @@ const ThemThuCungWrapper = styled.div`
     position: relative;
     z-index: 10;
     border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+    /* animation: ${growAnimation} linear 0.5s; */
 `
 
-const ChiTietWrapper = styled.div`
-    width: 70%;
-    height: auto;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-    background: var(--color-white);
-    color: var(--color-dark);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    position: relative;
-    z-index: 10;
-    border-radius: 10px;
-    --growth-from: 0.7;
-    --growth-to: 1;
-    animation: growth linear 0.1s;
+
+const ChiTietWrapper = styled.div`
+  width: 80%;
+  height: 90%;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+  background: var(--color-white);
+  color: var(--color-dark);
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  overflow-y: auto; 
+  overflow-x: hidden;
+  position: relative;
+  z-index: 10;
+  border-radius: 10px;
+  animation: ${growAnimation} linear 0.5s;
+    
 `
 
 const ModalImg = styled.img`
@@ -118,15 +124,15 @@ const Button = styled.div`
     flex-direction: row;
 `
 
-const H1 = styled.h1`
+const H2 = styled.h2`
 margin-top: 30px;
 `
 
 const ModalForm = styled.form`
 width: 100%;    
 height: 100%;
-    display: flex;
-    flex-direction: column;
+display: flex;
+flex-direction: column;
 `
 
 const ModalFormItem = styled.div`
@@ -278,6 +284,7 @@ const FormTextArea = styled.textarea`
         box-shadow: var(--color-success) 0px 1px 4px, var(--color-success) 0px 0px 0px 3px;
     }
 `
+
 
 const Table = styled.table`
     background: var(--color-white);
@@ -467,14 +474,14 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
         }
     }
     // ================================================================
-    //  =============== Xem chi tiết thú cưng ===============
+    //  =============== Xem chi tiết đơn đặt hàng ===============
     if (type === "chitietdonhang") {
         return (
             <>
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
                         <ChiTietWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Chi tiết đơn đặt mua</H1>
+                            <H2>Chi tiết đơn đặt mua</H2>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px", flexDirection: "column" }}>
                                     <div style={{ display: "flex" }}>
@@ -520,7 +527,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                         </ModalChiTietItem>
                                     </div>
                                     <div style={{ display: "flex" }}>
-                                        <ModalChiTietItem style={{ flex: "1" }}>
+                                        <ModalChiTietItem style={{ flex: "1" ,width:"100%", height: "200px", overflow: "auto"}}>
                                             <FormSpan>Thú cưng đã được đặt mua:</FormSpan>
                                             <Table>
                                                 <Thead>
@@ -609,9 +616,22 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                                         }}
                                                     >Từ chối đơn này</ButtonClick>
                                                 </ButtonContainer>
+                                                <ButtonContainer>
+                                                    <ButtonClick
+                                                        onClick={() => {
+                                                            TuChoiDon({
+                                                                tentrangthaidathang: tenTrangThaiDatHangModal,
+                                                                madathang: maDatHangModal,
+                                                                manhanvien: admin ? admin.manhanvien : null,
+                                                                hotennhanvien: admin ? admin.hotennhanvien : null,
+                                                                hinhdaidiennhanvien: admin ? admin.hinhdaidiennhanvien : null,
+                                                            });
+                                                        }}
+                                                    >Đơn đã thanh toán</ButtonClick>
+                                                </ButtonContainer>
                                             </>
                                             : null
-                                        :null
+                                        : null
                                 }
                                 {/* // <ButtonContainer>
                                 //     <ButtonClick
@@ -640,10 +660,10 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                 //     >Từ chối đơn này</ButtonClick>
                                 // </ButtonContainer> */}
                                 <ButtonContainer>
-                                            <ButtonClick
-                                                onClick={handleCloseChiTiet}
-                                            >Đóng</ButtonClick>
-                                        </ButtonContainer>
+                                    <ButtonClick
+                                        onClick={handleCloseChiTiet}
+                                    >Đóng</ButtonClick>
+                                </ButtonContainer>
                             </ButtonUpdate>
                             <CloseModalButton
                                 aria-label="Close modal"

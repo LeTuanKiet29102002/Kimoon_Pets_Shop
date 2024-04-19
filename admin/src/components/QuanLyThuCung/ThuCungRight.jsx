@@ -90,7 +90,7 @@ const StyledMuiButton = styled(Button)`
 
   }
   &:hover {
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0);
+    box-shadow: 0px 4px 10px #00000000;
 
   }
 `;
@@ -310,6 +310,15 @@ const ThuCungRight = ({ reRenderData, setReRenderData }) => {
     console.log("checkk right result: ", thucungright);
   }, [thucungright]);
 
+
+  const values = [true, 'sm-down', 'md-down', 'lg-down', 'xl-down', 'xxl-down'];
+  const [fullscreen, setFullscreen] = useState(true);
+  const [show, setShow] = useState(false);
+
+  function handleShow(breakpoint) {
+    setFullscreen(breakpoint);
+    setShow(true);
+  }
 
   return (
     <Container>

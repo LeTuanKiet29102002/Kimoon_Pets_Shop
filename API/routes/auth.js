@@ -3,6 +3,27 @@ const con = require("../config/database.config");
 const CryptoJS = require("crypto-js");  //Thư viện mã hóa mật khẩu
 const { verifyUserToken, verifyUserTokenAndAuthorization, verifyAdminToken } = require("./verifyToken");
 
+
+//Login email
+router.post("/LoginEmail", (req, res) => {
+  const email = req.body.emailnguoimua;
+  // Truy vấn SQL để kiểm tra xem email đã tồn tại trong cơ sở dữ liệu chưa
+  const checkEmailQuery = "SELECT * FROM nguoimua WHERE emailnguoimua = ?";
+  con.query(checkEmailQuery, [email], (err, rows) => {
+    if (rows.length < 0||rows.length === 0) {
+      const sql = "INSERT INTO nguoimua ( maxa,emailnguoimua, hotennguoimua, hinhdaidien) VALUES (?, ?,  ?, ?)";
+      con.query(sql, [req.body.maxa, req.body.emailnguoimua, req.body.hotennguoimua, req.body.hinhdaidien], (err, result) => {
+        if (err) {
+          console.log("Login email thất bại: ", err);
+        } else {
+          res.status(200).json(result);
+          console.log("Login với Email thành công");
+        }
+      })
+    }
+  })
+});
+
 // Đăng ký
 router.post("/register", (req, res) => {
   if (req.body.tennguoimuadangky == "" || req.body.emailnguoimua == "" || req.body.matkhaudangky == "")
@@ -196,7 +217,7 @@ router.get("/delete/:manguoimua", verifyUserTokenAndAuthorization, (req, res) =>
 
 
 
-router.post("/LoginAdmin", async (req, res) => {
+router.post("/loginadmin", async (req, res) => {
   try {
     const sql1 = "SELECT * FROM nhanvien WHERE emailnhanvien = ? AND matkhau = ?";
     const result1 = await query(sql1, [req.body.emailnhanvien, req.body.matkhau]);

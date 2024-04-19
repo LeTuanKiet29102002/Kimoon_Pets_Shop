@@ -116,7 +116,7 @@ const Info = styled.div`
 
 const ContainerSoldOut = styled.div`
   flex: 1;
-  scale: 0.9;
+  scale: 0.85;
   margin: 5px;
   width: 280px;
   height: 350px;
@@ -145,7 +145,7 @@ const ContainerSoldOut = styled.div`
 
 const Container = styled.div`
   flex: 1;
-  scale: 0.9;
+  scale: 0.85;
   margin: 5px;
   width: 280px;
   height: 350px;

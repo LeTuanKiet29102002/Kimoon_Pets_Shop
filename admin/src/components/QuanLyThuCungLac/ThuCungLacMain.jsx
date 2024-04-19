@@ -555,7 +555,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                         }
                                         <Td className="info">
                                             <ButtonInfo
-                                                onClick={() => openModal({ type: "chitietthucung", thucunglac: thucungitem })}
+                                                onClick={() => openModal({ type: "chitietthucung", thucung: thucungitem })}
                                             >
                                                 <RemoveRedEyeOutlined />
                                             </ButtonInfo>

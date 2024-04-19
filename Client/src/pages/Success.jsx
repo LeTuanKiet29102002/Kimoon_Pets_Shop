@@ -23,7 +23,7 @@ text-align: center;
 flex-direction: column;
 `
 const H2 = styled.h2`
-margin-top: 20px
+margin-top: 20px;
 `
 const Small = styled.small`
 font-size: 1.3rem;
