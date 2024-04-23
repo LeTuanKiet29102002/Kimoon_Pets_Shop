@@ -190,7 +190,7 @@ const DetailInfo = styled.div`
 
 `
 
-const Product = (props) => {
+const Product = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const mathucung = location.pathname.split("/")[2];

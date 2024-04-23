@@ -72,7 +72,7 @@ const ChiTietWrapper = styled.div`
     background: var(--color-white);
     color: var(--color-dark);
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     max-height: 100vh; /* giới hạn chiều cao của modal */
     overflow: auto; /* hiển thị thanh cuộn khi nội dung vượt quá kích thước */
@@ -122,7 +122,7 @@ const Button = styled.div`
     flex-direction: row;
 `
 
-const H1 = styled.h1`
+const H2 = styled.h2`
 margin-top: 30px;
 `
 
@@ -454,7 +454,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                 {showModal ? (
                     <Background ref={modalRef} onClick={closeModal}>
                         <ChiTietWrapper showModal={showModal} style={{ flexDirection: `column` }}>
-                            <H1>Chi tiết Đơn đặt mua</H1>
+                            <H2>Chi tiết đơn đặt mua</H2>
                             <ModalForm>
                                 <div style={{ display: "flex", marginTop: "15px", flexDirection: "column" }}>
                                     <div style={{ display: "flex" }}>

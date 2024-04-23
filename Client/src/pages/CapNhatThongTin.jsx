@@ -16,6 +16,7 @@ import "../css/main.css";
 import { Link } from "react-router-dom";
 import Toast from "../components/Toast";
 import { updateInfo } from "../redux/userRedux";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 const Container = styled.div``;
 
@@ -26,6 +27,7 @@ const Wrapper = styled.div`
   background-color: #f8f9fa;
   box-shadow: 0 2px 3px #e0e0e0;
   display: flex;
+  border-radius: 10px;
 `;
 
 const Box1 = styled.div`
@@ -33,6 +35,9 @@ const Box1 = styled.div`
   padding: 10px 40px;
   user-select: none;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Box2 = styled.div`
@@ -183,7 +188,6 @@ const ButtonContainer = styled.div`
     height: 100%;
     z-index: 5;
     border-radius: 5px;
-
   }
 `;
 
@@ -213,6 +217,49 @@ const Avatar = styled.img`
   max-height: 400px;
   overflow: hidden;
   object-fit: contain;
+  border-radius: 10px;
+`;
+
+const Label = styled.label``;
+
+const ButtonImage = styled.div`
+  padding: 10px;
+  min-width: 150px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  z-index: 10;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+  }
+`;
+
+const ButtonImageContainer = styled.div`
+  justify-content: center;
+  position: relative;
+  float: right;
+  margin: 10px 22px 22px 0;
+  display: flex;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    right: -5px;
+    background-color: transperent;
+    min-width: 150px;
+    height: 100%;
+    z-index: 5;
+    border-radius: 5px;
+  }
 `;
 
 const CapNhatThongTin = () => {
@@ -550,9 +597,18 @@ const CapNhatThongTin = () => {
           <p style={{ fontWeight: "500", marginTop: "10px" }}>
             Hình đại diện của bạn:
           </p>
+          <Label htmlFor="imageInput">
+            <ButtonImageContainer>
+              <ButtonImage>
+                <AddPhotoAlternateIcon />
+                Thêm hình ảnh
+              </ButtonImage>
+            </ButtonImageContainer>
+          </Label>
           <FormInput
             type="file"
-            style={{ width: "100%", marginTop: "0px" }}
+            style={{ display: "none" }}
+            id="imageInput"
             onChange={(e) => handleChangeImg(e.target.files[0])}
           />
         </Box1>

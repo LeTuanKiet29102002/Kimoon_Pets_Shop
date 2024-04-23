@@ -19,7 +19,7 @@ const Container = styled.div`
 const Info = styled.div``;
 
 const ProfilePhoto = styled.div`
-  width: 3.6rem;
+  width: 3.4rem;
   height: 2.8rem;
   border-radius: 50%;
   overflow: hidden;
