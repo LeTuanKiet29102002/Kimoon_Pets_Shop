@@ -252,7 +252,7 @@ const GroupButton = styled.div`
   width: 500px;
   height: 50px;
   position:absolute;
-  z-index:100;
+  z-index:10;
   display: flex;
   align-items: center;
   justify-content: space-between;

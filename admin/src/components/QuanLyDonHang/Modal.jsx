@@ -456,6 +456,43 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
         }
     }
 
+    //XÁC NHÂN THANH TOÁN
+    const XacNhanThanhToan = async ({ tentrangthaidathang, madathang, manhanvien, hotennhanvien, hinhdaidiennhanvien }) => {
+        console.log("Mã đặt hàng, mã nhân viên: ", tentrangthaidathang, madathang, manhanvien);
+        if (tentrangthaidathang === "Đang giao dịch") {
+            const duyetdonres = await axios.post("http://localhost:3001/api/order/xacNhanThanhToan", { madathang, manhanvien, hotennhanvien, hinhdaidiennhanvien });
+            if (duyetdonres.data.message === "Xác nhận thanh toán cho đơn hàng thành công") {
+                const dataShow = { message: "Xác nhận đơn hàng có mã " + madathang + " thanh toán thành công!", type: "success" };
+                showToastFromOut(dataShow);
+                setShowModal(prev => !prev);
+                setReRenderData(prev => !prev);
+                handleClose();  //Đóng thanh tìm kiếm
+            } else {
+                const dataShow = { message: "Có lỗi khi xác nhận thanh toán đơn đặt mua có mã " + madathang, type: "danger" };
+                showToastFromOut(dataShow);
+                setShowModal(prev => !prev);
+                setReRenderData(prev => !prev);
+                handleClose();  //Đóng thanh tìm kiếm
+            }
+        } else {
+            if (tentrangthaidathang === "Hoàn thành") {
+                const dataShow = { message: "Đơn đặt mua " + madathang + " đã được xác nhận rồi ", type: "danger" };
+                showToastFromOut(dataShow);
+                setShowModal(prev => !prev);
+                setReRenderData(prev => !prev);
+                handleClose();  //Đóng thanh tìm kiếm
+            }
+            else {
+                const dataShow = { message: "Đơn đặt mua " + madathang + " chưa ở trạng thái giao dịch ", type: "danger" };
+                showToastFromOut(dataShow);
+                setShowModal(prev => !prev);
+                setReRenderData(prev => !prev);
+                handleClose();  //Đóng thanh tìm kiếm
+            }
+
+        }
+    }
+
     // TỪ CHỐI ĐƠN
     const TuChoiDon = async ({ tentrangthaidathang, madathang, manhanvien, hotennhanvien, hinhdaidiennhanvien }) => {
         const tuchoidonres = await axios.post("http://localhost:3001/api/order/tuChoiDon", { madathang, manhanvien, hotennhanvien, hinhdaidiennhanvien });
@@ -527,7 +564,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                         </ModalChiTietItem>
                                     </div>
                                     <div style={{ display: "flex" }}>
-                                        <ModalChiTietItem style={{ flex: "1" ,width:"100%", height: "200px", overflow: "auto"}}>
+                                        <ModalChiTietItem style={{ flex: "1", width: "100%", height: "200px", overflow: "auto" }}>
                                             <FormSpan>Thú cưng đã được đặt mua:</FormSpan>
                                             <Table>
                                                 <Thead>
@@ -619,7 +656,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                                 <ButtonContainer>
                                                     <ButtonClick
                                                         onClick={() => {
-                                                            TuChoiDon({
+                                                            XacNhanThanhToan({
                                                                 tentrangthaidathang: tenTrangThaiDatHangModal,
                                                                 madathang: maDatHangModal,
                                                                 manhanvien: admin ? admin.manhanvien : null,
@@ -627,7 +664,7 @@ const Modal = ({ showModal, setShowModal, type, donhang, setReRenderData, handle
                                                                 hinhdaidiennhanvien: admin ? admin.hinhdaidiennhanvien : null,
                                                             });
                                                         }}
-                                                    >Đơn đã thanh toán</ButtonClick>
+                                                    >Xác nhận thanh toán</ButtonClick>
                                                 </ButtonContainer>
                                             </>
                                             : null

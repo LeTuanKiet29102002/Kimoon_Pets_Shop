@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import Pay from "./pages/Pay";
 import Success from "./pages/Success";
+import CheckOutError from "./pages/CheckOutError";
 import "./css/main.css";
 import { useSelector } from "react-redux";
 import CapNhatThongTin from "./pages/CapNhatThongTin";
@@ -76,6 +77,7 @@ const App = () => {
             <Route path="/pay" element={<Pay />} />
             {/* <Route path="/success" element={<Success />} /> */}
             <Route path="/success" element={<Success />} />
+            <Route path="/checkoutError" element={<CheckOutError />} />
             <Route
               path="/datmua"
               element={cart.length > 0 ? <DatMua /> : <Home />}

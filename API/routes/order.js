@@ -97,8 +97,14 @@ router.post("/datMua", async (req, res) => {
               );
               // console.log("Thu cung: ",thucung.data[0].mathucung);
             });
-            res.status(200).json({ message: "Đặt mua thành công" });
-            console.log("Đặt mua thành công");
+            // if (result1 && result1.length > 0) {
+            //   console.log("Mã đặt hàng: ", result1[0].madathang);
+            // } else {
+            //   console.log("Không tìm thấy đơn đặt hàng với ngày: ", ngaydathang);
+            // }
+
+            res.status(200).json({ message: "Đặt mua thành công", madathang:result1[0].madathang });
+            console.log("Đặt mua thành công",result1[0].madathang);
 
             // MAILER
             var noidung = "";
@@ -318,6 +324,31 @@ router.post("/duyetDon", async (req, res) => {
   });
 });
 
+//XÁC NHẬN THANH TOÁN TAY
+router.post("/xacNhanThanhToan", async (req, res) => {
+  const sql =
+    "update dathang set trangthaidathang = 3, manhanvien = ? where madathang = ?;";
+  con.query(sql, [req.body.manhanvien, req.body.madathang], (err, result) => {
+    if (err) {
+      console.log("Có lỗi khi xác nhận thanh toán đơn đặt mua: ", err);
+    } else {
+      const sql1 =
+        "insert into adminlog (noidunglog, hinhdaidien) values ('" +
+        req.body.hotennhanvien +
+        " đã xác nhận thanh toán đặt mua có mã " +
+        req.body.madathang +
+        "', ?);";
+      con.query(sql1, [req.body.hinhdaidiennhanvien], (err, result) => {
+        if (err) {
+          console.log("Có lỗi khi thêm vào adminlog: ", err);
+        }
+      });
+      res.status(200).json({ message: "Xác nhận thanh toán cho đơn hàng thành công" });
+      console.log("Lấy số lượng đơn đặt mua thành công");
+    }
+  });
+});
+
 // TỪ CHỐI ĐƠN
 router.post("/tuChoiDon", async (req, res) => {
   const sql =
@@ -365,5 +396,8 @@ router.post("/tuChoiDon", async (req, res) => {
     }
   });
 });
+
+//VNPAY
+
 
 module.exports = router;

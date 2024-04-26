@@ -3,12 +3,11 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { ArrowRightAltOutlined, CheckCircleRounded } from "@material-ui/icons";
+import CancelIcon from '@mui/icons-material/Cancel';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutCart } from "../redux/cartRedux";
-import { useSelector, useDispatch } from "react-redux";
 
 
 const Container = styled.div`
@@ -72,16 +71,7 @@ const Button = styled.button`
 
 const Success = () => {
     const [countDown, setCountDown] = useState(10);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentStatus = urlParams.get('paymentStatus');
-        console.log('Payment Status kiet:', paymentStatus); // Kiểm tra log này xem đã nhận đúng giá trị chưa
-        if (paymentStatus === 'success') {
-            dispatch(logoutCart());
-        }
-    }, [dispatch]);
     useEffect(() => {
         const intervalCount = setInterval(() => {
             setCountDown(prev => prev - 1);
@@ -96,10 +86,10 @@ const Success = () => {
             <Navbar />
             <Announcement />
             <Wrapper>
-                <CheckCircleRounded style={{ fontSize: "6rem", color: "var(--color-success)", margin: "auto" }} />
-                <span style={{ color: "var(--color-success)", fontSize: "1.8rem", fontWeight: "700", letterSpacing: "2px" }}>ĐẶT MUA THÀNH CÔNG!!!</span>
-                <H2>Cảm ơn bạn đã tin tưởng và đặt mua thú cưng tại <span style={{ color: "var(--color-primary)" }}>Kimoon Pets</span></H2>
-                <Small className="text-muted">Thông tin đặt mua của bạn đã được gửi vào email!</Small>
+                <CancelIcon style={{ fontSize: "6rem", color: "var(--color-danger)", margin: "auto" }} />
+                <span style={{ color: "var(--color-danger)", fontSize: "1.8rem", fontWeight: "700", letterSpacing: "2px" }}>ĐẶT MUA BỊ LỖI!!!</span>
+                <H2>Quý khách vui lòng liên hệ với&nbsp;<span style={{ color: "var(--color-primary)" }}>Kimoon Pets</span>&nbsp;để tìm hiểu thêm</H2>
+                <Small className="text-muted">Xin quý khách thông cảm cho Shop!</Small>
                 <Link to="/" style={{textDecoration:  "none"}}>
                     <ButtonContainer>
                         <Button><ArrowRightAltOutlined />   Quay về trang chủ sau {countDown} giây ...</Button>

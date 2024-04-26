@@ -19,7 +19,7 @@ const Container = styled.div`
 const Info = styled.div``;
 
 const ProfilePhoto = styled.div`
-  width: 3.4rem;
+  width: 2.8rem;
   height: 2.8rem;
   border-radius: 50%;
   overflow: hidden;
@@ -60,7 +60,10 @@ const Update = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Message = styled.div``;
+const Message = styled.div`
+    width: 210px;
+    height: 42px;
+`;
 
 // Sales Analytics
 const SalesAnalytics = styled.div`
@@ -200,19 +203,19 @@ const Right = () => {
         <Updates>
           {adminLog
             ? adminLog.map((log, key) => {
-                return (
-                  <Update>
-                    <ProfilePhoto>
-                      <Img src={log.hinhdaidien} />
-                    </ProfilePhoto>
-                    <Message>
-                      {/* <p><b>Monkey D Luffy</b> received his order of Tuan Kiet tech GPS drone</p> */}
-                      <p>{log.noidunglog}</p>
-                      <Small className="text-muted">2 Minutes Ago</Small>
-                    </Message>
-                  </Update>
-                );
-              })
+              return (
+                <Update>
+                  <ProfilePhoto>
+                    <Img src={log.hinhdaidien} />
+                  </ProfilePhoto>
+                  <Message>
+                    {/* <p><b>Monkey D Luffy</b> received his order of Tuan Kiet tech GPS drone</p> */}
+                    <p>{log.noidunglog}</p>
+                    <Small className="text-muted">2 Minutes Ago</Small>
+                  </Message>
+                </Update>
+              );
+            })
             : null}
         </Updates>
       </RecentUpdates>

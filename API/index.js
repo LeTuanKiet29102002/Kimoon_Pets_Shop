@@ -20,7 +20,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
-app.use("/api/checkout", stripeRoute);
+// app.use("/api/checkout", stripeRoute);
+app.use("/api/stripe", stripeRoute);
 app.use("/api/products", productRoute);
 app.use("/api/lostpets", lostpetsRoute);
 // app.use("/api/products", productRoute);

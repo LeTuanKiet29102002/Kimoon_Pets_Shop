@@ -300,7 +300,7 @@ router.post("/getThuCungTimKiem", async (req, res) => {
 // ========================================== THỐNG KÊ ================================================
 // Lấy thống kê theo danh mục
 router.post("/getThongKeTheoDanhMuc", async (req, res) => {
-    const sql = "select dm.tendanhmuc, sum(ct.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 GROUP by dm.madanhmuc;";
+    const sql = "select dm.tendanhmuc, sum(ct.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 GROUP by dm.madanhmuc;";
     con.query(sql, (err, result) => {
         if (err) {
             console.log("Có lỗi khi lấy Thống kê doanh thu theo danh mục: ", err);
@@ -314,7 +314,7 @@ router.post("/getThongKeTheoDanhMuc", async (req, res) => {
 // Lấy thống kê theo doanh thu chó
 router.post("/getDoanhThuCho", async (req, res) => {
     if(req.body.ngay != "" && req.body.thang != "" && req.body.nam != "") {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc = 'Chó' && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc = 'Chó' && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu chó: ", err);
@@ -325,7 +325,7 @@ router.post("/getDoanhThuCho", async (req, res) => {
         })
         
     } else {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc = 'Chó' && YEAR(d.ngaydathang) = '2024';";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc = 'Chó' && YEAR(d.ngaydathang) = '2024';";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu chó: ", err);
@@ -339,7 +339,7 @@ router.post("/getDoanhThuCho", async (req, res) => {
 // Lấy thống kê theo doanh thu mèo
 router.post("/getDoanhThuMeo", async (req, res) => {
     if(req.body.ngay != "" && req.body.thang != "" && req.body.nam != "") {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc = 'Mèo' && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc = 'Mèo' && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu mèo: ", err);
@@ -349,7 +349,7 @@ router.post("/getDoanhThuMeo", async (req, res) => {
             }
         })
     } else {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc = 'Mèo'  && YEAR(d.ngaydathang) = '2024';";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc = 'Mèo'  && YEAR(d.ngaydathang) = '2024';";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu mèo: ", err);
@@ -363,7 +363,7 @@ router.post("/getDoanhThuMeo", async (req, res) => {
 // Lấy thống kê theo doanh thu thú khác
 router.post("/getDoanhThuKhac", async (req, res) => {
     if(req.body.ngay != "" && req.body.thang != "" && req.body.nam != "") {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc != 'Chó' && dm.tendanhmuc != 'Mèo'  && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc != 'Chó' && dm.tendanhmuc != 'Mèo'  && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu thú khác: ", err);
@@ -373,7 +373,7 @@ router.post("/getDoanhThuKhac", async (req, res) => {
             }
         })
     } else {
-        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && dm.tendanhmuc != 'Chó' && dm.tendanhmuc != 'Mèo' && YEAR(d.ngaydathang) = '2024';";
+        const sql = "select dm.tendanhmuc, sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && dm.tendanhmuc != 'Chó' && dm.tendanhmuc != 'Mèo' && YEAR(d.ngaydathang) = '2024';";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê doanh thu thú khác: ", err);
@@ -388,7 +388,7 @@ router.post("/getDoanhThuKhac", async (req, res) => {
 // Lấy thống kê tổng doanh thu
 router.post("/getTongDoanhThu", async (req, res) => {
     if(req.body.ngay != "" && req.body.thang != "" && req.body.nam != "") {
-        const sql = "select sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2  && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
+        const sql = "select sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3  && DAY(d.ngaydathang) = ? && MONTH(d.ngaydathang) = ? && YEAR(d.ngaydathang) = ?;";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê tổng doanh thu: ", err);
@@ -398,7 +398,7 @@ router.post("/getTongDoanhThu", async (req, res) => {
             }
         })
     } else {
-        const sql = "select sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 2 && YEAR(d.ngaydathang) = '2024';";
+        const sql = "select sum(cd.tongtienchitietdathang) as tongtiengiaodich from dathang d join chitietdathang cd on d.madathang = cd.madathang join thucung t on cd.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc join nguoimua n on d.manguoimua = n.manguoimua where d.trangthaidathang = 3 && YEAR(d.ngaydathang) = '2024';";
         con.query(sql, [req.body.ngay, req.body.thang, req.body.nam], (err, result) => {
             if (err) {
                 console.log("Có lỗi khi lấy Thống kê tổng doanh thu: ", err);
@@ -424,7 +424,7 @@ router.post("/getSoDonHangHomNay", (req, res) => {
 })
 // THỐNG KÊ DOANH THU HÔM NAY
 router.post("/getDoanhThuHomNay", (req, res) => {
-    const sql = "select sum(tongtiendathang) as tongtien from dathang where day(ngaydathang) = day(now()) and month(ngaydathang) = month(now()) and year(ngaydathang) = year(now()) and trangthaidathang = 2;";
+    const sql = "select sum(tongtiendathang) as tongtien from dathang where day(ngaydathang) = day(now()) and month(ngaydathang) = month(now()) and year(ngaydathang) = year(now()) and trangthaidathang = 3;";
     con.query(sql, (err, result) => {
         if (err) {
             console.log("Có lỗi khi lấy doanh thu hôm nay");
@@ -449,7 +449,7 @@ router.post("/getDonCanDuyetuHomNay", (req, res) => {
 
 // THỐNG KÊ DOANH THU THEO THÁNG CỦA TỪNG DANH MỤC
 router.post("/getDoanhThuTheoThang", (req, res) => {
-    const sql = "select dm.tendanhmuc, sum(case month(d.ngaydathang) when 1 then ct.tongtienchitietdathang else 0 END) as thang1, sum(case month(d.ngaydathang) when 2 then ct.tongtienchitietdathang else 0 END) as thang2, sum(case month(d.ngaydathang) when 3 then ct.tongtienchitietdathang else 0 END) as thang3, sum(case month(d.ngaydathang) when 4 then ct.tongtienchitietdathang else 0 END) as thang4, sum(case month(d.ngaydathang) when 5 then ct.tongtienchitietdathang else 0 END) as thang5, sum(case month(d.ngaydathang) when 6 then ct.tongtienchitietdathang else 0 END) as thang6, sum(case month(d.ngaydathang) when 7 then ct.tongtienchitietdathang else 0 END) as thang7, sum(case month(d.ngaydathang) when 8 then ct.tongtienchitietdathang else 0 END) as thang8, sum(case month(d.ngaydathang) when 9 then ct.tongtienchitietdathang else 0 END) as thang9, sum(case month(d.ngaydathang) when 10 then ct.tongtienchitietdathang else 0 END) as thang10, sum(case month(d.ngaydathang) when 11 then ct.tongtienchitietdathang else 0 END) as thang11, sum(case month(d.ngaydathang) when 12 then ct.tongtienchitietdathang else 0 END) as thang12, sum(ct.tongtienchitietdathang) as canam from dathang d join chitietdathang ct on d.madathang = ct.madathang join thucung t on ct.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc WHERE year(d.ngaydathang) = 2024 and d.trangthaidathang = 2 GROUP BY dm.madanhmuc;";
+    const sql = "select dm.tendanhmuc, sum(case month(d.ngaydathang) when 1 then ct.tongtienchitietdathang else 0 END) as thang1, sum(case month(d.ngaydathang) when 2 then ct.tongtienchitietdathang else 0 END) as thang2, sum(case month(d.ngaydathang) when 3 then ct.tongtienchitietdathang else 0 END) as thang3, sum(case month(d.ngaydathang) when 4 then ct.tongtienchitietdathang else 0 END) as thang4, sum(case month(d.ngaydathang) when 5 then ct.tongtienchitietdathang else 0 END) as thang5, sum(case month(d.ngaydathang) when 6 then ct.tongtienchitietdathang else 0 END) as thang6, sum(case month(d.ngaydathang) when 7 then ct.tongtienchitietdathang else 0 END) as thang7, sum(case month(d.ngaydathang) when 8 then ct.tongtienchitietdathang else 0 END) as thang8, sum(case month(d.ngaydathang) when 9 then ct.tongtienchitietdathang else 0 END) as thang9, sum(case month(d.ngaydathang) when 10 then ct.tongtienchitietdathang else 0 END) as thang10, sum(case month(d.ngaydathang) when 11 then ct.tongtienchitietdathang else 0 END) as thang11, sum(case month(d.ngaydathang) when 12 then ct.tongtienchitietdathang else 0 END) as thang12, sum(ct.tongtienchitietdathang) as canam from dathang d join chitietdathang ct on d.madathang = ct.madathang join thucung t on ct.mathucung = t.mathucung join danhmuc dm on t.madanhmuc = dm.madanhmuc WHERE year(d.ngaydathang) = 2024 and d.trangthaidathang = 3 GROUP BY dm.madanhmuc;";
     con.query(sql, (err, result) => {
         if (err) {
             console.log("Có lỗi khi lấy doanh thu theo tháng của từng danh mục");

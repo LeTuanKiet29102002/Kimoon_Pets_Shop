@@ -12,6 +12,8 @@ import "../css/main.css";
 import format_money from "../utils"
 import { logoutCart } from "../redux/cartRedux";
 import Toast from "../components/Toast";
+import PayButton from '../components/PayButton';
+// import Paypal from '../components/Paypal';
 
 const Container = styled.div`
 
@@ -206,6 +208,7 @@ const Button = styled.button`
 
 
 const DatMua = () => {
+
     // Page success sau khi đặt mua thành công
     const navigate = useNavigate();
 
@@ -224,6 +227,7 @@ const DatMua = () => {
     // User, Cart từ redux
     const user = useSelector(state => state.user.currentUser);
     const cart = useSelector(state => state.cart);
+    console.log("check carrt", cart);
     const dispatch = useDispatch();
 
     // Các state khởi tạo
@@ -241,6 +245,7 @@ const DatMua = () => {
     const [tenXa, setTenXa] = useState("");
     const [tenQuanHuyen, setTenQuanHuyen] = useState("");
     const [tenThanhPho, setTenThanhPho] = useState("");
+    const [madonhang, setMadonhang] = useState("");
 
     // Useeffect lấy dữ liệu từ USer
     useEffect(() => {
@@ -313,21 +318,24 @@ const DatMua = () => {
             giohang
         });
         if (
-            manguoimua != ""
-            && maxa != ""
-            && hotendathang != ""
-            && emaildathang != ""
-            && sdtdathang != ""
-            && diachidathang != ""
+            manguoimua !== ""
+            && maxa !== ""
+            && hotendathang !== ""
+            && emaildathang !== ""
+            && sdtdathang !== ""
+            && diachidathang !== ""
             // ghichudathang
         ) {
             try {
                 const datmuares = await axios.post("http://localhost:3001/api/order/datMua", { manguoimua, maxa, hotendathang, emaildathang, sdtdathang, diachidathang, ghichudathang, tongtiendathang, giohang });
-                console.log("Kết quả đặt mua: ", datmuares.data.message);
+                console.log("Kết quả đặt mua: ", datmuares.data);
                 if (datmuares.data.message === "Đặt mua thành công") {
                     // Chuyển đến trang đặt mua thành công
+                    setMadonhang(datmuares.data.madathang);
+                    // console.log("check madathang tay", madathang);
                     navigate("/success");
-                    dispatch(logoutCart()); //Khởi tạo lại người dùng
+                    dispatch(logoutCart());
+                     //Khởi tạo lại người dùng
                 }
             } catch (err) {
                 console.log("Lỗi khi đặt mua: ", err);
@@ -339,6 +347,11 @@ const DatMua = () => {
             showToastFromOut(dataShow);
         }
     }
+
+
+   
+
+
 
     // ---- Không có user (Chưa đăng nhập)
     const [maXaNoUser, setMaXaNoUser] = useState("");
@@ -385,287 +398,292 @@ const DatMua = () => {
     }, [maQuanHuyenNoUser])
 
 
+
     return (
         <Container>
             <Navbar />
             <Announcement />
 
-                    <Wrapper>
-                        <Box1>
-                            <Title1>
-                                <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>Những thú cưng mà bạn muốn mua</p>
-                            </Title1>
-                            <Carousel style={{ maxHeight: "300px", overflow: "hidden" }}>
-                                {
-                                    cart.products.map((thucung, key) => {
-                                        return (
-                                            <Carousel.Item>
-                                                <DatMuaImage item={thucung.data[0].mathucung}></DatMuaImage>
-                                            </Carousel.Item>
-                                        );
-                                    })
-                                }
-                            </Carousel>
-                            <p style={{ fontWeight: "500", marginTop: "10px" }}>Chi tiết giỏ hàng</p>
-                            {
-                                cart.products.map((thucung, key) => {
-                                    return (
-                                        <CartItem>
-                                            <Circle />
-                                            <Course>
-                                                <Content>
-                                                    <span style={{ width: "320px", fontWeight: "bold" }}> {thucung.data[0].tieude} </span>
-                                                    <span style={{ fontWeight: "400", color: "var(--color-primary)", width: "145px", textAlign: "right" }}>{format_money((thucung.data[0].giamgia).toString())} VNĐ</span>
-                                                </Content>
-                                                <span style={{ fontWeight: "400" }}><span style={{ color: "var(--color-primary)" }}>{thucung.soluongmua}</span> x {thucung.data[0].tenthucung}</span>
-                                            </Course>
-                                        </CartItem>
-                                    );
-                                })
-                            }
-                        </Box1>
+            <Wrapper>
+                <Box1>
+                    <Title1>
+                        <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>Những thú cưng mà bạn muốn mua</p>
+                    </Title1>
+                    <Carousel style={{ maxHeight: "300px", overflow: "hidden" }}>
                         {
-                            user
-                                ?
-                                <Box2>
-                                    <InfomationTitle>
-                                        <p style={{ fontWeight: "bold", margin: "10px 0 0 0" }}>Chi tiết thanh toán</p>
-                                        <p style={{ fontSize: "1rem" }}>Hoàn tất thanh toán bằng việc cung cấp những thông tin sau</p>
-                                    </InfomationTitle>
-                                    <InfomationForm>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Địa chỉ email:</FormSpan>
-                                            <FormInput type="text" value={user.emailnguoimua} disabled />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Họ tên:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setHoTenNguoiMua(e.target.value) }} value={hoTenNguoiMua} />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Số điện thoại:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setSdtNguoiMua(e.target.value) }} value={sdtNguoiMua} />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Địa chỉ:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setDiaChiNguoiMua(e.target.value) }} value={diaChiNguoiMua} />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Thuộc tỉnh:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaThanhPho(e.target.value) }}>
-                                                <FormOption value="">-- Chọn thành phố --</FormOption>
-                                                {mangTinhThanhPho.map((tinhthanhpho, key) => {
-                                                    if (tinhthanhpho.tenthanhpho === tenThanhPho) {
+                            cart.products.map((thucung, key) => {
+                                return (
+                                    <Carousel.Item>
+                                        <DatMuaImage item={thucung.data[0].mathucung}></DatMuaImage>
+                                    </Carousel.Item>
+                                );
+                            })
+                        }
+                    </Carousel>
+                    <p style={{ fontWeight: "500", marginTop: "10px" }}>Chi tiết giỏ hàng</p>
+                    {
+                        cart.products.map((thucung, key) => {
+                            return (
+                                <CartItem>
+                                    <Circle />
+                                    <Course>
+                                        <Content>
+                                            <span style={{ width: "320px", fontWeight: "bold" }}> {thucung.data[0].tieude} </span>
+                                            <span style={{ fontWeight: "400", color: "var(--color-primary)", width: "145px", textAlign: "right" }}>{format_money((thucung.data[0].giamgia).toString())} VNĐ</span>
+                                        </Content>
+                                        <span style={{ fontWeight: "400" }}><span style={{ color: "var(--color-primary)" }}>{thucung.soluongmua}</span> x {thucung.data[0].tenthucung}</span>
+                                    </Course>
+                                </CartItem>
+                            );
+                        })
+                    }
+                </Box1>
+                {
+                    user
+                        ?
+                        <Box2>
+                            <InfomationTitle>
+                                <p style={{ fontWeight: "bold", margin: "10px 0 0 0" }}>Chi tiết thanh toán</p>
+                                <p style={{ fontSize: "1rem" }}>Hoàn tất thanh toán bằng việc cung cấp những thông tin sau</p>
+                            </InfomationTitle>
+                            <InfomationForm>
+                                <ModalChiTietItem>
+                                    <FormSpan>Địa chỉ email:</FormSpan>
+                                    <FormInput type="text" value={user.emailnguoimua} disabled />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Họ tên:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setHoTenNguoiMua(e.target.value) }} value={hoTenNguoiMua} />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Số điện thoại:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setSdtNguoiMua(e.target.value) }} value={sdtNguoiMua} />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Địa chỉ:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setDiaChiNguoiMua(e.target.value) }} value={diaChiNguoiMua} />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Thuộc tỉnh:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaThanhPho(e.target.value) }}>
+                                        <FormOption value="">-- Chọn thành phố --</FormOption>
+                                        {mangTinhThanhPho.map((tinhthanhpho, key) => {
+                                            if (tinhthanhpho.tenthanhpho === tenThanhPho) {
+                                                return (
+                                                    <FormOption value={tinhthanhpho.mathanhpho} selected> {tinhthanhpho.tenthanhpho} </FormOption>
+                                                )
+                                            } else {
+                                                return (
+                                                    <FormOption value={tinhthanhpho.mathanhpho}> {tinhthanhpho.tenthanhpho} </FormOption>
+                                                )
+                                            }
+                                        })}
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Thuộc huyện:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaQuanHuyen(e.target.value) }}>
+                                        {
+                                            mangQuanHuyen.length > 0
+                                                ?
+                                                mangQuanHuyen.map((quanhuyen, key) => {
+                                                    if (quanhuyen.tenquanhuyen === tenQuanHuyen) {
                                                         return (
-                                                            <FormOption value={tinhthanhpho.mathanhpho} selected> {tinhthanhpho.tenthanhpho} </FormOption>
+                                                            <FormOption value={quanhuyen.maquanhuyen} selected> {quanhuyen.tenquanhuyen} </FormOption>
                                                         )
                                                     } else {
                                                         return (
-                                                            <FormOption value={tinhthanhpho.mathanhpho}> {tinhthanhpho.tenthanhpho} </FormOption>
+                                                            <FormOption value={quanhuyen.maquanhuyen}> {quanhuyen.tenquanhuyen} </FormOption>
                                                         )
                                                     }
-                                                })}
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Thuộc huyện:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaQuanHuyen(e.target.value) }}>
-                                                {
-                                                    mangQuanHuyen.length > 0
-                                                        ?
-                                                        mangQuanHuyen.map((quanhuyen, key) => {
-                                                            if (quanhuyen.tenquanhuyen === tenQuanHuyen) {
-                                                                return (
-                                                                    <FormOption value={quanhuyen.maquanhuyen} selected> {quanhuyen.tenquanhuyen} </FormOption>
-                                                                )
-                                                            } else {
-                                                                return (
-                                                                    <FormOption value={quanhuyen.maquanhuyen}> {quanhuyen.tenquanhuyen} </FormOption>
-                                                                )
-                                                            }
-                                                        })
-                                                        :
-                                                        <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
-                                                }
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Thuộc xã:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaXa(e.target.value) }}>
-                                                {
-                                                    mangXaPhuongThiTran.length > 0
-                                                        ?
-                                                        mangXaPhuongThiTran.map((xaphuong, key) => {
-                                                            if (xaphuong.tenxa === tenXa) {
-                                                                return (
-                                                                    <FormOption value={xaphuong.maxa} selected> {xaphuong.tenxa} </FormOption>
-                                                                )
-                                                            } else {
-                                                                return (
-                                                                    <FormOption value={xaphuong.maxa}> {xaphuong.tenxa} </FormOption>
-                                                                )
-                                                            }
-                                                        })
-                                                        :
-                                                        <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
-                                                }
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Ghi chú:</FormSpan>
-                                            <FormTextArea rows="3" onChange={(e) => { setGhiChu(e.target.value) }} value={ghiChu} placeholder="Ghi chú về đơn đặt hàng này" />
-                                        </ModalChiTietItem>
-                                    </InfomationForm>
-                                    <Total>
-                                        <TotalItem>
-                                            <p>Tổng tiền thú cưng</p>
-                                            <p>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
-                                        </TotalItem>
-                                        <TotalItem>
-                                            <p>Phí vận chuyển</p>
-                                            <p>0.00 VNĐ</p>
-                                        </TotalItem>
-                                        <TotalItem>
-                                            <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
-                                            <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
-                                        </TotalItem>
-                                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                            <ButtonContainer>
-                                                <Button
-                                                    onClick={() => {
-                                                        DatMua({
-                                                            manguoimua: maNguoiMua,
-                                                            maxa: maXa,
-                                                            hotendathang: hoTenNguoiMua,
-                                                            emaildathang: emailNguoiMua,
-                                                            sdtdathang: sdtNguoiMua,
-                                                            diachidathang: diaChiNguoiMua,
-                                                            ghichudathang: ghiChu,
-                                                            tongtiendathang: cart.tongtiengiohang,
-                                                            giohang: cart.products
-                                                        })
-                                                    }}
-                                                >Đặt mua</Button>
-                                            </ButtonContainer>
-                                            <Link to="/">
-                                                <ButtonContainer>
-                                                    <Button>Trở lại</Button>
-                                                </ButtonContainer>
-                                            </Link>
-                                        </div>
-                                    </Total>
-                                </Box2>
-                                :
-                                <Box2>
-                                    <InfomationTitle>
-                                        <p style={{ fontWeight: "bold", margin: "10px 0 0 0" }}>Chi tiết thanh toán</p>
-                                        <p style={{ fontSize: "1rem" }}>Hoàn tất thanh toán bằng việc cung cấp những thông tin sau</p>
-                                    </InfomationTitle>
-                                    <InfomationForm>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Địa chỉ email:</FormSpan>
-                                            <FormInput type="email" onChange={(e) => { setEmailNguoiMuaNoUser(e.target.value) }} placeholder="Email của bạn là" />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Họ tên:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setHoTenNguoiMuaNoUser(e.target.value) }} placeholder="Họ tên của bạn là" />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Số điện thoại:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setSdtNguoiMuaNoUser(e.target.value) }} placeholder="Số điện thoại của bạn là" />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Địa chỉ:</FormSpan>
-                                            <FormInput type="text" onChange={(e) => { setDiaChiNguoiMuaNoUser(e.target.value) }} placeholder="Địa chỉ của bạn là" />
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem >
-                                            <FormSpan>Thuộc tỉnh:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaThanhPhoNoUser(e.target.value) }}>
-                                                <FormOption value="">-- Chọn thành phố --</FormOption>
-                                                {mangTinhThanhPhoNoUser.map((tinhthanhpho, key) => {
+                                                })
+                                                :
+                                                <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
+                                        }
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Thuộc xã:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaXa(e.target.value) }}>
+                                        {
+                                            mangXaPhuongThiTran.length > 0
+                                                ?
+                                                mangXaPhuongThiTran.map((xaphuong, key) => {
+                                                    if (xaphuong.tenxa === tenXa) {
+                                                        return (
+                                                            <FormOption value={xaphuong.maxa} selected> {xaphuong.tenxa} </FormOption>
+                                                        )
+                                                    } else {
+                                                        return (
+                                                            <FormOption value={xaphuong.maxa}> {xaphuong.tenxa} </FormOption>
+                                                        )
+                                                    }
+                                                })
+                                                :
+                                                <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
+                                        }
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Ghi chú:</FormSpan>
+                                    <FormTextArea rows="3" onChange={(e) => { setGhiChu(e.target.value) }} value={ghiChu} placeholder="Ghi chú về đơn đặt hàng này" />
+                                </ModalChiTietItem>
+                            </InfomationForm>
+                            <Total>
+                                <TotalItem>
+                                    <p>Tổng tiền thú cưng</p>
+                                    <p>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
+                                </TotalItem>
+                                <TotalItem>
+                                    <p>Phí vận chuyển</p>
+                                    <p>0.00 VNĐ</p>
+                                </TotalItem>
+                                <TotalItem>
+                                    <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
+                                    <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
+                                </TotalItem>
+                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                    <ButtonContainer>
+                                        <Button
+                                            onClick={() => {
+                                                DatMua({
+                                                    manguoimua: maNguoiMua,
+                                                    maxa: maXa,
+                                                    hotendathang: hoTenNguoiMua,
+                                                    emaildathang: emailNguoiMua,
+                                                    sdtdathang: sdtNguoiMua,
+                                                    diachidathang: diaChiNguoiMua,
+                                                    ghichudathang: ghiChu,
+                                                    tongtiendathang: cart.tongtiengiohang,
+                                                    giohang: cart.products
+                                                })
+                                            }}
+                                        >Đặt mua</Button>
+                                    </ButtonContainer>
+                                    <Link to="/">
+                                        <ButtonContainer>
+                                            <Button>Trở lại</Button>
+                                        </ButtonContainer>
+                                    </Link>
+                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
+                                    <PayButton CartItems={cart}  />                                     
+                                </div>
+                            </Total>
+                        </Box2>
+                        :
+                        <Box2>
+                            <InfomationTitle>
+                                <p style={{ fontWeight: "bold", margin: "10px 0 0 0" }}>Chi tiết thanh toán</p>
+                                <p style={{ fontSize: "1rem" }}>Hoàn tất thanh toán bằng việc cung cấp những thông tin sau</p>
+                            </InfomationTitle>
+                            <InfomationForm>
+                                <ModalChiTietItem>
+                                    <FormSpan>Địa chỉ email:</FormSpan>
+                                    <FormInput type="email" onChange={(e) => { setEmailNguoiMuaNoUser(e.target.value) }} placeholder="Email của bạn là" />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Họ tên:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setHoTenNguoiMuaNoUser(e.target.value) }} placeholder="Họ tên của bạn là" />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Số điện thoại:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setSdtNguoiMuaNoUser(e.target.value) }} placeholder="Số điện thoại của bạn là" />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Địa chỉ:</FormSpan>
+                                    <FormInput type="text" onChange={(e) => { setDiaChiNguoiMuaNoUser(e.target.value) }} placeholder="Địa chỉ của bạn là" />
+                                </ModalChiTietItem>
+                                <ModalChiTietItem >
+                                    <FormSpan>Thuộc tỉnh:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaThanhPhoNoUser(e.target.value) }}>
+                                        <FormOption value="">-- Chọn thành phố --</FormOption>
+                                        {mangTinhThanhPhoNoUser.map((tinhthanhpho, key) => {
+                                            return (
+                                                <FormOption value={tinhthanhpho.mathanhpho}> {tinhthanhpho.tenthanhpho} </FormOption>
+                                            )
+                                        })}
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem >
+                                    <FormSpan>Thuộc huyện:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaQuanHuyenNoUser(e.target.value) }}>
+                                        {
+                                            mangQuanHuyenNoUser.length > 0
+                                                ?
+                                                mangQuanHuyenNoUser.map((quanhuyen, key) => {
                                                     return (
-                                                        <FormOption value={tinhthanhpho.mathanhpho}> {tinhthanhpho.tenthanhpho} </FormOption>
+                                                        <FormOption value={quanhuyen.maquanhuyen}> {quanhuyen.tenquanhuyen} </FormOption>
                                                     )
-                                                })}
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem >
-                                            <FormSpan>Thuộc huyện:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaQuanHuyenNoUser(e.target.value) }}>
-                                                {
-                                                    mangQuanHuyenNoUser.length > 0
-                                                        ?
-                                                        mangQuanHuyenNoUser.map((quanhuyen, key) => {
-                                                            return (
-                                                                <FormOption value={quanhuyen.maquanhuyen}> {quanhuyen.tenquanhuyen} </FormOption>
-                                                            )
-                                                        })
-                                                        :
-                                                        <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
-                                                }
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem >
-                                            <FormSpan>Thuộc xã:</FormSpan>
-                                            <FormSelect onChange={(e) => { setMaXaNoUser(e.target.value) }}>
-                                                {
-                                                    mangXaPhuongThiTranNoUser.length > 0
-                                                        ?
-                                                        mangXaPhuongThiTranNoUser.map((xaphuong, key) => {
-                                                            return (
-                                                                <FormOption value={xaphuong.maxa}> {xaphuong.tenxa} </FormOption>
-                                                            )
-                                                        })
-                                                        :
-                                                        <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
-                                                }
-                                            </FormSelect>
-                                        </ModalChiTietItem>
-                                        <ModalChiTietItem>
-                                            <FormSpan>Ghi chú:</FormSpan>
-                                            <FormTextArea rows="3" onChange={(e) => { setGhiChuNoUser(e.target.value) }} placeholder="Ghi chú về đơn đặt hàng này" />
-                                        </ModalChiTietItem>
-                                    </InfomationForm>
-                                    <Total>
-                                        <TotalItem>
-                                            <p>Tổng tiền thú cưng</p>
-                                            <p>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
-                                        </TotalItem>
-                                        <TotalItem>
-                                            <p>Phí vận chuyển</p>
-                                            <p>0.00 VNĐ</p>
-                                        </TotalItem>
-                                        <TotalItem>
-                                            <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
-                                            <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
-                                        </TotalItem>
-                                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                            <ButtonContainer>
-                                                <Button
-                                                    onClick={() => {
-                                                        DatMua({
-                                                            manguoimua: "0",
-                                                            maxa: maXaNoUser,
-                                                            hotendathang: hoTenNguoiMuaNoUser,
-                                                            emaildathang: emailNguoiMuaNoUser,
-                                                            sdtdathang: sdtNguoiMuaNoUser,
-                                                            diachidathang: diaChiNguoiMuaNoUser,
-                                                            ghichudathang: ghiChuNoUser,
-                                                            tongtiendathang: cart.tongtiengiohang,
-                                                            giohang: cart.products
-                                                        })
-                                                    }}
-                                                >Đặt mua</Button>
-                                            </ButtonContainer>
-                                            <Link to="/">
-                                                <ButtonContainer>
-                                                    <Button>Trở lại</Button>
-                                                </ButtonContainer>
-                                            </Link>
-                                        </div>
-                                    </Total>
-                                </Box2>
-                        }
-                    </Wrapper>
+                                                })
+                                                :
+                                                <FormOption value="">-- Bạn chưa chọn Thành phố -- </FormOption>
+                                        }
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem >
+                                    <FormSpan>Thuộc xã:</FormSpan>
+                                    <FormSelect onChange={(e) => { setMaXaNoUser(e.target.value) }}>
+                                        {
+                                            mangXaPhuongThiTranNoUser.length > 0
+                                                ?
+                                                mangXaPhuongThiTranNoUser.map((xaphuong, key) => {
+                                                    return (
+                                                        <FormOption value={xaphuong.maxa}> {xaphuong.tenxa} </FormOption>
+                                                    )
+                                                })
+                                                :
+                                                <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
+                                        }
+                                    </FormSelect>
+                                </ModalChiTietItem>
+                                <ModalChiTietItem>
+                                    <FormSpan>Ghi chú:</FormSpan>
+                                    <FormTextArea rows="3" onChange={(e) => { setGhiChuNoUser(e.target.value) }} placeholder="Ghi chú về đơn đặt hàng này" />
+                                </ModalChiTietItem>
+                            </InfomationForm>
+                            <Total>
+                                <TotalItem>
+                                    <p>Tổng tiền thú cưng</p>
+                                    <p>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
+                                </TotalItem>
+                                <TotalItem>
+                                    <p>Phí vận chuyển</p>
+                                    <p>0.00 VNĐ</p>
+                                </TotalItem>
+                                <TotalItem>
+                                    <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
+                                    <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
+                                </TotalItem>
+                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                    <ButtonContainer>
+                                        <Button
+                                            onClick={() => {
+                                                DatMua({
+                                                    manguoimua: "0",
+                                                    maxa: maXaNoUser,
+                                                    hotendathang: hoTenNguoiMuaNoUser,
+                                                    emaildathang: emailNguoiMuaNoUser,
+                                                    sdtdathang: sdtNguoiMuaNoUser,
+                                                    diachidathang: diaChiNguoiMuaNoUser,
+                                                    ghichudathang: ghiChuNoUser,
+                                                    tongtiendathang: cart.tongtiengiohang,
+                                                    giohang: cart.products
+                                                })
+                                            }}
+                                        >Đặt mua</Button>
+                                    </ButtonContainer>
+                                    <Link to="/">
+                                        <ButtonContainer>
+                                            <Button>Trở lại</Button>
+                                        </ButtonContainer>
+                                    </Link>
+                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
+                                    <PayButton CartItems={cart}/>
+                                </div>
+                            </Total>
+                        </Box2>
+                }
+            </Wrapper>
 
 
             {/* === TOAST === */}
