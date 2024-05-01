@@ -123,7 +123,8 @@ const Line = styled.div`
 const Map = styled.div`
   width: 290px;
   height: 150px;
-  border-radius: 3px;
+  border-radius: 5px;
+  overflow: hidden;
 `;
 const End = styled.div`
   background-color: #cd3b0e;

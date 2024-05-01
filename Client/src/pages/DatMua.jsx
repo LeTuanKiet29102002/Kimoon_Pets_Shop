@@ -14,6 +14,7 @@ import { logoutCart } from "../redux/cartRedux";
 import Toast from "../components/Toast";
 import PayButton from '../components/PayButton';
 // import Paypal from '../components/Paypal';
+import Money from "../assets/svg/icons8-money.gif";
 
 const Container = styled.div`
 
@@ -59,7 +60,7 @@ border: 1px solid transparent;
 const Circle = styled.span`
 height: 12px;
 width: 12px;
-background: #ccc;
+background: #78ee34;
 border-radius: 50%;
 margin-right: 15px;
 border: 4px solid transparent;
@@ -206,6 +207,55 @@ const Button = styled.button`
     }
 `
 
+const ButtonContainerPay = styled.div`
+    justify-content: center;
+    position: relative;
+    float: right;
+    margin: 10px 22px 22px 0;
+    display: flex;
+    border-radius: 5px;
+
+    &::after {
+        content: "";
+        border: 2px solid black;
+        position: absolute;
+        top: 5px;
+        right: -5px;
+        background-color: transperent;
+        min-width: 300px;
+        height: 100%;
+        z-index: 5;
+        border-radius: 5px;
+
+    }
+`
+
+const ButtonPay = styled.button`
+    padding: 10px;
+    min-width: 300px;
+    border: 2px solid black;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    z-index: 10;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #fe6430;
+    }
+    &:active {
+        background-color: #333;
+        transform: translate(5px, 5px);
+        transition: transform 0.25s;
+    }
+`
+const IMG = styled.img`
+    height: 20px;
+    width: 20px;
+    margin-right: 20px;
+
+`;
 
 const DatMua = () => {
 
@@ -246,6 +296,7 @@ const DatMua = () => {
     const [tenQuanHuyen, setTenQuanHuyen] = useState("");
     const [tenThanhPho, setTenThanhPho] = useState("");
     const [madonhang, setMadonhang] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState('');
 
     // Useeffect lấy dữ liệu từ USer
     useEffect(() => {
@@ -335,7 +386,7 @@ const DatMua = () => {
                     // console.log("check madathang tay", madathang);
                     navigate("/success");
                     dispatch(logoutCart());
-                     //Khởi tạo lại người dùng
+                    //Khởi tạo lại người dùng
                 }
             } catch (err) {
                 console.log("Lỗi khi đặt mua: ", err);
@@ -349,7 +400,7 @@ const DatMua = () => {
     }
 
 
-   
+
 
 
 
@@ -542,32 +593,43 @@ const DatMua = () => {
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
                                 </TotalItem>
+                                <ModalChiTietItem style={{ marginTop: "10px", marginBottom: "20px" }}>
+                                    <FormSpan>Phương thức thanh toán:</FormSpan>
+                                    <FormSelect onChange={(e) => setPaymentMethod(e.target.value)}>
+                                        <FormOption value="cash">Thanh toán bằng tiền mặt</FormOption>
+                                        <FormOption value="stripe">Thanh toán bằng Stripe</FormOption>
+                                    </FormSelect>
+                                </ModalChiTietItem>
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    <ButtonContainer>
-                                        <Button
-                                            onClick={() => {
-                                                DatMua({
-                                                    manguoimua: maNguoiMua,
-                                                    maxa: maXa,
-                                                    hotendathang: hoTenNguoiMua,
-                                                    emaildathang: emailNguoiMua,
-                                                    sdtdathang: sdtNguoiMua,
-                                                    diachidathang: diaChiNguoiMua,
-                                                    ghichudathang: ghiChu,
-                                                    tongtiendathang: cart.tongtiengiohang,
-                                                    giohang: cart.products
-                                                })
-                                            }}
-                                        >Đặt mua</Button>
-                                    </ButtonContainer>
+                                    {paymentMethod !== 'stripe' &&
+                                        <ButtonContainerPay>
+                                            <ButtonPay
+                                                onClick={() => {
+                                                    DatMua({
+                                                        manguoimua: maNguoiMua,
+                                                        maxa: maXa,
+                                                        hotendathang: hoTenNguoiMua,
+                                                        emaildathang: emailNguoiMua,
+                                                        sdtdathang: sdtNguoiMua,
+                                                        diachidathang: diaChiNguoiMua,
+                                                        ghichudathang: ghiChu,
+                                                        tongtiendathang: cart.tongtiengiohang,
+                                                        giohang: cart.products
+                                                    })
+                                                }}
+                                            ><IMG src={Money} alt='tien' />Thanh toán bằng tiền mặt </ButtonPay>
+                                        </ButtonContainerPay>
+                                    }
+                                    {paymentMethod === 'stripe' && <PayButton CartItems={cart} style={{ display: 'none' }} />}
+                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
+                                    {/* <PayButton CartItems={cart} /> */}
                                     <Link to="/">
                                         <ButtonContainer>
                                             <Button>Trở lại</Button>
                                         </ButtonContainer>
                                     </Link>
-                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
-                                    <PayButton CartItems={cart}  />                                     
                                 </div>
+
                             </Total>
                         </Box2>
                         :
@@ -654,32 +716,43 @@ const DatMua = () => {
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
                                 </TotalItem>
+                                <ModalChiTietItem style={{ marginTop: "10px", marginBottom: "20px" }}>
+                                    <FormSpan>Phương thức thanh toán:</FormSpan>
+                                    <FormSelect onChange={(e) => setPaymentMethod(e.target.value)}>
+                                        {/* <FormOption value="">-- Chọn phương thức thanh toán --</FormOption> */}
+                                        <FormOption value="cash">Thanh toán bằng tiền mặt</FormOption>
+                                        <FormOption value="stripe">Thanh toán bằng Stripe</FormOption>
+                                    </FormSelect>
+                                </ModalChiTietItem>
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    <ButtonContainer>
-                                        <Button
-                                            onClick={() => {
-                                                DatMua({
-                                                    manguoimua: "0",
-                                                    maxa: maXaNoUser,
-                                                    hotendathang: hoTenNguoiMuaNoUser,
-                                                    emaildathang: emailNguoiMuaNoUser,
-                                                    sdtdathang: sdtNguoiMuaNoUser,
-                                                    diachidathang: diaChiNguoiMuaNoUser,
-                                                    ghichudathang: ghiChuNoUser,
-                                                    tongtiendathang: cart.tongtiengiohang,
-                                                    giohang: cart.products
-                                                })
-                                            }}
-                                        >Đặt mua</Button>
-                                    </ButtonContainer>
+                                    {paymentMethod !== 'stripe' &&
+                                        <ButtonContainerPay>
+                                            <ButtonPay
+                                                onClick={() => {
+                                                    DatMua({
+                                                        manguoimua: "0",
+                                                        maxa: maXaNoUser,
+                                                        hotendathang: hoTenNguoiMuaNoUser,
+                                                        emaildathang: emailNguoiMuaNoUser,
+                                                        sdtdathang: sdtNguoiMuaNoUser,
+                                                        diachidathang: diaChiNguoiMuaNoUser,
+                                                        ghichudathang: ghiChuNoUser,
+                                                        tongtiendathang: cart.tongtiengiohang,
+                                                        giohang: cart.products
+                                                    })
+                                                }}
+                                            ><IMG src={Money} alt='tien' />Thanh toán bằng tiền mặt</ButtonPay>
+                                        </ButtonContainerPay>
+                                    }
+                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
+                                    {paymentMethod === 'stripe' && <PayButton CartItems={cart} style={{ display: 'none' }} />}
                                     <Link to="/">
                                         <ButtonContainer>
                                             <Button>Trở lại</Button>
                                         </ButtonContainer>
                                     </Link>
-                                    {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
-                                    <PayButton CartItems={cart}/>
                                 </div>
+
                             </Total>
                         </Box2>
                 }

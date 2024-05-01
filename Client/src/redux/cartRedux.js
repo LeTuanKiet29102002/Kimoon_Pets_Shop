@@ -17,7 +17,7 @@ const cartSlice = createSlice({
                     const soluongcothemua = state.products[i].data[0].soluong - soluongtronggiohang;
                     const soluongmuonmua = action.payload.soluongmua;
 
-                    if(soluongcothemua == 0) {
+                    if(soluongcothemua === 0) {
                         console.log("Số lượng mua đã đạt giới hạn");
                         return;
                     }

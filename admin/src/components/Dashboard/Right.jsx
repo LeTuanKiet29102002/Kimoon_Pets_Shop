@@ -267,10 +267,10 @@ const Right = () => {
             <h3>{donCanDuyetHomNay === "" ? "Chưa có" : donCanDuyetHomNay}</h3>
           </ItemRight>
         </Item>
-        {/* <Item className="add-product">
+        <Item className="add-product">
           <Add />
           <h3>Thêm thú cưng</h3>
-        </Item> */}
+        </Item>
       </SalesAnalytics>
     </Container>
   );

@@ -5,10 +5,10 @@ import './ToggleLanguage.css';
 const ToggleLanguage = () => {
     return (
         <>
-            <div class="toggle">
+            <div className="toggle">
                 <input type="checkbox" id="btn" />
                 <label for="btn">
-                    <span class="thumb"></span>
+                    <span className="thumb"></span>
                 </label>
             </div>
         </>

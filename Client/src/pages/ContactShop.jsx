@@ -18,12 +18,12 @@ const Wrapper = styled.div`
 
 const IMG = styled.div`
   width: 100%;
-  height: 336px;
+  height: 100vh;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("http://thietkeshop247.com.vn/kcfinder/upload/images/Thiet-ke-shop-thu-cung-dep.jpg%282%29.jpg");
-  background-position: center;
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/Screenshot%202024-04-30%20173648.png?alt=media&token=138d86a1-c0e8-4d5b-965c-ea160037738f");
+  background-position: top;
   border-radius: 10px;
   box-shadow: 2px 6px 12px #323437;
   overflow: hidden;
@@ -88,11 +88,11 @@ const ContactShop = () => {
           id="attachment_10702"
           aria-describedby="caption-attachment-10702"
           style={{ width: "1154px" }}
-          class="wp-caption aligncenter"
+          className="wp-caption aligncenter"
         >
           <img
             style={{boxShadow: "4px 4px 10px #000000", borderRadius: "10px"}}
-            class="wp-image-10702 size-full"
+            className="wp-image-10702 size-full"
             src="https://pethouse.com.vn/wp-content/uploads/2023/05/danh-sach-ngan-hang-ho-tro-tra-gop-qua-the-tin-dung.png"
             alt="danh sach ngan hang ho tro tra gop qua the tin dung"
             width="1154px"
@@ -104,7 +104,7 @@ const ContactShop = () => {
                           "
             sizes="(max-width: 1154px) 100vw, 1154px"
           />
-          <figcaption id="caption-attachment-10702" class="wp-caption-text">
+          <figcaption id="caption-attachment-10702" className="wp-caption-text">
             danh sach ngan hang ho tro tra gop qua the tin dung
           </figcaption>
         </figure>
