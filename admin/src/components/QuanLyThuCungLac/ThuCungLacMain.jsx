@@ -407,7 +407,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                     }
                     <Td className="info">
                         <ButtonInfo
-                            onClick={() => openModal({ type: "chitietthucung", thucunglac: thucungitem })}
+                            onClick={() => openModal({ type: "chitietthucunglac", thucunglac: thucungitem })}
                         >
                             <RemoveRedEyeOutlined />
                         </ButtonInfo>
@@ -421,14 +421,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                 <>
                                     <Td className="warning">
                                         <ButtonFix
-                                            onClick={() => openModal({ type: "chinhsuathucung", thucunglac: thucungitem })}
+                                            onClick={() => openModal({ type: "chinhsuathucunglac", thucunglac: thucungitem })}
                                         >
                                             <DriveFileRenameOutlineOutlined />
                                         </ButtonFix>
                                     </Td>
                                     <Td className="primary">
                                         <ButtonDelete
-                                            onClick={() => openModal({ type: "xoathucung", thucunglac: thucungitem })}
+                                            onClick={() => openModal({ type: "xoathucunglac", thucunglac: thucungitem })}
                                         >
                                             <DeleteSweepOutlined />
                                         </ButtonDelete>
@@ -555,7 +555,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                         }
                                         <Td className="info">
                                             <ButtonInfo
-                                                onClick={() => openModal({ type: "chitietthucung", thucung: thucungitem })}
+                                                onClick={() => openModal({ type: "chitietthucunglac", thucung: thucungitem })}
                                             >
                                                 <RemoveRedEyeOutlined />
                                             </ButtonInfo>
@@ -569,14 +569,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                                     <>
                                                         <Td className="warning">
                                                             <ButtonFix
-                                                                onClick={() => openModal({ type: "chinhsuathucung", thucunglac: thucungitem })}
+                                                                onClick={() => openModal({ type: "chinhsuathucunglac", thucunglac: thucungitem })}
                                                             >
                                                                 <DriveFileRenameOutlineOutlined />
                                                             </ButtonFix>
                                                         </Td>
                                                         <Td className="primary">
                                                             <ButtonDelete
-                                                                onClick={() => openModal({ type: "xoathucung", thucunglac: thucungitem })}
+                                                                onClick={() => openModal({ type: "xoathucunglac", thucunglac: thucungitem })}
                                                             >
                                                                 <DeleteSweepOutlined />
                                                             </ButtonDelete>

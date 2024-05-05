@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import Toast from "../components/Toast";
 import { updateInfo } from "../redux/userRedux";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import moment from 'moment-timezone';
+
 
 const Container = styled.div``;
 
@@ -302,7 +304,12 @@ const CapNhatThongTin = () => {
   useEffect(() => {
     setMaNguoiMua(user.manguoimua);
     setHoTenNguoiMua(user.hotennguoimua);
-    setNgaySinhNguoiMua(user.ngaysinhnguoimua);
+    // const formattedDate = user.ngaysinhnguoimua ? new Date(user.ngaysinhnguoimua).toISOString().split('T')[0] : "";
+    // setNgaySinhNguoiMua(formattedDate);
+    moment.tz.setDefault('Asia/Ho_Chi_Minh');
+    const formattedDate = user.ngaysinhnguoimua ? moment(user.ngaysinhnguoimua).format('YYYY-MM-DD') : "";
+    setNgaySinhNguoiMua(formattedDate);
+    // setNgaySinhNguoiMua(user.ngaysinhnguoimua);
     setGioiTinhNguoiMua(user.giotinhnguoimua);
     setSdtNguoiMua(user.sdtnguoimua);
     setDiaChiNguoiMua(user.diachinguoimua);
@@ -386,17 +393,20 @@ const CapNhatThongTin = () => {
         // https://firebase.google.com/docs/storage/web/handle-errors
         switch (error.code) {
           case "storage/unauthorized":
-            // User doesn't have permission to access the object
+            console.log("Người dùng không có quyền truy cập vào đối tượng");
+            // Có thể cung cấp thông báo cho người dùng ở đây
             break;
           case "storage/canceled":
-            // User canceled the upload
+            console.log("Người dùng đã hủy tải lên");
+            // Có thể cung cấp thông báo cho người dùng ở đây
             break;
-
-          // ...
-
           case "storage/unknown":
-            // Unknown error occurred, inspect error.serverResponse
+            console.log("Đã xảy ra lỗi không xác định");
+            // Có thể cung cấp thông báo cho người dùng ở đây
             break;
+          default:
+            console.log("Lỗi không xác định:", error.code);
+            // Có thể cung cấp thông báo cho người dùng ở đây
         }
       },
       () => {
@@ -438,13 +448,13 @@ const CapNhatThongTin = () => {
     });
 
     if (
-      manguoimua != "" &&
-      maxa != "" &&
-      hotennguoimua != "" &&
-      ngaysinhnguoimua != "" &&
-      gioitinhnguoimua != "" &&
-      sdtnguoimua != "" &&
-      diachinguoimua != ""
+      manguoimua !== "" &&
+      maxa !== "" &&
+      hotennguoimua !== "" &&
+      ngaysinhnguoimua !== "" &&
+      gioitinhnguoimua !== "" &&
+      sdtnguoimua !== "" &&
+      diachinguoimua !== ""
       // && hinhdaidiennguoimua != ""
       // && hinhdaidiennguoimuachange != ""
     ) {
@@ -589,11 +599,11 @@ const CapNhatThongTin = () => {
           {hinhDaiDienNguoiMuaChange != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
             <Avatar src={hinhDaiDienNguoiMuaChange} />
           ) : //Khi mảng hình trống thì hiện No Available Image
-          hinhDaiDienNguoiMua != "" ? (
-            <Avatar src={hinhDaiDienNguoiMua} />
-          ) : (
-            <Avatar src="https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c" />
-          )}
+            hinhDaiDienNguoiMua != "" ? (
+              <Avatar src={hinhDaiDienNguoiMua} />
+            ) : (
+              <Avatar src="https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c" />
+            )}
           <p style={{ fontWeight: "500", marginTop: "10px" }}>
             Hình đại diện của bạn:
           </p>

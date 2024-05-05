@@ -180,6 +180,7 @@ const InputEffect = styled.div`
 
 const Newsletter = () => {
   const navigate = useNavigate();
+
   return (
     <Container>
       <Letter>
@@ -206,7 +207,7 @@ const Newsletter = () => {
           Nếu bạn muốn tìm thú cưng của mình bị lạc hãy nhấp vào nút sau!!!
         </Desc>
         <ButtonCss>
-          <ButtonThree />
+          <ButtonThree/>
         </ButtonCss>
       </LostPet>
     </Container>

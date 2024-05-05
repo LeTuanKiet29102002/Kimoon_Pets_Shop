@@ -331,7 +331,7 @@ const ThuCungRight = ({ reRenderData, setReRenderData }) => {
           </Icon>
           <ItemRight>
             <Info>
-              <h3>SỐ LƯỢNG THÚ CƯNG</h3>
+              <h3>SỐ LƯỢNG LOẠI THÚ CƯNG</h3>
               <small className="text-muted">{ngaythangnam}</small>
             </Info>
             <h3 className="success" style={{ fontSize: "1.2rem" }}>

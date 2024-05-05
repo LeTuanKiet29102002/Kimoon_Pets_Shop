@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import Register from "../pages/Register";
-import Login from "../pages/Login";
+import Login from "../pages/SendEmail";
 import Home from "../pages/Home";
 import MiniCart from "./MiniCart";
 import FavoriteProducts from "./FavoriteProducts";
@@ -133,7 +133,7 @@ const SearchProduct = styled.div`
   border-radius: 2px;
   box-shadow: 0 1px 5px rgb(189, 189, 189);
   display: block;
-  overflow: hidden;
+  /* overflow: hidden; */
   z-index: 100;
   &::after {
     content: "";
@@ -356,10 +356,10 @@ const NavbarUserItemLi = styled.li`
     content: "";
     display: none;
     position: absolute;
-    top: -1px;
+    top: 0px;
     left: -4px;
     width: 3%;
-    height: 43px;
+    height: 42px;
     background-color: #fe6433;
   }
 `;
@@ -708,7 +708,7 @@ const Navbar = () => {
                       style={{ textDecoration: "none", width: "100%" }}
                       to="/capnhatthongtin"
                     >
-                      <NavbarUserItemLi style={{ marginTop: "10px" }}>
+                      <NavbarUserItemLi>
                         Cập nhật thông tin
                       </NavbarUserItemLi>
                     </Link>
@@ -717,6 +717,12 @@ const Navbar = () => {
                       to="/donmua"
                     >
                       <NavbarUserItemLi>Đơn mua của bạn</NavbarUserItemLi>
+                    </Link>
+                    <Link
+                      style={{ textDecoration: "none", color: "black" }}
+                      to="/SendEmail?doimatkhau"
+                    >
+                      <NavbarUserItemLi>Đổi mật khẩu</NavbarUserItemLi>
                     </Link>
                     {userEmail ? (
                       <NavbarUserItemLi onClick={() => handleDangXuatEmail()}>

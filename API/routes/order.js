@@ -399,5 +399,28 @@ router.post("/tuChoiDon", async (req, res) => {
 
 //VNPAY
 
+//LẤY SỐ LƯỢNG TRẠNG THÁI CÁC ĐƠN
+
+router.post("/getSoLuongTrangThaiDonHang", async (req, res) => {
+  const sql = "SELECT \
+                SUM(CASE WHEN trangthaidathang = 1 THEN 1 ELSE 0 END) AS soluongchoxacnhan, \
+                SUM(CASE WHEN trangthaidathang = 2 THEN 1 ELSE 0 END) AS soluongdanggiaodich, \
+                SUM(CASE WHEN trangthaidathang = 3 THEN 1 ELSE 0 END) AS soluonghoanthanh, \
+                SUM(CASE WHEN trangthaidathang = 4 THEN 1 ELSE 0 END) AS soluongdahuy \
+              FROM dathang;";
+  con.query(sql, (err, result) => {
+    if (err) {
+      console.log("Có lỗi khi lấy số lượng đơn đặt mua: ", err);
+      res.status(500).json({ error: "Đã xảy ra lỗi khi lấy số lượng đơn đặt mua." });
+    } else {
+      res.status(200).json(result[0]);
+      console.log("Lấy số lượng đơn đặt mua thành công");
+    }
+  });
+});
+
+
+
+
 
 module.exports = router;

@@ -23,6 +23,8 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
+import MyResponsivePie from "./PieChart";
+import RadialChart from "./RadialChart";
 
 ChartJS.register(
   CategoryScale,
@@ -200,13 +202,28 @@ const A = styled.a`
   display: block;
   margin: 1rem auto;
   color: var(--color-primary);
+  font-size: 20px;
+  font-weight: 300;
 `;
+const Chart = styled.div`
+  /* overflow: hidden; */
+`
+
+const ChartFull = styled.div`
+  height: 550px;
+  overflow: hidden;
+  ${Chart}.active & {
+    height: 1700px;
+  }
+`
 
 const Main = () => {
   const [ngayThangNam, setNgayThangNam] = useState();
   const [nam, setNam] = useState("");
   const [thang, setThang] = useState("");
   const [ngay, setNgay] = useState("");
+  const [isShowFullChart, setIsShowFullChart] = useState(false);
+
 
   const [tongDoanhThu, setTongDoanhThu] = useState();
   const [doanhThuCho, setDoanhThuCho] = useState();
@@ -215,6 +232,13 @@ const Main = () => {
   const [hienThiDoanhThuMeo, setHienThiDoanhThuMeo] = useState();
   const [doanhThuKhac, setDoanhThuKhac] = useState();
   const [hienThiDoanhThuKhac, setHienThiDoanhThuKhac] = useState();
+
+  //Show full chart
+  const handleShowFullChart = () => {
+    setIsShowFullChart(!isShowFullChart);
+    console.log('check full:', isShowFullChart);
+  };
+
   // Thống kê doanh thu theo tháng từng danh mục
   const [doanhThuTheoThang, setDoanhThuTheoThang] = useState([]);
 
@@ -364,7 +388,6 @@ const Main = () => {
   return (
     <Container>
       <H1>Dashboard</H1>
-
       <Date>
         <InputDate
           type="date"
@@ -397,7 +420,7 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
-                {doanhThuCho&&doanhThuCho!==0 ?
+                {doanhThuCho && doanhThuCho !== 0 ?
                   <Circle
                     cx="38"
                     cy="38"
@@ -453,7 +476,7 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
-                {doanhThuMeo&&doanhThuMeo!==0 ?
+                {doanhThuMeo && doanhThuMeo !== 0 ?
                   <Circle
                     cx="38"
                     cy="38"
@@ -476,7 +499,7 @@ const Main = () => {
               </Svg>
               <ProgressNumber>
                 <ProgressNumberP>
-                  {doanhThuMeo?Math.round((doanhThuMeo * 100) / tongDoanhThu):0}%
+                  {doanhThuMeo ? Math.round((doanhThuMeo * 100) / tongDoanhThu) : 0}%
                 </ProgressNumberP>
               </ProgressNumber>
             </Progress>
@@ -500,7 +523,7 @@ const Main = () => {
             <Left>
               <H3>Doanh thu thú cưng khác</H3>
               <H1>
-                {hienThiDoanhThuKhac?hienThiDoanhThuKhac:0}
+                {hienThiDoanhThuKhac ? hienThiDoanhThuKhac : 0}
                 <span style={{ textDecoration: "underline" }}>
                   <b>đ</b>
                 </span>
@@ -508,34 +531,34 @@ const Main = () => {
             </Left>
             <Progress>
               <Svg>
-              {doanhThuKhac&&doanhThuKhac!==0?
-                <Circle
-                  cx="38"
-                  cy="38"
-                  r="36"
-                  strokeDasharray="315"
-                  strokeDashoffset={Math.round(
-                    315 -
-                    ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
-                  )}
-                ></Circle>
-                :
-                <CircleNaN
-                  cx="38"
-                  cy="38"
-                  r="36"
-                  strokeDasharray="315"
-                  strokeDashoffset={Math.round(
-                    315 -
-                    ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
-                  )}
-                ></CircleNaN>
-              }
-                
+                {doanhThuKhac && doanhThuKhac !== 0 ?
+                  <Circle
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 -
+                      ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></Circle>
+                  :
+                  <CircleNaN
+                    cx="38"
+                    cy="38"
+                    r="36"
+                    strokeDasharray="315"
+                    strokeDashoffset={Math.round(
+                      315 -
+                      ((doanhThuKhac * 100) / tongDoanhThu) * 2 * (360 / 315)
+                    )}
+                  ></CircleNaN>
+                }
+
               </Svg>
               <ProgressNumber>
                 <ProgressNumberP>
-                  {doanhThuKhac?Math.round((doanhThuKhac * 100) / tongDoanhThu):0}%
+                  {doanhThuKhac ? Math.round((doanhThuKhac * 100) / tongDoanhThu) : 0}%
                 </ProgressNumberP>
               </ProgressNumber>
             </Progress>
@@ -545,39 +568,45 @@ const Main = () => {
         {/* END OF INCOME */}
       </Insights>
       {/* END OF INSIGHTS */}
-      <RecentOrders>
-        <H2>Thống kê Doanh thu từng danh mục thú cưng theo tháng (2024)</H2>
-        <Line
-          data={{
-            labels: [
-              "Tháng 1",
-              "Tháng 2",
-              "Tháng 3",
-              "Tháng 4",
-              "Tháng 5",
-              "Tháng 6",
-              "Tháng 7",
-              "Tháng 8",
-              "Tháng 9",
-              "Tháng 10",
-              "Tháng 11",
-              "Tháng 12",
-            ],
-            datasets: dataset[0],
-          }}
-          options={{
-            title: {
-              display: true,
-              text: "World population per region (in millions)",
-            },
-            legend: {
-              display: true,
-              position: "bottom",
-            },
-          }}
-        />
-        <A href="#">Show all</A>
-      </RecentOrders>
+      <Chart className={isShowFullChart ? 'active' : ''}>
+        <ChartFull >
+          <RecentOrders>
+            <H2>Thống kê doanh thu từng danh mục thú cưng theo tháng (2024)</H2>
+            <Line
+              data={{
+                labels: [
+                  "Tháng 1",
+                  "Tháng 2",
+                  "Tháng 3",
+                  "Tháng 4",
+                  "Tháng 5",
+                  "Tháng 6",
+                  "Tháng 7",
+                  "Tháng 8",
+                  "Tháng 9",
+                  "Tháng 10",
+                  "Tháng 11",
+                  "Tháng 12",
+                ],
+                datasets: dataset[0],
+              }}
+              options={{
+                title: {
+                  display: true,
+                  text: "World population per region (in millions)",
+                },
+                legend: {
+                  display: true,
+                  position: "bottom",
+                },
+              }}
+            />
+          </RecentOrders>
+          <MyResponsivePie />
+          <RadialChart />
+        </ChartFull>
+      </Chart>
+      <A onClick={handleShowFullChart}>{isShowFullChart?'Hide':'Show all'}</A>
     </Container>
   );
 };

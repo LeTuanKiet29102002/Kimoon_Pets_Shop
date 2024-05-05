@@ -424,28 +424,28 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
         });
 
         if (
-            manhanvien != ""
-            && machucvumoi != ""
-            && maxamoi != ""
-            && matkhaumoi != ""
-            && rematkhaumoi != ""
-            && hotennhanvienmoi != ""
-            && ngaysinhnhanvienmoi != ""
-            && gioitinhnhanvienmoi != ""
-            && sdtnhanvienmoi != ""
-            && diachinhanvienmoi != ""
-            && hinhdaidiennhanvienmoi != ""
-            // && nhanvienmodalhinhanhdaidiennhanvienchange != ""
+            manhanvien !== ""
+            && machucvumoi !== ""
+            && maxamoi !== ""
+            && matkhaumoi !== ""
+            && rematkhaumoi !== ""
+            && hotennhanvienmoi !== ""
+            && ngaysinhnhanvienmoi !== ""
+            && gioitinhnhanvienmoi !== ""
+            && sdtnhanvienmoi !== ""
+            && diachinhanvienmoi !== ""
+            && hinhdaidiennhanvienmoi !== ""
+            // && nhanvienmodalhinhanhdaidiennhanvienchange !== ""
         ) {
             // Nếu tồn tại rematkhau thì phải check mật khẩu mới với rematkhau
-            if (rematkhaumoi != null) {
+            if (rematkhaumoi !== null) {
                 if (matkhaumoi === rematkhaumoi) {
                     try {
                         const sdtres = await axios.post("http://localhost:3001/api/user/checkSdtNhanVienUpdate", { sdtnhanvien: sdtnhanvienmoi, manhanvien: manhanvien });
-                        if (sdtres.data.message == "Chưa có sdt nhân viên này!") {
+                        if (sdtres.data.message === "Chưa có sdt nhân viên này!") {
                             try {
                                 // setThuCungModalHinhAnhChange([]);
-                                if (hinhdaidiennhanvienmoichange != "") {
+                                if (hinhdaidiennhanvienmoichange !== "") {
                                     const updatenhanvienres = await axios.post("http://localhost:3001/api/user/updateNhanVien", { manhanvien, machucvumoi, maxamoi, matkhaumoi, hotennhanvienmoi, ngaysinhnhanvienmoi, gioitinhnhanvienmoi, sdtnhanvienmoi, diachinhanvienmoi, hinhdaidiennhanvienmoi: hinhdaidiennhanvienmoichange });
                                     console.log("KQ trả về update: ", updatenhanvienres);
                                     setReRenderData(prev => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
@@ -689,19 +689,22 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                 // A full list of error codes is available at
                 // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
-                    case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
-                        break;
-                    case 'storage/canceled':
-                        // User canceled the upload
-                        break;
-
-                    // ...
-
-                    case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
-                        break;
-                }
+                    case "storage/unauthorized":
+                      console.log("Người dùng không có quyền truy cập vào đối tượng");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    case "storage/canceled":
+                      console.log("Người dùng đã hủy tải lên");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    case "storage/unknown":
+                      console.log("Đã xảy ra lỗi không xác định");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    default:
+                      console.log("Lỗi không xác định:", error.code);
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                  }
             },
             () => {
                 // Upload completed successfully, now we can get the download URL
@@ -819,19 +822,22 @@ const Modal = ({ showModal, setShowModal, type, nhanvien, setReRenderData, handl
                 // A full list of error codes is available at
                 // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
-                    case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
-                        break;
-                    case 'storage/canceled':
-                        // User canceled the upload
-                        break;
-
-                    // ...
-
-                    case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
-                        break;
-                }
+                    case "storage/unauthorized":
+                      console.log("Người dùng không có quyền truy cập vào đối tượng");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    case "storage/canceled":
+                      console.log("Người dùng đã hủy tải lên");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    case "storage/unknown":
+                      console.log("Đã xảy ra lỗi không xác định");
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                      break;
+                    default:
+                      console.log("Lỗi không xác định:", error.code);
+                      // Có thể cung cấp thông báo cho người dùng ở đây
+                  }
             },
             () => {
                 // Upload completed successfully, now we can get the download URL

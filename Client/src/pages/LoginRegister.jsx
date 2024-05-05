@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+
 const SignIn = styled.div`
   width: 95%;
   height: 95%;
@@ -501,6 +502,10 @@ const LoginRegister = () => {
     setTrungMatKhau(false);
   };
 
+  const handleResetPassword = () => {
+    navigate("/SendEmail");
+}
+
   return (
     <SignIn
       className={
@@ -572,7 +577,7 @@ const LoginRegister = () => {
             Đăng nhập
           </Button>
           {error && <Error>Something went wrong...</Error>}
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={handleResetPassword}>DO NOT YOU REMEMBER THE PASSWORD?</Link>
         </Form>
       </SignInPage>
       {/* Trang đăng ký */}

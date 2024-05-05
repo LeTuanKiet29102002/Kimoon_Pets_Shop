@@ -682,17 +682,20 @@ const Modal = ({
           // https://firebase.google.com/docs/storage/web/handle-errors
           switch (error.code) {
             case "storage/unauthorized":
-              // User doesn't have permission to access the object
+              console.log("Người dùng không có quyền truy cập vào đối tượng");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
             case "storage/canceled":
-              // User canceled the upload
+              console.log("Người dùng đã hủy tải lên");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
-
-            // ...
-
             case "storage/unknown":
-              // Unknown error occurred, inspect error.serverResponse
+              console.log("Đã xảy ra lỗi không xác định");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
+            default:
+              console.log("Lỗi không xác định:", error.code);
+              // Có thể cung cấp thông báo cho người dùng ở đây
           }
         },
         () => {
@@ -805,17 +808,20 @@ const Modal = ({
           // https://firebase.google.com/docs/storage/web/handle-errors
           switch (error.code) {
             case "storage/unauthorized":
-              // User doesn't have permission to access the object
+              console.log("Người dùng không có quyền truy cập vào đối tượng");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
             case "storage/canceled":
-              // User canceled the upload
+              console.log("Người dùng đã hủy tải lên");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
-
-            // ...
-
             case "storage/unknown":
-              // Unknown error occurred, inspect error.serverResponse
+              console.log("Đã xảy ra lỗi không xác định");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
+            default:
+              console.log("Lỗi không xác định:", error.code);
+              // Có thể cung cấp thông báo cho người dùng ở đây
           }
         },
         () => {

@@ -471,4 +471,12 @@ router.get("/", async (req, res) => {
         res.status(200).json(result);
     })
 })
+
+//TỔNG LƯỢNG THÚ CƯNG THEO DANH MỤC TRONG NGÀY
+
+//LẤY SỐ LƯỢNG THÚ CƯNG ĐÃ BÁN TRONG NGÀY 
+
+
+//LẤY SỐ LƯỢNG THÚ CƯNG ĐANG CÒN TRONG NGÀY
+
 module.exports = router;

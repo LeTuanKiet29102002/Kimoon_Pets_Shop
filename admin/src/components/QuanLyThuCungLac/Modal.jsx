@@ -1,5 +1,5 @@
 import format_money from "../../utils";
-import styled,{keyframes} from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/main.css";
@@ -11,6 +11,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../firebase";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
 
 const Background = styled.div`
   width: 100%;
@@ -20,6 +22,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 
   top: 0;
   right: 0;
@@ -27,7 +30,6 @@ const Background = styled.div`
   left: 0;
   animation: fadeIn linear 0.1s;
 `;
-
 const growAnimation = keyframes`
     from {
         transform: scale(0.1);
@@ -36,10 +38,9 @@ const growAnimation = keyframes`
         transform: scale(1);
     }
 `;
-
 const ModalWrapper = styled.div`
   width: 500px;
-  height: auto;
+  min-height: 50%;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
@@ -53,14 +54,15 @@ const ModalWrapper = styled.div`
   animation: ${growAnimation} linear 0.5s;
 `;
 
+
 const ThemThuCungWrapper = styled.div`
-  width: auto;
+  width: 80%;
   height: auto;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   /* transform: scale(0.8, 0.8); */
   max-height: 80vh; /* giới hạn chiều cao của modal */
@@ -72,15 +74,16 @@ const ThemThuCungWrapper = styled.div`
 `;
 
 const ChiTietWrapper = styled.div`
-  width: 70%;
-  height: auto;
+  width: 80%;
+  height: 90%;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-
+  overflow-y: auto; 
+  overflow-x: hidden;
   position: relative;
   z-index: 10;
   border-radius: 10px;
@@ -155,6 +158,55 @@ const ModalChiTietItem = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const Label = styled.label
+  ``
+const FormLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+`
+
+const ButtonImage = styled.div`
+    padding: 10px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+    transition: transform 0.25s;
+  }
+
+`
+
+const ButtonImageContainer = styled.div`
+  position: relative;
+  float: right;
+  margin: 0 22px 22px 0;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    right: 20px;
+    background-color: transperent;
+    width: 95%;
+    height: 95%;
+    z-index: -1;
+    border-radius: 5px;
+  }
+`
+
 
 const FormSpan = styled.span`
   font-size: 1.2rem;
@@ -236,12 +288,16 @@ const ChiTietHinhAnh = styled.img`
   width: 100px;
   height: 100px;
   object-fit: cover;
-  margin: auto;
+  margin: 10px;
+  border-radius: 3px;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  overflow: auto;
+  border: 1px dashed #000;
+  border-radius:5px;
   &img {
     margin: 0px 20px;
   }
@@ -268,12 +324,12 @@ const FormOption = styled.option`
   margin: auto;
 `;
 
-const FormLabel = styled.label`
-  display: flex;
-  flex-direction: row;
-  // justify-content: center;
-  align-items: center;
-`;
+// const FormLabel = styled.label`
+//   display: flex;
+//   flex-directory: row;
+//   // justify-content: center;
+//   align-items: center;
+// `;
 
 const FormCheckbox = styled.input`
   appearance: auto;
@@ -626,17 +682,20 @@ const Modal = ({
           // https://firebase.google.com/docs/storage/web/handle-errors
           switch (error.code) {
             case "storage/unauthorized":
-              // User doesn't have permission to access the object
+              console.log("Người dùng không có quyền truy cập vào đối tượng");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
             case "storage/canceled":
-              // User canceled the upload
+              console.log("Người dùng đã hủy tải lên");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
-
-            // ...
-
             case "storage/unknown":
-              // Unknown error occurred, inspect error.serverResponse
+              console.log("Đã xảy ra lỗi không xác định");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
+            default:
+              console.log("Lỗi không xác định:", error.code);
+              // Có thể cung cấp thông báo cho người dùng ở đây
           }
         },
         () => {
@@ -749,17 +808,20 @@ const Modal = ({
           // https://firebase.google.com/docs/storage/web/handle-errors
           switch (error.code) {
             case "storage/unauthorized":
-              // User doesn't have permission to access the object
+              console.log("Người dùng không có quyền truy cập vào đối tượng");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
             case "storage/canceled":
-              // User canceled the upload
+              console.log("Người dùng đã hủy tải lên");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
-
-            // ...
-
             case "storage/unknown":
-              // Unknown error occurred, inspect error.serverResponse
+              console.log("Đã xảy ra lỗi không xác định");
+              // Có thể cung cấp thông báo cho người dùng ở đây
               break;
+            default:
+              console.log("Lỗi không xác định:", error.code);
+              // Có thể cung cấp thông báo cho người dùng ở đây
           }
         },
         () => {
@@ -942,7 +1004,7 @@ const Modal = ({
   console.log("Giới tính: ", maDanhMucMoi);
   // ================================================================
   //  =============== Xem chi tiết thú cưng ===============
-  if (type === "chitietthucung") {
+  if (type === "chitietthucunglac") {
     return (
       <>
         {showModal ? (
@@ -1218,12 +1280,6 @@ const Modal = ({
                   </ModalChiTietItem>
                 </div>
                 <ModalChiTietItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    multiple
-                    onChange={(e) => handleShowImg(e.target.files)}
-                  />
                   <ImageWrapper>
                     {hinhAnhMoi.length > 0 ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
                       hinhAnhMoi.map((hinhanh, index) => {
@@ -1238,6 +1294,23 @@ const Modal = ({
                       />
                     )}
                   </ImageWrapper>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Thêm hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleShowImg(e.target.files)}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                      multiple="true"
+                    />
+                  </FormLabel>
                 </ModalChiTietItem>
               </ModalForm>
               <ButtonUpdate>
@@ -1283,7 +1356,7 @@ const Modal = ({
     );
   }
   // =============== Chỉnh sửa thú cưng ===============
-  if (type === "chinhsuathucung") {
+  if (type === "chinhsuathucunglac") {
     return (
       <>
         {showModal ? (
@@ -1467,13 +1540,6 @@ const Modal = ({
                   </ModalChiTietItem>
                 </div>
                 <ModalChiTietItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <FormInput
-                    type="file"
-                    multiple
-                    onChange={(e) => handleChangeImg(e.target.files)}
-                    placeholder="Nhập vào tên danh mục thú cưng"
-                  />
                   <ImageWrapper>
                     {thuCungModalHinhAnhChange.length > 0 //Khi mảng hình có hình thì hiện các hình trong mảng
                       ? thuCungModalHinhAnhChange.map(
@@ -1487,6 +1553,23 @@ const Modal = ({
                         })
                         : null}
                   </ImageWrapper>
+                  <FormLabel>
+                    <Label htmlFor="imageInput">
+                      <ButtonImageContainer>
+                        <ButtonImage>
+                          <AddPhotoAlternateIcon />
+                          Cập nhật hình ảnh
+                        </ButtonImage>
+                      </ButtonImageContainer>
+                    </Label>
+                    <FormInput
+                      type="file"
+                      onChange={(e) => handleChangeImg(e.target.files)}
+                      id="imageInput"
+                      style={{ display: 'none' }}
+                      multiple="true"
+                    />
+                  </FormLabel>
                 </ModalChiTietItem>
               </ModalForm>
               <ButtonUpdate>
@@ -1534,7 +1617,7 @@ const Modal = ({
     );
   }
   // // =============== Xóa thú cưng ===============
-  if (type === "xoathucung") {
+  if (type === "xoathucunglac") {
     return (
       <>
         {showModal ? (

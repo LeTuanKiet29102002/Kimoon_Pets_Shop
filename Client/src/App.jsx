@@ -3,7 +3,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import Register from "./pages/Register";
-import Login from "./pages/Login";
+import SendEmail from "./pages/SendEmail.jsx";
 import Cart from "./pages/Cart";
 import Favorite from "./pages/Favorite";
 import {
@@ -27,6 +27,8 @@ import { AuthContextProvider } from "./context/AuthContext.js";
 import WarrantyPolicy from "./pages/WarrantyPolicy.jsx";
 import ContactShop from "./pages/ContactShop.jsx";
 import Protected from "./components/Protected.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -63,7 +65,8 @@ const App = () => {
             <Route path="/favorite" element={<Favorite />} />
             <Route path="/ContactShop" element={<ContactShop />} />
             <Route path="/WarrantyPolicy" element={<WarrantyPolicy />} />
-
+            <Route path="/ResetPassword" element={<ResetPassword />} />
+            <Route path="/SendEmail" element={<SendEmail />} />
             <Route
               path="/register"
               element={user ? <Navigate to="/" /> : <LoginRegister />}
@@ -75,7 +78,6 @@ const App = () => {
             <Route path="/product/:id" element={<Product />} />
             <Route path="/products/:tendanhmuc" element={<ProductList />} />
             <Route path="/pay" element={<Pay />} />
-            {/* <Route path="/success" element={<Success />} /> */}
             <Route path="/success" element={<Success />} />
             <Route path="/checkoutError" element={<CheckOutError />} />
             <Route

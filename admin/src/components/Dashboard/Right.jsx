@@ -11,6 +11,7 @@ import styled from "styled-components";
 import RightTop from "./RightTop";
 import axios from "axios";
 import format_money from "../../utils";
+import Clock from './Clock';
 
 const Container = styled.div`
   margin-top: 1.4rem;
@@ -105,7 +106,7 @@ const Item = styled.div`
     align-items: center;
     justify-content: center;
     &:hover {
-      background: var(--color-primary);
+      background: var(--greyLight-1);
       color: white;
     }
     & div {
@@ -268,8 +269,7 @@ const Right = () => {
           </ItemRight>
         </Item>
         <Item className="add-product">
-          <Add />
-          <h3>Thêm thú cưng</h3>
+          <Clock/>
         </Item>
       </SalesAnalytics>
     </Container>
