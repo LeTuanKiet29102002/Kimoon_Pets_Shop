@@ -48,8 +48,8 @@ router.post("/register", (req, res) => {
       // Nếu chưa có email này
       if (result.length === 0) {
         console.log("Chưa có email này");
-        var sql1 = "insert into nguoimua (hotennguoimua, maxa, emailnguoimua, matkhau) values (?, '00001', ?, ?)";
-        con.query(sql1, [req.body.tennguoimuadangky, req.body.emailnguoimuadangky, CryptoJS.AES.encrypt(req.body.matkhaudangky, process.env.PRIVATE_KEY).toString()], function (err, result1) {
+        var sql1 = "insert into nguoimua (hotennguoimua, maxa, emailnguoimua, matkhau, hinhdaidien) values (?, '00001', ?, ?, ?)";
+        con.query(sql1, [req.body.tennguoimuadangky, req.body.emailnguoimuadangky, CryptoJS.AES.encrypt(req.body.matkhaudangky, process.env.PRIVATE_KEY).toString(),'https://grn-admin.mpoint.vn/uploads/avatar-mac-dinh.png'], function (err, result1) {
           if (err) throw err;
           var sql2 = "select * from nguoimua where emailnguoimua = ?";
           con.query(sql2, [req.body.emailnguoimuadangky], function (err, result2) {

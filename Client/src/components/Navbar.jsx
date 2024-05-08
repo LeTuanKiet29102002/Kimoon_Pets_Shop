@@ -254,16 +254,20 @@ const MenuItemCN = styled.div`
 `;
 
 const NavbarUserImage = styled.img`
-  margin-right: 2px;
-  width: 28px;
-  height: 28px;
+  margin-left: 2px;
+  min-width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.1);
 `;
 const NavbarUserName = styled.span`
   margin-left: 4px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 500;
+  padding-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 const NavbarUserMenu = styled.ul`
   position: absolute;

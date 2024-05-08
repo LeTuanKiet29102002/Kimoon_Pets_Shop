@@ -301,45 +301,45 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
         setTimKiem("");
     }
 
-    // Lấy danh mục
-    const [thucunglac, setThuCungLac] = useState([]);
+    // Lấy thú lạc
+    const [thulac, setThuCungLac] = useState([]);
     useEffect(() => {
         const getThuCungLac = async () => {
             try {
-                const thucunglacres = await axios.post("http://localhost:3001/api/lostpets/getThuCungLac", {});
-                console.log("check thu cung lac: ", thucunglacres);
+                const thulacres = await axios.post("http://localhost:3001/api/lostpets/getThuCungLac", {});
+                console.log("check thu cung lac: ", thulacres);
 
-                setThuCungLac(thucunglacres.data);
+                setThuCungLac(thulacres.data);
             } catch (err) {
                 console.log("Lỗi lấy thú cưng lạc: ", err);
             }
         }
         getThuCungLac();
     }, [reRenderData]);
-    // useEffect(() => {
-    //     const timThuCungLac = async () => {
-    //         try {
-    //             const ketquares = await axios.post("http://localhost:3001/api/products/findThuCung", { tenthulac: timkiem });
-    //             setThuCungLac(ketquares.data);
-    //             console.log("Kết quả tìm trong effect: ", ketquares.data);
-    //         } catch (err) {
-    //             console.log("Lỗi tìm kiếm: ", err);
-    //         }
-    //     }
-    //     timThuCungLac();
-    //     setPageNumber(0);
-    // }, [timkiem])
-    console.log("Thú cưng lạc: ", thucunglac);
+    useEffect(() => {
+        const timThuCungLac = async () => {
+            try {
+                const ketquares = await axios.post("http://localhost:3001/api/lostpets/findThuCungLac", { tenthulac: timkiem });
+                setThuCungLac(ketquares.data);
+                console.log("Kết quả tìm trong effect: ", ketquares.data);
+            } catch (err) {
+                console.log("Lỗi tìm kiếm: ", err);
+            }
+        }
+        timThuCungLac();
+        setPageNumber(0);
+    }, [timkiem])
+    console.log("Thú cưng lạc: ", thulac);
 
     // Modal
     const [showModal, setShowModal] = useState(false);
     const [typeModal, setTypeModal] = useState("")
-    const [thuCungModal, setThuCungModal] = useState(null);
+    const [thuLacModal, setThuLacModal] = useState(null);
 
     const openModal = (modal) => {
         setShowModal(prev => !prev);
         setTypeModal(modal.type);
-        setThuCungModal(modal.thucung);
+        setThuLacModal(modal.thulac);
     }
 
     // ===== TOAST =====
@@ -360,16 +360,16 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
     const thuCungPerPage = 12;
     const pageVisited = pageNumber * thuCungPerPage;
 
-    const thuCungChuyenTrang = thucunglac
+    const thuCungChuyenTrang = thulac
         .slice(pageVisited, pageVisited + thuCungPerPage)
-        .map(thucungitem => {
+        .map(thulacitem => {
             return (
                 <Tr>
-                    <Td>{thucungitem.mathulac}</Td>
-                    <Td>{thucungitem.tenthulac}</Td>
-                    <Td>{thucungitem.hotennguoimua}</Td>
+                    <Td>{thulacitem.mathulac}</Td>
+                    <Td>{thulacitem.tenthulac}</Td>
+                    <Td>{thulacitem.hotennguoimua}</Td>
                     <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <ImgDanhMuc src={thucungitem.hinhdaidien} style={{
+                        <ImgDanhMuc src={thulacitem.hinhdaidien} style={{
                             borderRadius: "20%",
                             width: "36px",
                             height: "36px",
@@ -377,9 +377,9 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                             margin: "5px",
                         }} />
                     </Td>
-                    <Td>{thucungitem.sdtnguoimua}</Td>
+                    <Td>{thulacitem.sdtnguoimua}</Td>
                     <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <ImgDanhMuc src={thucungitem.hinhanhthulac} style={{
+                        <ImgDanhMuc src={thulacitem.hinhanhthulac} style={{
                             borderRadius: "20%",
                             width: "36px",
                             height: "36px",
@@ -388,26 +388,26 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                         }} />
                     </Td>
                     {
-                        thucungitem.tentrangthaithucung === "Chờ duyệt"
+                        thulacitem.tentrangthaithucung === "Chờ duyệt"
                             ?
-                            <Td style={{ backgroundColor: "var(--color-warning)" }}>{thucungitem.tentrangthaithucung}</Td>
+                            <Td style={{ backgroundColor: "var(--color-warning)" }}>{thulacitem.tentrangthaithucung}</Td>
                             :
-                            thucungitem.tentrangthaithucung === "Đang duyệt"
+                            thulacitem.tentrangthaithucung === "Đang duyệt"
                                 ?
-                                <Td style={{ backgroundColor: "var(--color-info)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                <Td style={{ backgroundColor: "var(--color-info)" }}>{thulacitem.tentrangthaithucung}</Td>
                                 :
-                                thucungitem.tentrangthaithucung === "Đã duyệt"
+                                thulacitem.tentrangthaithucung === "Đã duyệt"
                                     ?
-                                    <Td style={{ backgroundColor: "var(--color-success)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                    <Td style={{ backgroundColor: "var(--color-success)" }}>{thulacitem.tentrangthaithucung}</Td>
                                     :
-                                    thucungitem.tentrangthaithucung === "Đã hủy"
+                                    thulacitem.tentrangthaithucung === "Đã hủy"
                                         ?
-                                        <Td style={{ backgroundColor: "var(--color-danger)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                        <Td style={{ backgroundColor: "var(--color-danger)" }}>{thulacitem.tentrangthaithucung}</Td>
                                         : null
                     }
                     <Td className="info">
                         <ButtonInfo
-                            onClick={() => openModal({ type: "chitietthucunglac", thucunglac: thucungitem })}
+                            onClick={() => openModal({ type: "chitietthulac", thulac: thulacitem })}
                         >
                             <RemoveRedEyeOutlined />
                         </ButtonInfo>
@@ -421,14 +421,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                 <>
                                     <Td className="warning">
                                         <ButtonFix
-                                            onClick={() => openModal({ type: "chinhsuathucunglac", thucunglac: thucungitem })}
+                                            onClick={() => openModal({ type: "chinhsuathulac", thulac: thulacitem })}
                                         >
                                             <DriveFileRenameOutlineOutlined />
                                         </ButtonFix>
                                     </Td>
                                     <Td className="primary">
                                         <ButtonDelete
-                                            onClick={() => openModal({ type: "xoathucunglac", thucunglac: thucungitem })}
+                                            onClick={() => openModal({ type: "xoathulac", thulac: thulacitem })}
                                         >
                                             <DeleteSweepOutlined />
                                         </ButtonDelete>
@@ -439,14 +439,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                     }
                     {/* <Td className="warning">
                         <ButtonFix
-                            onClick={() => openModal({ type: "chinhsuathucung", thucung: thucungitem })}
+                            onClick={() => openModal({ type: "chinhsuathucung", thulac: thulacitem })}
                         >
                             <DriveFileRenameOutlineOutlined />
                         </ButtonFix>
                     </Td>
                     <Td className="primary">
                         <ButtonDelete
-                            onClick={() => openModal({ type: "xoathucung", thucung: thucungitem })}
+                            onClick={() => openModal({ type: "xoathucung", thulac: thulacitem })}
                         >
                             <DeleteSweepOutlined />
                         </ButtonDelete>
@@ -457,7 +457,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
         );
 
 
-    const pageCount = Math.ceil(thucunglac.length / thuCungPerPage);
+    const pageCount = Math.ceil(thulac.length / thuCungPerPage);
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     }
@@ -482,9 +482,9 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                         <Tr>
                             <Th>Mã thú cưng lạc</Th>
                             <Th>Tên thú cưng lạc</Th>
-                            <Th>Tên người mua</Th>
+                            <Th>Tên chủ</Th>
                             <Th>Hình đại diện</Th>
-                            <Th>SĐT người mua</Th>
+                            <Th>SĐT liên hệ</Th>
                             <Th>Hình thú lạc</Th>
                             <Th>Trạng thái thú cưng</Th>
                             <Th>Chi tiết</Th>
@@ -507,17 +507,17 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                     </Thead>
                     <Tbody>
                         {
-                            thucunglac !== null
+                            thulac !== null
                                 ?
                                 thuCungChuyenTrang
                                 :
-                                (thucunglac.slice(0, 12).map(thucungitem => (
+                                (thulac.slice(0, 12).map(thulacitem => (
                                     <Tr>
-                                        <Td>{thucungitem.mathulac}</Td>
-                                        <Td>{thucungitem.tenthulac}</Td>
-                                        <Td>{thucungitem.hotennguoimua}</Td>
+                                        <Td>{thulacitem.mathulac}</Td>
+                                        <Td>{thulacitem.tenthulac}</Td>
+                                        <Td>{thulacitem.hotennguoimua}</Td>
                                         <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                            <ImgDanhMuc src={thucungitem.hinhdaidien} style={{
+                                            <ImgDanhMuc src={thulacitem.hinhdaidien} style={{
                                                 borderRadius: "20%",
                                                 width: "36px",
                                                 height: "36px",
@@ -525,9 +525,9 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                                 margin: "5px",
                                             }} />
                                         </Td>
-                                        <Td>{thucungitem.sdtnguoimua}</Td>
+                                        <Td>{thulacitem.sdtnguoimua}</Td>
                                         <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                            <ImgDanhMuc src={thucungitem.hinhanhthulac} style={{
+                                            <ImgDanhMuc src={thulacitem.hinhanhthulac} style={{
                                                 borderRadius: "20%",
                                                 width: "36px",
                                                 height: "36px",
@@ -536,26 +536,26 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                             }} />
                                         </Td>
                                         {
-                                            thucungitem.tentrangthaithucung === "Chờ duyệt"
+                                            thulacitem.tentrangthaithucung === "Chờ duyệt"
                                                 ?
-                                                <Td style={{ backgroundColor: "var(--color-warning)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                <Td style={{ backgroundColor: "var(--color-warning)" }}>{thulacitem.tentrangthaithucung}</Td>
                                                 :
-                                                thucungitem.tentrangthaithucung === "Đang duyệt"
+                                                thulacitem.tentrangthaithucung === "Đang duyệt"
                                                     ?
-                                                    <Td style={{ backgroundColor: "var(--color-info)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                    <Td style={{ backgroundColor: "var(--color-info)" }}>{thulacitem.tentrangthaithucung}</Td>
                                                     :
-                                                    thucungitem.tentrangthaithucung === "Đã duyệt"
+                                                    thulacitem.tentrangthaithucung === "Đã duyệt"
                                                         ?
-                                                        <Td style={{ backgroundColor: "var(--color-success)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                        <Td style={{ backgroundColor: "var(--color-success)" }}>{thulacitem.tentrangthaithucung}</Td>
                                                         :
-                                                        thucungitem.tentrangthaithucung === "Đã hủy"
+                                                        thulacitem.tentrangthaithucung === "Đã hủy"
                                                             ?
-                                                            <Td style={{ backgroundColor: "var(--color-danger)" }}>{thucungitem.tentrangthaithucung}</Td>
+                                                            <Td style={{ backgroundColor: "var(--color-danger)" }}>{thulacitem.tentrangthaithucung}</Td>
                                                             : null
                                         }
                                         <Td className="info">
                                             <ButtonInfo
-                                                onClick={() => openModal({ type: "chitietthucunglac", thucung: thucungitem })}
+                                                onClick={() => openModal({ type: "chitietthulac", thulac: thulacitem })}
                                             >
                                                 <RemoveRedEyeOutlined />
                                             </ButtonInfo>
@@ -569,14 +569,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                                     <>
                                                         <Td className="warning">
                                                             <ButtonFix
-                                                                onClick={() => openModal({ type: "chinhsuathucunglac", thucunglac: thucungitem })}
+                                                                onClick={() => openModal({ type: "chinhsuathulac", thulac: thulacitem })}
                                                             >
                                                                 <DriveFileRenameOutlineOutlined />
                                                             </ButtonFix>
                                                         </Td>
                                                         <Td className="primary">
                                                             <ButtonDelete
-                                                                onClick={() => openModal({ type: "xoathucunglac", thucunglac: thucungitem })}
+                                                                onClick={() => openModal({ type: "xoathulac", thulac: thulacitem })}
                                                             >
                                                                 <DeleteSweepOutlined />
                                                             </ButtonDelete>
@@ -588,14 +588,14 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
 
                                         {/* <Td className="warning">
                                             <ButtonFix
-                                                onClick={() => openModal({ type: "chinhsuathucung", thucung: thucungitem })}
+                                                onClick={() => openModal({ type: "chinhsuathucung", thulac: thulacitem })}
                                             >
                                                 <DriveFileRenameOutlineOutlined />
                                             </ButtonFix>
                                         </Td>
                                         <Td className="primary">
                                             <ButtonDelete
-                                                onClick={() => openModal({ type: "xoathucung", thucung: thucungitem })}
+                                                onClick={() => openModal({ type: "xoathucung", thulac: thulacitem })}
                                             >
                                                 <DeleteSweepOutlined />
                                             </ButtonDelete>
@@ -627,7 +627,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                 showModal={showModal}   //state Đóng mở modal
                 setShowModal={setShowModal} //Hàm Đóng mở modal
                 type={typeModal}    //Loại modal
-                thucung={thuCungModal}  //Dữ liệu bên trong modal
+                thulac={thuLacModal}  //Dữ liệu bên trong modal
                 setReRenderData={setReRenderData}   //Hàm rerender khi dữ liệu thay đổi
                 handleClose={handleClose}   //Đóng tìm kiếm
                 showToastFromOut={showToastFromOut} //Hàm hiện toast

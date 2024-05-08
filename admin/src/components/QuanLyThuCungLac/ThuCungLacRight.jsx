@@ -185,7 +185,7 @@ const ThuCungLacRight = ({ reRenderData, setReRenderData }) => {
             <>
               <Item
                 className="add-product"
-                onClick={() => openModal({ type: "themthucunglac" })}
+                onClick={() => openModal({ type: "themthulac" })}
               >
                 <Add />
                 <h3>Thêm thú cưng lạc</h3>

@@ -28,6 +28,7 @@ import WarrantyPolicy from "./pages/WarrantyPolicy.jsx";
 import ContactShop from "./pages/ContactShop.jsx";
 import Protected from "./components/Protected.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import LostPets from "./pages/LostPets.jsx";
 
 
 const App = () => {
@@ -88,6 +89,10 @@ const App = () => {
             <Route
               path="/capnhatthongtin"
               element={user ? <CapNhatThongTin /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/lostpets"
+              element={user ? <LostPets /> : <Navigate to="/" />}
             />
             <Route
               path="/donmua"

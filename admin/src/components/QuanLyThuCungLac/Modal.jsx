@@ -1,4 +1,3 @@
-import format_money from "../../utils";
 import styled, { keyframes } from "styled-components";
 import { CloseOutlined } from "@mui/icons-material";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -11,8 +10,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../firebase";
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-
+import { async } from "@firebase/util";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+const CryptoJS = require("crypto-js"); //Thư viện mã hóa mật khẩu
 
 const Background = styled.div`
   width: 100%;
@@ -28,6 +28,7 @@ const Background = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
+
   animation: fadeIn linear 0.1s;
 `;
 const growAnimation = keyframes`
@@ -40,7 +41,7 @@ const growAnimation = keyframes`
 `;
 const ModalWrapper = styled.div`
   width: 500px;
-  min-height: 50%;
+  height: auto;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
@@ -54,19 +55,17 @@ const ModalWrapper = styled.div`
   animation: ${growAnimation} linear 0.5s;
 `;
 
-
-const ThemThuCungWrapper = styled.div`
+const ThemNhanVienWrapper = styled.div`
   width: 80%;
-  height: auto;
+  height: 90%;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: var(--color-white);
   color: var(--color-dark);
   display: flex;
   /* justify-content: center; */
   align-items: center;
-  /* transform: scale(0.8, 0.8); */
-  max-height: 80vh; /* giới hạn chiều cao của modal */
-  overflow: auto; /* hiển thị thanh cuộn khi nội dung vượt quá kích thước */
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   z-index: 10;
   border-radius: 10px;
@@ -82,12 +81,60 @@ const ChiTietWrapper = styled.div`
   display: flex;
   /* justify-content: center; */
   align-items: center;
-  overflow-y: auto; 
   overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
   z-index: 10;
   border-radius: 10px;
   animation: ${growAnimation} linear 0.5s;
+`;
+
+const Label = styled.label``;
+
+const FormLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ButtonImage = styled.div`
+  margin-left: 20px;
+  padding: 10px;
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #fe6430;
+  }
+  &:active {
+    background-color: #333;
+    transform: translate(5px, 5px);
+    transition: transform 0.25s;
+  }
+`;
+
+const ButtonImageContainer = styled.div`
+  position: relative;
+  float: right;
+  margin: 0 22px 22px 0;
+  &::after {
+    content: "";
+    border: 2px solid black;
+    position: absolute;
+    top: 5px;
+    left: 26px;
+    right: 20px;
+    background-color: transperent;
+    width: 86%;
+    height: 95%;
+    z-index: -1;
+    border-radius: 5px;
+  }
 `;
 
 const ModalImg = styled.img`
@@ -135,7 +182,7 @@ const H2 = styled.h2`
 
 const ModalForm = styled.form`
   width: 100%;
-  height: 100%;
+  height: 130%;
   display: flex;
   flex-direction: column;
   border-radius: var(--card-border-radius);
@@ -148,65 +195,10 @@ const ModalForm = styled.form`
 `;
 
 const ModalFormItem = styled.div`
-  margin: 10px 30px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ModalChiTietItem = styled.div`
   margin: 2px 30px;
   display: flex;
   flex-direction: column;
 `;
-const Label = styled.label
-  ``
-const FormLabel = styled.div`
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-`
-
-const ButtonImage = styled.div`
-    padding: 10px;
-  border: 2px solid black;
-  background-color: black;
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-  border-radius: 5px;
-  text-align: center;
-  &:hover {
-    background-color: #fe6430;
-  }
-  &:active {
-    background-color: #333;
-    transform: translate(5px, 5px);
-    transition: transform 0.25s;
-  }
-
-`
-
-const ButtonImageContainer = styled.div`
-  position: relative;
-  float: right;
-  margin: 0 22px 22px 0;
-  &::after {
-    content: "";
-    border: 2px solid black;
-    position: absolute;
-    top: 5px;
-    left: 8px;
-    right: 20px;
-    background-color: transperent;
-    width: 95%;
-    height: 95%;
-    z-index: -1;
-    border-radius: 5px;
-  }
-`
-
 
 const FormSpan = styled.span`
   font-size: 1.2rem;
@@ -285,19 +277,16 @@ const FormImg = styled.img`
 `;
 
 const ChiTietHinhAnh = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
-  margin: 10px;
-  border-radius: 3px;
+  margin: auto;
+  border-radius: 5px;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
-  /* flex-direction: row; */
-  overflow: auto;
-  border: 1px dashed #000;
-  border-radius:5px;
+  flex-direction: row;
   &img {
     margin: 0px 20px;
   }
@@ -325,11 +314,11 @@ const FormOption = styled.option`
 `;
 
 // const FormLabel = styled.label`
-//   display: flex;
-//   flex-directory: row;
-//   // justify-content: center;
-//   align-items: center;
-// `;
+//     display: flex;
+//     flex-directory: row;
+//     // justify-content: center;
+//     align-items: center;
+// `
 
 const FormCheckbox = styled.input`
   appearance: auto;
@@ -353,11 +342,37 @@ const FormTextArea = styled.textarea`
   }
 `;
 
+const Position = styled.div`
+  position: absolute;
+  position: absolute;
+  top: 200px;
+  left: 160px;
+  width: 85%;
+`;
+
+const PositionTwo = styled.div`
+  position: absolute;
+  position: absolute;
+  top: 280px;
+  left: 160px;
+  width: 85%;
+`;
+
+const PositionThree = styled.div`
+  position: absolute;
+  position: absolute;
+  top: 370px;
+  left: 390px;
+  width: 66%;
+`;
+
+
+
 const Modal = ({
   showModal,
   setShowModal,
   type,
-  thucung,
+  thulac,
   setReRenderData,
   handleClose,
   showToastFromOut,
@@ -366,8 +381,10 @@ const Modal = ({
   const closeModal = (e) => {
     if (modalRef.current === e.target) {
       setShowModal(false);
-      // setThuCungModalHinhAnh([]); //Modal chi tiết thú cưng khi tắt sẽ xóa mảng hình
+      // setthuCungModalHinhAnh([]); //Modal chi tiết thú cưng khi tắt sẽ xóa mảng hình
       setHinhAnhMoi([]); //Modal thêm thú cưng khi tắt sẽ xóa mảng hình
+      setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
+      setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
     }
   };
 
@@ -375,8 +392,10 @@ const Modal = ({
     (e) => {
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
-        // setThuCungModalHinhAnh([]); //Modal chi tiết thú cưng khi tắt sẽ xóa mảng hình
+        // setthuCungModalHinhAnh([]); //Modal chi tiết thú cưng khi tắt sẽ xóa mảng hình
         setHinhAnhMoi([]); //Modal thêm thú cưng khi tắt sẽ xóa mảng hình
+        setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
+        setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
       }
     },
     [setShowModal, showModal]
@@ -387,611 +406,616 @@ const Modal = ({
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
 
-  // =============== Xử lý cập nhật thú cưng ===============
-  const handleCapNhatThuCung = async ({
-    mathucung,
-    madanhmucmoi,
-    tenthucungmoi,
-    gioitinhthucungmoi,
-    tuoithucungmoi,
-    datiemchungmoi,
-    baohanhsuckhoemoi,
-    tieudemoi,
-    motamoi,
-    ghichumoi,
-    soluongmoi,
-    giabanmoi,
-    giamgiamoi,
-    thucungmodalhinganhchange,
-    thucungmodalhinhanh,
+  // =============== Xử lý cập nhật thú cưng lạc ===============
+  const handleCapNhatThuLac = async ({
+    mathulac,
+    tenthulacmoi,
+    trangthaithucungmoi,
+    dacdiemmoi,
+    maxamoi,
+    hotenlienhemoi,
+    emaillienhemoi,
+    sdtlienhemoi,
+    diachilienhemoi,
+    ngaytaomoi,
+    hinhanhthulacmoi,
+    hinhanhthulacmoichange,
   }) => {
-    console.log("Dau vao:", {
-      mathucung,
-      madanhmucmoi,
-      tenthucungmoi,
-      gioitinhthucungmoi,
-      tuoithucungmoi,
-      datiemchungmoi,
-      baohanhsuckhoemoi,
-      tieudemoi,
-      motamoi,
-      ghichumoi,
-      soluongmoi,
-      giabanmoi,
-      giamgiamoi,
-      thucungmodalhinganhchange,
-      thucungmodalhinhanh,
+    console.log("Đầu vào Cập nhật thú cưng lạc:", {
+      mathulac,
+      tenthulacmoi,
+      trangthaithucungmoi,
+      dacdiemmoi,
+      maxamoi,
+      hotenlienhemoi,
+      emaillienhemoi,
+      sdtlienhemoi,
+      diachilienhemoi,
+      ngaytaomoi,
+      hinhanhthulacmoi,
+      hinhanhthulacmoichange,
     });
 
     if (
-      madanhmucmoi !== "" &&
-      tenthucungmoi !== "" &&
-      gioitinhthucungmoi !== "" &&
-      tuoithucungmoi !== "" &&
-      // && datiemchungmoi !== ""
-      // && baohanhsuckhoemoi !== ""
-      tieudemoi !== "" &&
-      motamoi !== "" &&
-      ghichumoi !== "" &&
-      soluongmoi !== "" &&
-      giabanmoi !== "" &&
-      giamgiamoi !== ""
-      // && hinhanhmoi !== ""
+      mathulac !== "" &&
+      tenthulacmoi !== "" &&
+      trangthaithucungmoi !== "" &&
+      dacdiemmoi !== "" &&
+      maxamoi !== "" &&
+      hotenlienhemoi !== "" &&
+      emaillienhemoi !== "" &&
+      sdtlienhemoi !== "" &&
+      diachilienhemoi !== "" &&
+      ngaytaomoi !== "" &&
+      hinhanhthulacmoi !== ""
+      // && nhanvienmodalhinhanhdaidiennhanvienchange !== ""
     ) {
       try {
-        // setThuCungModalHinhAnhChange([]);
-        if (thucungmodalhinganhchange.length > 0) {
-          const updatethucungres = await axios.post(
-            "http://localhost:3001/api/products/updateThuCung",
+        // setthuCungModalHinhAnhChange([]);
+        if (hinhanhthulacmoichange !== "") {
+          const updatethulacres = await axios.post(
+            "http://localhost:3001/api/lostpets/updateThuCungLac",
             {
-              mathucung,
-              madanhmucmoi,
-              tenthucungmoi,
-              gioitinhthucungmoi,
-              tuoithucungmoi,
-              datiemchungmoi,
-              baohanhsuckhoemoi,
-              tieudemoi,
-              motamoi,
-              ghichumoi,
-              soluongmoi,
-              giabanmoi,
-              giamgiamoi,
-              hinhanhmoi: thucungmodalhinganhchange,
+              mathulac,
+              tenthulacmoi,
+              trangthaithucungmoi,
+              dacdiemmoi,
+              maxamoi,
+              hotenlienhemoi,
+              emaillienhemoi,
+              sdtlienhemoi,
+              diachilienhemoi,
+              ngaytaomoi,
+              hinhanhthulacmoi: hinhanhthulacmoichange,
             }
           );
-          console.log("KQ trả về update: ", updatethucungres);
+          console.log("KQ trả về update: ", updatethulacres);
           setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
           setShowModal((prev) => !prev);
           handleClose();
           const dataShow = {
-            message: "Thay đổi thú cưng có mã " + mathucung + " thành công!",
+            message: "Thay đổi thú cưng lạc có mã " + mathulac + " thành công!",
             type: "success",
           };
           showToastFromOut(dataShow);
-          setThuCungModalHinhAnhChange([]);
+          setthuLacModalHinhAnhThuLacChange([]);
         } else {
-          const updatethucungres = await axios.post(
-            "http://localhost:3001/api/products/updateThuCung",
+          const updatethulacres = await axios.post(
+            "http://localhost:3001/api/lostpets/updateThuCungLac",
             {
-              mathucung,
-              madanhmucmoi,
-              tenthucungmoi,
-              gioitinhthucungmoi,
-              tuoithucungmoi,
-              datiemchungmoi,
-              baohanhsuckhoemoi,
-              tieudemoi,
-              motamoi,
-              ghichumoi,
-              soluongmoi,
-              giabanmoi,
-              giamgiamoi,
-              hinhanhmoi: thucungmodalhinhanh,
+              mathulac,
+              tenthulacmoi,
+              trangthaithucungmoi,
+              dacdiemmoi,
+              maxamoi,
+              hotenlienhemoi,
+              emaillienhemoi,
+              sdtlienhemoi,
+              diachilienhemoi,
+              ngaytaomoi,
+              hinhanhthulacmoi: hinhanhthulacmoi,
             }
           );
-          console.log("KQ trả về update: ", updatethucungres);
+          console.log("KQ trả về update: ", updatethulacres);
           setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
           setShowModal((prev) => !prev);
           handleClose();
           const dataShow = {
-            message: "Thay đổi thú cưng có mã " + mathucung + " thành công!",
+            message: "Thay đổi thú cưng lạc có mã " + mathulac + " thành công!",
             type: "success",
           };
           showToastFromOut(dataShow);
-          // setThuCungModalHinhAnh([]);
-          setIsUpdate((prev) => !prev);
+          // setthuCungModalHinhAnh([]);
         }
       } catch (err) {
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
         setShowModal((prev) => !prev);
         handleClose();
         const dataShow = {
-          message: "Thất bại! Không thể cập nhật thú cưng có mã " + mathucung,
+          message:
+            "Thất bại! Không thể cập nhật thú cưng lạc có mã " + mathulac,
           type: "danger",
         };
         showToastFromOut(dataShow);
       }
+    } else {
+      const dataShow = {
+        message: "Bạn chưa nhập đủ thông tin cho thú cưng lạc",
+        type: "danger",
+      };
+      showToastFromOut(dataShow); //Hiện toast thông báo
     }
   };
   //  test
-  const [thuCungModal, setThuCungModal] = useState();
-  const [thuCungModalMaDanhMuc, setThuCungModalMaDanhMuc] = useState();
-  const [thuCungModalTenThuCung, setThuCungModalTenThuCung] = useState();
-  const [thuCungModalGioiTinhThuCung, setThuCungModalGioiTinhThuCung] =
-    useState();
-  const [thuCungModalTuoiThuCung, setThuCungModalTuoiThuCung] = useState();
-  const [thuCungModalDaTiemChung, setThuCungModalDaTiemChung] = useState();
-  const [thuCungModalBaoHanhSucKhoe, setThuCungModalBaoHanhSucKhoe] =
-    useState();
-  const [thuCungModalTieuDe, setThuCungModalTieuDe] = useState();
-  const [thuCungModalMoTa, setThuCungModalMoTa] = useState();
-  const [thuCungModalGhiChu, setThuCungModalGhiChu] = useState();
-  const [thuCungModalSoLuong, setThuCungModalSoLuong] = useState();
-  const [thuCungModalGiaBan, setThuCungModalGiaBan] = useState();
-  const [thuCungModalGiamGia, setThuCungModalGiamGia] = useState();
-  const [thuCungModalHinhAnh, setThuCungModalHinhAnh] = useState([]);
-  const [thuCungModalHinhAnhChange, setThuCungModalHinhAnhChange] = useState(
+  const [thuLacModal, setthuLacModal] = useState();
+  const [thuLacModalTenThuLac, setthuLacModalTenThuLac] = useState();
+  const [thuLacModalMaThuLac, setthuLacModalMaThuLac] = useState();
+  const [thuLacModalTrangThaiThuCung, setthuLacModalTrangThaiThuCung] = useState();
+  const [thuLacModalDacDiem, setthuLacModalDacDiem] = useState();
+  const [thuLacModalMaNguoiMua, setthuLacModalMaNguoiMua] = useState();
+  const [thuLacModalMaXa, setthuLacModalMaXa] = useState();
+  const [thuLacModalHoTenLienHe, setthuLacModalHoTenLienHe] = useState();
+  const [thuLacModalEmailLienHe, setthuLacModalEmailLienHe] = useState();
+  const [thuLacModalSdtLienHe, setthuLacModalSdtLienHe] = useState();
+  const [thuLacModalDiaChiLienHe, setthuLacModalDiaChiLienHe] = useState();
+  const [thuLacModalNgayTao, setthuLacModalNgayTao] = useState();
+  const [thuLacModalHinhAnhThuLac, setthuLacModalHinhAnhThuLac] = useState([]);
+  const [thuLacModalHinhAnhThuLacChange, setthuLacModalHinhAnhThuLacChange] = useState("");
+
+  const [thuLacModalTenXa, setthuLacModalTenXa] = useState();
+  const [thuLacModalTenQuanHuyen, setthuLacModalTenQuanHuyen] = useState();
+  const [thuLacModalTenThanhPho, setthuLacModalTenThanhPho] = useState();
+  const [thuLacModalMaQuanHuyen, setthuLacModalMaQuanHuyen] = useState();
+  const [thuLacModalMaThanhPho, setthuLacModalMaThanhPho] = useState();
+
+  //Old
+  const [thuLacModalOld, setthuLacModalOld] = useState();
+  const [thuLacModalMaThuLacOld, setthuLacModalMaThuLacOld] = useState();
+  const [thuLacModalDacDiemOld, setthuLacModalDacDiemOld] = useState();
+  const [thuLacModalMaNguoiMuaOld, setthuLacModalMaNguoiMuaOld] = useState();
+  const [thuLacModalTenThuLacOld, setthuLacModalTenThuLacOld] = useState();
+  const [thuLacModalTrangThaiThuCungOld, setthuLacModalTrangThaiThuCungOld] = useState();
+  const [thuLacModalEmailLienHeOld, setthuLacModalEmailLienHeOld] = useState();
+  const [thuLacModalHoTenLienHeOld, setthuLacModalHoTenLienHeOld] = useState();
+  const [thuLacModalSdtLienHeOld, setthuLacModalSdtLienHeOld] = useState();
+  const [thuLacModalDiaChiLienHeOld, setthuLacModalDiaChiLienHeOld] = useState();
+  const [thuLacModalNgayTaoOld, setthuLacModalNgayTaoOld] = useState();
+  const [thuLacModalHinhAnhThuLacOld, setthuLacModalHinhAnhThuLacOld] = useState("");
+  const [thuLacModalTenXaOld, setthuLacModalTenXaOld] = useState();
+  const [thuLacModalTenQuanHuyenOld, setthuLacModalTenQuanHuyenOld] = useState();
+  const [thuLacModalTenThanhPhoOld, setthuLacModalTenThanhPhoOld] = useState();
+  const [thuLacModalMaXaOld, setthuLacModalMaXaOld] = useState();
+  const [thuLacModalMaQuanHuyenOld, setthuLacModalMaQuanHuyenOld] = useState();
+  const [thuLacModalMaThanhPhoOld, setthuLacModalMaThanhPhoOld] = useState();
+  useEffect(() => {
+    // setthuCungModalHinhAnh([]);
+    // setthuCungModalHinhAnhChange([]);
+    setHinhAnhMoi([]);
+    const getThuLac = async () => {
+      try {
+        const thulacres = await axios.post(
+          "http://localhost:3001/api/lostpets/findThuCungLacById",
+          { mathulac: thulac.mathulac }
+        );
+        console.log("check lac:", thulacres);
+        setthuLacModal(thulacres.data);
+        setthuLacModalMaThuLac(thulacres.data[0].mathulac);
+        setthuLacModalTenThuLac(thulacres.data[0].tenthulac);
+        setthuLacModalTrangThaiThuCung(thulacres.data[0].trangthaithucung);
+        setthuLacModalDacDiem(thulacres.data[0].dacdiem);
+        setthuLacModalMaNguoiMua(thulacres.data[0].manguoimua);
+        setthuLacModalEmailLienHe(thulacres.data[0].emaillienhe);
+        setthuLacModalHoTenLienHe(thulacres.data[0].hotenlienhe);
+        setthuLacModalNgayTao(thulacres.data[0].ngaytao);
+        setthuLacModalSdtLienHe(thulacres.data[0].sdtlienhe);
+        setthuLacModalDiaChiLienHe(thulacres.data[0].diachilienhe);
+        setthuLacModalHinhAnhThuLac(thulacres.data[0].hinhanhthulac);
+        setthuLacModalTenXa(thulacres.data[0].tenxa);
+        setthuLacModalTenQuanHuyen(thulacres.data[0].tenquanhuyen);
+        setthuLacModalTenThanhPho(thulacres.data[0].tenthanhpho);
+        setthuLacModalMaXa(thulacres.data[0].maxa);
+        setthuLacModalMaQuanHuyen(thulacres.data[0].maquanhuyen);
+        setthuLacModalMaThanhPho(thulacres.data[0].mathanhpho);
+
+        setthuLacModalOld(thulacres.data);
+        setthuLacModalMaThuLacOld(thulacres.data[0].mathulac);
+        setthuLacModalTenThuLacOld(thulacres.data[0].tenthulac);
+        setthuLacModalTrangThaiThuCungOld(thulacres.data[0].trangthaithucung);
+        setthuLacModalDacDiemOld(thulacres.data[0].dacdiem);
+        setthuLacModalMaNguoiMuaOld(thulacres.data[0].manguoimua);
+        setthuLacModalEmailLienHeOld(thulacres.data[0].emaillienhe);
+        setthuLacModalHoTenLienHeOld(thulacres.data[0].hotenlienhe);
+        setthuLacModalNgayTaoOld(thulacres.data[0].ngaytao);
+        setthuLacModalSdtLienHeOld(thulacres.data[0].sdtlienhe);
+        setthuLacModalDiaChiLienHeOld(thulacres.data[0].diachilienhe);
+        setthuLacModalHinhAnhThuLacOld(thulacres.data[0].hinhanhthulac);
+        setthuLacModalTenXaOld(thulacres.data[0].tenxa);
+        setthuLacModalTenQuanHuyenOld(thulacres.data[0].tenquanhuyen);
+        setthuLacModalTenThanhPhoOld(thulacres.data[0].tenthanhpho);
+        setthuLacModalMaXaOld(thulacres.data[0].maxa);
+        setthuLacModalMaQuanHuyenOld(thulacres.data[0].maquanhuyen);
+        setthuLacModalMaThanhPhoOld(thulacres.data[0].mathanhpho);
+        console.log("Nhân viên modal hahaha: ", thuLacModal);
+
+      } catch (err) {
+        console.log("Lỗi lấy thú cưng lạc: ", err);
+      }
+    };
+    getThuLac();
+  }, [thulac]);
+  console.log("Nhân viên modal: ", thuLacModal);
+
+  // Effect Tỉnh - Huyện - Xã cập nhật
+  const [mangTinhThanhPhoUpdate, setMangTinhThanhPhoUpdate] = useState([]);
+  const [mangQuanHuyenUpdate, setMangQuanHuyenUpdate] = useState([]);
+  const [mangXaPhuongThiTranUpdate, setMangXaPhuongThiTranUpdate] = useState(
     []
   );
-
-  const [thuCungModalMaDanhMucOld, setThuCungModalMaDanhMucOld] = useState();
-  const [thuCungModalTenThuCungOld, setThuCungModalTenThuCungOld] = useState();
-  const [thuCungModalGioiTinhThuCungOld, setThuCungModalGioiTinhThuCungOld] =
-    useState();
-  const [thuCungModalTuoiThuCungOld, setThuCungModalTuoiThuCungOld] =
-    useState();
-  const [thuCungModalDaTiemChungOld, setThuCungModalDaTiemChungOld] =
-    useState();
-  const [thuCungModalBaoHanhSucKhoeOld, setThuCungModalBaoHanhSucKhoeOld] =
-    useState();
-  const [thuCungModalTieuDeOld, setThuCungModalTieuDeOld] = useState();
-  const [thuCungModalMoTaOld, setThuCungModalMoTaOld] = useState();
-  const [thuCungModalGhiChuOld, setThuCungModalGhiChuOld] = useState();
-  const [thuCungModalSoLuongOld, setThuCungModalSoLuongOld] = useState();
-  const [thuCungModalGiaBanOld, setThuCungModalGiaBanOld] = useState();
-  const [thuCungModalGiamGiaOld, setThuCungModalGiamGiaOld] = useState();
-  const [thuCungModalHinhAnhOld, setThuCungModalHinhAnhOld] = useState([]);
   useEffect(() => {
-    // setThuCungModalHinhAnh([]);
-    // setThuCungModalHinhAnhChange([]);
-    setHinhAnhMoi([]);
-    const getThuCung = async () => {
-      try {
-        const thucungres = await axios.post(
-          "http://localhost:3001/api/products/findThuCungById",
-          { mathucung: thucung.mathucung }
-        );
-        setThuCungModal(thucungres.data);
-        setThuCungModalMaDanhMuc(thucungres.data[0].madanhmuc);
-        setThuCungModalTenThuCung(thucungres.data[0].tenthucung);
-        setThuCungModalGioiTinhThuCung(thucungres.data[0].gioitinhthucung);
-        setThuCungModalTuoiThuCung(thucungres.data[0].tuoithucung);
-        setThuCungModalDaTiemChung(thucungres.data[0].datiemchung);
-        setThuCungModalBaoHanhSucKhoe(thucungres.data[0].baohanhsuckhoe);
-        setThuCungModalTieuDe(thucungres.data[0].tieude);
-        setThuCungModalMoTa(thucungres.data[0].mota);
-        setThuCungModalGhiChu(thucungres.data[0].ghichu);
-        setThuCungModalSoLuong(thucungres.data[0].soluong);
-        setThuCungModalGiaBan(thucungres.data[0].giaban);
-        setThuCungModalGiamGia(thucungres.data[0].giamgia);
-
-        setThuCungModalMaDanhMucOld(thucungres.data[0].madanhmuc);
-        setThuCungModalTenThuCungOld(thucungres.data[0].tenthucung);
-        setThuCungModalGioiTinhThuCungOld(thucungres.data[0].gioitinhthucung);
-        setThuCungModalTuoiThuCungOld(thucungres.data[0].tuoithucung);
-        setThuCungModalDaTiemChungOld(thucungres.data[0].datiemchung);
-        setThuCungModalBaoHanhSucKhoeOld(thucungres.data[0].baohanhsuckhoe);
-        setThuCungModalTieuDeOld(thucungres.data[0].tieude);
-        setThuCungModalMoTaOld(thucungres.data[0].mota);
-        setThuCungModalGhiChuOld(thucungres.data[0].ghichu);
-        setThuCungModalSoLuongOld(thucungres.data[0].soluong);
-        setThuCungModalGiaBanOld(thucungres.data[0].giaban);
-        setThuCungModalGiamGiaOld(thucungres.data[0].giamgia);
-      } catch (err) {
-        console.log("Lỗi lấy danh mục: ", err);
-      }
-    };
-    const getHinhAnh = async () => {
-      try {
-        setThuCungModalHinhAnh([]);
-        const hinhanhres = await axios.post(
-          "http://localhost:3001/api/products/findImage",
-          { mathucung: thucung.mathucung }
-        );
-        hinhanhres.data.map((thucung, index) => {
-          setThuCungModalHinhAnh((prev) => {
-            const isHave = thuCungModalHinhAnh.includes(thucung.hinhanh);
-            if (isHave) {
-              return [...prev];
-            } else {
-              return [...prev, thucung.hinhanh];
-            }
-          });
-          // setThuCungModalHinhAnhChange(prev => {
-          //     const isHave = thuCungModalHinhAnhChange.includes(thucung.hinhanh);
-          //     if (isHave) {
-          //         return [...prev];
-          //     } else {
-          //         return [...prev, thucung.hinhanh];
-          //     }
-          // });
-          setThuCungModalHinhAnhOld((prev) => {
-            const isHave = thuCungModalHinhAnhOld.includes(thucung.hinhanh);
-            if (isHave) {
-              return [...prev];
-            } else {
-              return [...prev, thucung.hinhanh];
-            }
-          });
-        });
-      } catch (err) {
-        console.log("Lỗi lấy hình ảnh thú cưng: ", err);
-      }
-    };
-    getThuCung();
-    getHinhAnh();
-  }, [thucung]);
-  console.log("Thú cưng modal: ", thuCungModal);
-
-  const [isUpdate, setIsUpdate] = useState(true);
-  useEffect(() => {
-    const getImageUpdate = async () => {
-      try {
-        const hinhanhres = await axios.post(
-          "http://localhost:3001/api/products/findImage",
-          { mathucung: thucung.mathucung }
-        );
-        setThuCungModalHinhAnh(hinhanhres.data);
-      } catch (err) {
-        console.log("Lỗi lấy hình ảnh thú cưng: ", err);
-      }
-    };
-    getImageUpdate();
-  }, [isUpdate]);
-  // Thay đổi hình ảnh
-  const handleChangeImg = (hinhmoiarray) => {
-    setThuCungModalHinhAnhChange([]);
-    for (let i = 0; i < hinhmoiarray.length; i++) {
-      // console.log("hinh moi: ", hinhmoiarray[i]);
-      const hinhanhunique = new Date().getTime() + hinhmoiarray[i].name;
-      const storage = getStorage(app);
-      const storageRef = ref(storage, hinhanhunique);
-      const uploadTask = uploadBytesResumable(storageRef, hinhmoiarray[i]);
-
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-            default:
-          }
-        },
-        (error) => {
-          // A full list of error codes is available at
-          // https://firebase.google.com/docs/storage/web/handle-errors
-          switch (error.code) {
-            case "storage/unauthorized":
-              console.log("Người dùng không có quyền truy cập vào đối tượng");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            case "storage/canceled":
-              console.log("Người dùng đã hủy tải lên");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            case "storage/unknown":
-              console.log("Đã xảy ra lỗi không xác định");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            default:
-              console.log("Lỗi không xác định:", error.code);
-              // Có thể cung cấp thông báo cho người dùng ở đây
-          }
-        },
-        () => {
-          // Upload completed successfully, now we can get the download URL
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
-            try {
-              setThuCungModalHinhAnhChange((prev) => [...prev, downloadURL]);
-            } catch (err) {
-              console.log("Lỗi cập nhật hình ảnh:", err);
-            }
-          });
-        }
+    const getTinhThanhPhoUpdate = async () => {
+      const thanhphores = await axios.post(
+        "http://localhost:3001/api/lostpets/getTinhThanhPho",
+        {}
       );
-    }
+      setMangTinhThanhPhoUpdate(thanhphores.data);
+      console.log("Tỉnh TPUpdate [res]: ", thanhphores.data);
+    };
+    getTinhThanhPhoUpdate();
+  }, []);
+
+  useEffect(() => {
+    const getQuanHuyenUpdate = async () => {
+      const quanhuyenres = await axios.post(
+        "http://localhost:3001/api/lostpets/getQuanHuyen",
+        { mathanhpho: thuLacModalMaThanhPho }
+      );
+      setMangQuanHuyenUpdate(quanhuyenres.data);
+      console.log("Quận huyện Update [res]: ", quanhuyenres.data);
+    };
+    getQuanHuyenUpdate();
+  }, [thuLacModalMaThanhPho]);
+
+  useEffect(() => {
+    const getXaPhuongThiTranUpdate = async () => {
+      const xaphuongthitranres = await axios.post(
+        "http://localhost:3001/api/lostpets/getXaPhuongThiTran",
+        { maquanhuyen: thuLacModalMaQuanHuyen }
+      );
+      setMangXaPhuongThiTranUpdate(xaphuongthitranres.data);
+      console.log("Xã phường Update res: ", xaphuongthitranres.data);
+    };
+    getXaPhuongThiTranUpdate();
+  }, [thuLacModalMaQuanHuyen]);
+
+  // Thay đổi hình ảnh
+  const handleChangeImg = (hinhmoi) => {
+    setthuLacModalHinhAnhThuLacChange("");
+    const hinhanhunique = new Date().getTime() + hinhmoi;
+    const storage = getStorage(app);
+    const storageRef = ref(storage, hinhanhunique);
+    const uploadTask = uploadBytesResumable(storageRef, hinhmoi);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+        }
+      },
+      (error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/unauthorized":
+            console.log("Người dùng không có quyền truy cập vào đối tượng");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          case "storage/canceled":
+            console.log("Người dùng đã hủy tải lên");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          case "storage/unknown":
+            console.log("Đã xảy ra lỗi không xác định");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          default:
+            console.log("Lỗi không xác định:", error.code);
+          // Có thể cung cấp thông báo cho người dùng ở đây
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          try {
+            setthuLacModalHinhAnhThuLacChange(downloadURL);
+          } catch (err) {
+            console.log("Lỗi cập nhật hình ảnh:", err);
+          }
+        });
+      }
+    );
   };
 
   const handleCloseUpdate = () => {
     // Set lại giá trị cũ sau khi đóng Modal
-    // setThuCungModalHinhAnh(thuCungModalHinhAnhOld);
-    setThuCungModalMaDanhMuc(thuCungModalMaDanhMucOld);
-    setThuCungModalTenThuCung(thuCungModalTenThuCungOld);
-    setThuCungModalGioiTinhThuCung(thuCungModalGioiTinhThuCungOld);
-    setThuCungModalTuoiThuCung(thuCungModalTuoiThuCungOld);
-    setThuCungModalDaTiemChung(thuCungModalDaTiemChungOld);
-    setThuCungModalBaoHanhSucKhoe(thuCungModalBaoHanhSucKhoeOld);
-    setThuCungModalTieuDe(thuCungModalTieuDeOld);
-    setThuCungModalMoTa(thuCungModalMoTaOld);
-    setThuCungModalGhiChu(thuCungModalMaDanhMucOld);
-    setThuCungModalSoLuong(thuCungModalSoLuongOld);
-    setThuCungModalGiaBan(thuCungModalGiaBanOld);
-    setThuCungModalGiamGia(thuCungModalMaDanhMucOld);
+    // setthuCungModalHinhAnh(thuCungModalHinhAnhOld);
+
+    // setthuLacModalMaThuLac(thuLacModalMaThuLacOld);
+    setthuLacModalTenThuLac(thuLacModalTenThuLacOld);
+    setthuLacModalTrangThaiThuCung(thuLacModalTrangThaiThuCungOld);
+    setthuLacModalEmailLienHeOld(thuLacModalDacDiemOld);
+    setthuLacModalMaNguoiMuaOld(thuLacModalMaNguoiMuaOld);
+    setthuLacModalMaXa(thuLacModalMaXaOld);
+    setthuLacModalEmailLienHe(thuLacModalEmailLienHeOld);
+    setthuLacModalHoTenLienHe(thuLacModalHoTenLienHeOld);
+    setthuLacModalNgayTao(thuLacModalNgayTaoOld);
+    setthuLacModalSdtLienHe(thuLacModalSdtLienHeOld);
+    setthuLacModalDiaChiLienHe(thuLacModalDiaChiLienHeOld);
+    setthuLacModalHinhAnhThuLac(thuLacModalHinhAnhThuLacOld);
 
     setShowModal((prev) => !prev);
     // setHinhAnhMoi([]);  //Đóng modal sẽ xóa mảng hình cũ ở Modal Thêm thú cưng
-    // setThuCungModalHinhAnhChange([]);
+    // setthuCungModalHinhAnhChange([]);
   };
 
-  // Checkbox - Update thú cưng - Đã tiêm chủng - Được check
-  const handleCheckboxDaTiemUpdate = (e) => {
-    if (e.target.checked) {
-      //Khi checked
-      setThuCungModalDaTiemChung(e.target.value);
-    } else {
-      setThuCungModalDaTiemChung("");
-    }
-  };
+  // =============== Xử lý thêm thú cưng lạc ===============
+  const [tenThuLacMoi, setTenThuLacMoi] = useState(""); //Giới tính mặc định là "Đực"
+  const [maTrangThaiThuCungMoi, setMaTrangThaiThuCungMoi] = useState("1"); //Danh mục mặc định là Chó
+  const [dacDiemMoi, setDacDiemMoi] = useState("");
+  const [maNguoiMuaMoi, setMaNguoiMuaMoi] = useState("");
+  const [maXaMoi, setMaXaMoi] = useState("00001");
+  const [hoTenLienHeMoi, setHoTenLienHeMoi] = useState("");
+  const [emailLienHeMoi, setEmailLienHeMoi] = useState(""); //Giới tính 
+  const [sdtLienHeMoi, setSdtLienHeMoi] = useState("");
+  const [diaChiLienHeMoi, setDiaChiLienHeMoi] = useState("");
+  const [ngayTaoMoi, setNgayTaoMoi] = useState("");
+  const [hinhAnhMoi, setHinhAnhMoi] = useState(); //Mảng chứa hình ảnh
 
-  // Checkbox - Update thú cưng - Bảo hành sức khỏe - Được check
-  const handleCheckboxBaoHanhUpdate = (e) => {
-    if (e.target.checked) {
-      //Khi checked
-      setThuCungModalBaoHanhSucKhoe(e.target.value);
-    } else {
-      setThuCungModalBaoHanhSucKhoe("");
-    }
-  };
+  // Lấy TỈNH - HUYỆN - XÃ
+  const [tinhThanhPho, setTinhThanhPho] = useState();
+  const [quanHuyen, setQuanHuyen] = useState();
+  const [xaPhuongThiTran, setXaPhuongThiTran] = useState();
 
-  console.log("Đã tiêm chủng: ", thuCungModalDaTiemChung);
-  console.log("Được bảo hành sức khỏe: ", thuCungModalBaoHanhSucKhoe);
-  console.log("thucungmodalhinhanh: ", thuCungModalHinhAnh);
-  console.log("thucungmodalhinhanhchange: ", thuCungModalHinhAnhChange);
+  const [mangTinhThanhPho, setMangTinhThanhPho] = useState([]);
+  const [mangQuanHuyen, setMangQuanHuyen] = useState([]);
+  const [mangXaPhuongThiTran, setMangXaPhuongThiTran] = useState([]);
 
-  // =============== Xử lý thêm thú cưng ===============
-  const [maDanhMucMoi, setMaDanhMucMoi] = useState("1"); //Danh mục mặc định là Chó
-  const [tenThuCungMoi, setTenThuCungMoi] = useState("");
-  const [gioiTinhThuCungMoi, setGioiTinhThuCungMoi] = useState("Đực"); //Giới tính mặc định là "Đực"
-  const [tuoiThuCungMoi, setTuoiThuCungMoi] = useState("");
-  const [daTiemChungMoi, setDaTiemChungMoi] = useState("");
-  const [baoHanhSucKhoeMoi, setBaoHanhSucKhoeMoi] = useState("");
-  const [tieuDeMoi, setTieuDeMoi] = useState("");
-  const [moTaMoi, setMoTaMoi] = useState("");
-  const [ghiChuMoi, setGhiChuMoi] = useState("");
-  const [soLuongMoi, setSoLuongMoi] = useState("");
-  const [giaBanMoi, setGiaBanMoi] = useState("");
-  const [giamGiaMoi, setGiamGiaMoi] = useState("");
-  const [hinhAnhMoi, setHinhAnhMoi] = useState([]); //Mảng chứa hình ảnh
+  useEffect(() => {
+    const getTinhThanhPho = async () => {
+      const thanhphores = await axios.post(
+        "http://localhost:3001/api/lostpets/getTinhThanhPho",
+        {}
+      );
+      setMangTinhThanhPho(thanhphores.data);
+      console.log("Tỉnh TP [res]: ", thanhphores.data);
+    };
+    getTinhThanhPho();
+  }, []);
+
+  useEffect(() => {
+    const getQuanHuyen = async () => {
+      const quanhuyenres = await axios.post(
+        "http://localhost:3001/api/lostpets/getQuanHuyen",
+        { mathanhpho: tinhThanhPho }
+      );
+      setMangQuanHuyen(quanhuyenres.data);
+      console.log("Quận huyện [res]: ", quanhuyenres.data);
+    };
+    getQuanHuyen();
+  }, [tinhThanhPho]);
+
+  useEffect(() => {
+    const getXaPhuongThiTran = async () => {
+      const xaphuongthitranres = await axios.post(
+        "http://localhost:3001/api/lostpets/getXaPhuongThiTran",
+        { maquanhuyen: quanHuyen }
+      );
+      setMangXaPhuongThiTran(xaphuongthitranres.data);
+      console.log("Xã phường res: ", xaphuongthitranres.data);
+    };
+    getXaPhuongThiTran();
+  }, [quanHuyen]);
 
   // Thay đổi hình ảnh
-  const handleShowImg = (hinhmoiarray) => {
+  const handleShowImg = (hinhmoi) => {
     // Chạy vòng lặp thêm từng hình trong mảng lên firebase rồi lưu vô mảng [hinhAnhMoi] ở modal Thêm thú cưng
     setHinhAnhMoi([]);
-    for (let i = 0; i < hinhmoiarray.length; i++) {
-      // console.log("hinh moi: ", hinhmoiarray[i]);
-      const hinhanhunique = new Date().getTime() + hinhmoiarray[i].name;
-      const storage = getStorage(app);
-      const storageRef = ref(storage, hinhanhunique);
-      const uploadTask = uploadBytesResumable(storageRef, hinhmoiarray[i]);
+    // console.log("hinh moi: ", hinhmoiarray[i]);
+    const hinhanhunique = new Date().getTime() + hinhmoi;
+    const storage = getStorage(app);
+    const storageRef = ref(storage, hinhanhunique);
+    const uploadTask = uploadBytesResumable(storageRef, hinhmoi);
 
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-            default:
-          }
-        },
-        (error) => {
-          // A full list of error codes is available at
-          // https://firebase.google.com/docs/storage/web/handle-errors
-          switch (error.code) {
-            case "storage/unauthorized":
-              console.log("Người dùng không có quyền truy cập vào đối tượng");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            case "storage/canceled":
-              console.log("Người dùng đã hủy tải lên");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            case "storage/unknown":
-              console.log("Đã xảy ra lỗi không xác định");
-              // Có thể cung cấp thông báo cho người dùng ở đây
-              break;
-            default:
-              console.log("Lỗi không xác định:", error.code);
-              // Có thể cung cấp thông báo cho người dùng ở đây
-          }
-        },
-        () => {
-          // Upload completed successfully, now we can get the download URL
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
-            try {
-              setHinhAnhMoi((prev) => [...prev, downloadURL]);
-              console.log("Up thành công 1 hình: ", downloadURL);
-            } catch (err) {
-              console.log("Lỗi show hình ảnh:", err);
-            }
-          });
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
         }
-      );
-    }
-    console.log("mang hinh: ", hinhmoiarray);
+      },
+      (error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/unauthorized":
+            console.log("Người dùng không có quyền truy cập vào đối tượng");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          case "storage/canceled":
+            console.log("Người dùng đã hủy tải lên");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          case "storage/unknown":
+            console.log("Đã xảy ra lỗi không xác định");
+            // Có thể cung cấp thông báo cho người dùng ở đây
+            break;
+          default:
+            console.log("Lỗi không xác định:", error.code);
+          // Có thể cung cấp thông báo cho người dùng ở đây
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          try {
+            setHinhAnhMoi(downloadURL);
+            console.log("Up thành công 1 hình: ", downloadURL);
+          } catch (err) {
+            console.log("Lỗi show hình ảnh:", err);
+          }
+        });
+      }
+    );
+    console.log("Hình mới: ", hinhmoi);
   };
 
-  const handleThemThuCung = async ({
-    madanhmucmoi,
-    tenthucungmoi,
-    gioitinhthucungmoi,
-    tuoithucungmoi,
-    datiemchungmoi,
-    baohanhsuckhoemoi,
-    tieudemoi,
-    motamoi,
-    ghichumoi,
-    soluongmoi,
-    giabanmoi,
-    giamgiamoi,
-    hinhanhmoi, //Mảng hình nhe
+  const handleThemThuLac = async ({
+    tenthulacmoi,
+    trangthaithucungmoi,
+    dacdiemmoi,
+    manguoimuamoi,
+    maxamoi,
+    hotenlienhemoi,
+    emaillienhemoi,
+    sdtlienhemoi,
+    diachilienhemoi,
+    ngaytaomoi,
+    hinhanhthulacmoi,//Hình đại diện thú cưng lạc mới
   }) => {
-    console.log("Thu Cung duoc them moi: ", {
-      madanhmucmoi,
-      tenthucungmoi,
-      gioitinhthucungmoi,
-      tuoithucungmoi,
-      datiemchungmoi,
-      baohanhsuckhoemoi,
-      tieudemoi,
-      motamoi,
-      ghichumoi,
-      soluongmoi,
-      giabanmoi,
-      giamgiamoi,
-      hinhanhmoi, //Mảng hình nhe
+    console.log("Thú lạc được thêm mới: ", {
+      tenthulacmoi,
+      trangthaithucungmoi,
+      dacdiemmoi,
+      manguoimuamoi,
+      maxamoi,
+      hotenlienhemoi,
+      emaillienhemoi,
+      sdtlienhemoi,
+      diachilienhemoi,
+      ngaytaomoi,
+      hinhanhthulacmoi, //Hình đại diện thú cưng lạc mới
     });
     if (
-      madanhmucmoi !== "" &&
-      tenthucungmoi !== "" &&
-      gioitinhthucungmoi !== "" &&
-      tuoithucungmoi !== "" &&
-      // && datiemchungmoi !== ""
-      // && baohanhsuckhoemoi !== ""
-      tieudemoi !== "" &&
-      motamoi !== "" &&
-      ghichumoi !== "" &&
-      soluongmoi >= 1 &&
-      giabanmoi >= 0 &&
-      giamgiamoi >= 0 &&
-      hinhanhmoi.length > 0
+      tenthulacmoi !== "" &&
+      trangthaithucungmoi !== "" &&
+      dacdiemmoi !== "" &&
+      manguoimuamoi !== "" &&
+      maxamoi !== "" &&
+      hotenlienhemoi !== "" &&
+      emaillienhemoi !== "" &&
+      sdtlienhemoi !== "" &&
+      diachilienhemoi !== "" &&
+      ngaytaomoi !== "" &&
+      hinhanhthulacmoi !== ""
     ) {
       try {
-        const insertthucungres = axios.post(
-          "http://localhost:3001/api/products/insertThuCung",
+        const insertthulacres = axios.post(
+          "http://localhost:3001/api/lostpets/insertThuCungLac",
           {
-            madanhmuc: madanhmucmoi,
-            tenthucung: tenthucungmoi,
-            gioitinhthucung: gioitinhthucungmoi,
-            tuoithucung: tuoithucungmoi,
-            datiemchung: datiemchungmoi,
-            baohanhsuckhoe: baohanhsuckhoemoi,
-            tieude: tieudemoi,
-            mota: motamoi,
-            ghichu: ghichumoi,
-            soluong: soluongmoi,
-            giaban: giabanmoi,
-            giamgia: giamgiamoi,
-            hinhanh: hinhanhmoi,
+            tenthulac: tenthulacmoi,
+            trangthaithucung: trangthaithucungmoi,
+            dacdiem: dacdiemmoi,
+            manguoimua: manguoimuamoi,
+            maxa: maxamoi,
+            hotenlienhe: hotenlienhemoi,
+            emaillienhe: emaillienhemoi,
+            sdtlienhe: sdtlienhemoi,
+            diachilienhe: diachilienhemoi,
+            ngaytao: ngaytaomoi,
+            hinhanhthulac: hinhanhthulacmoi,
           }
         );
-        console.log("KQ trả về update: ", insertthucungres);
+        console.log("KQ trả về update: ", insertthulacres);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         const dataShow = {
-          message: "Thêm thú cưng " + tenthucungmoi + " thành công!",
+          message:
+            "Thêm thú cưng lạc " + tenthulacmoi + " thành công!",
           type: "success",
         };
         showToastFromOut(dataShow);
         setHinhAnhMoi([]); //Làm rỗng mảng hình
+        // setMangQuanHuyen([]);   //Làm rỗng mảng Quận huyện
+        // setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
       } catch (err) {
         console.log("Lỗi insert: ", err);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         const dataShow = {
-          message: "Đã có lỗi khi thêm thú cưng " + tenthucungmoi,
+          message: "Đã có lỗi khi thêm thú cưng lạc " + tenthulacmoi,
           type: "danger",
         };
         showToastFromOut(dataShow); //Hiện toast thông báo
       }
+
     } else {
       const dataShow = {
-        message: "Bạn chưa nhập thông tin cho thú cưng",
+        message: "Bạn chưa nhập thông tin cho thú cưng lạc",
         type: "danger",
       };
       showToastFromOut(dataShow); //Hiện toast thông báo
     }
   };
 
-  // State chứa mảng danh mục - Lấy về danh mục để hiện select-option
-  const [danhMuc, setDanhMuc] = useState([]);
+  // State chứa mảng chức vụ - Lấy về chức vụ để hiện select-option
+  const [trangThaiThuCung, setTrangThaiThuCung] = useState([]);
   useEffect(() => {
-    const getDanhMuc = async () => {
+    const getTrangThaiThuCung = async () => {
       try {
-        const danhmucres = await axios.post(
-          "http://localhost:3001/api/products/getDanhMuc",
+        const trangthaithures = await axios.post(
+          "http://localhost:3001/api/lostpets/getTrangThaiThu",
           {}
         );
-        setDanhMuc(danhmucres.data);
-        console.log("Mảng danh mục: ", danhMuc);
+        setTrangThaiThuCung(trangthaithures.data);
+        console.log("Mảng trạng thái thú lạc: ", trangThaiThuCung);
       } catch (err) {
-        console.log("Lỗi lấy danh mục: ", err);
+        console.log("Lỗi lấy trạng thái thú lạc: ", err);
       }
     };
-    getDanhMuc();
-  }, [thucung]);
-  // Checkbox - Thêm thú cưng - Đã tiêm chủng
-  const [daTiem, setDaTiem] = useState(false);
-  const handleCheckboxDaTiem = (value) => {
-    setDaTiem(!daTiem);
-    if (!daTiem) {
-      //Khi checked
-      setDaTiemChungMoi(value);
-    } else {
-      setDaTiemChungMoi("");
-    }
-  };
-  // Checkbox - Thêm thú cưng - Bảo hành sức khỏe
-  const [baoHanh, setBaoHanh] = useState(false);
-  const handleCheckboxBaoHanh = (value) => {
-    setBaoHanh(!baoHanh);
-    if (!baoHanh) {
-      //Khi checked
-      setBaoHanhSucKhoeMoi(value);
-    } else {
-      setBaoHanhSucKhoeMoi("");
-    }
-  };
+    getTrangThaiThuCung();
+  }, [thulac]);
 
-  // =============== Xử lý xóa thú cưng ===============
-  const handleXoaThuCung = async ({ mathucung }) => {
-    if (mathucung !== "") {
+  // State chứa mảng ma nguoi mua
+  const [maNguoiMua, setMaNguoiMua] = useState([]);
+  useEffect(() => {
+    const getMaNguoiMua = async () => {
       try {
-        const deletethucungres = await axios.post(
-          "http://localhost:3001/api/products/deleteThuCung",
-          { mathucung }
+        const manguoimuares = await axios.post(
+          "http://localhost:3001/api/lostpets/getMaNguoiMua",
+          {}
         );
-        console.log("KQ trả về delete: ", deletethucungres);
+        setMaNguoiMua(manguoimuares.data);
+        console.log("Mảng trạng thái thú lạc: ", maNguoiMua);
+      } catch (err) {
+        console.log("Lỗi lấy trạng thái thú lạc: ", err);
+      }
+    };
+    getMaNguoiMua();
+  }, [thulac]);
+
+  // =============== Xử lý xóa thú cưng lạc ===============
+  const handleXoaThuLac = async ({ mathulac }) => {
+    if (mathulac !== "") {
+      try {
+        const deletethulacres = await axios.post(
+          "http://localhost:3001/api/lostpets/deleteThuCungLac",
+          { mathulac }
+        );
+        console.log("KQ trả về delete: ", deletethulacres);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         handleClose(); //Đóng thanh tìm kiếm
         const dataShow = {
-          message: "Đã xóa thú cưng mã " + mathucung + " thành công!",
+          message: "Đã xóa thú cưng lạc mã " + mathulac + " thành công!",
           type: "success",
         };
         showToastFromOut(dataShow);
       } catch (err) {
-        console.log("Lỗi Delete thú cưng err: ", err);
+        console.log("Lỗi Delete thú cưng lạc err: ", err);
       }
     }
   };
@@ -1000,11 +1024,12 @@ const Modal = ({
   const handleCloseChiTiet = () => {
     setShowModal((prev) => !prev);
     setHinhAnhMoi([]); //Đóng modal sẽ xóa mảng hình cũ ở Modal Thêm thú cưng
+    setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
+    setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
   };
-  console.log("Giới tính: ", maDanhMucMoi);
   // ================================================================
   //  =============== Xem chi tiết thú cưng ===============
-  if (type === "chitietthucunglac") {
+  if (type === "chitietthulac") {
     return (
       <>
         {showModal ? (
@@ -1013,116 +1038,110 @@ const Modal = ({
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H2>Chi tiết thú cưng</H2>
+              <H2>Chi tiết thú cưng lạc</H2>
               <ModalForm>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Mã thú cưng:</FormSpan>
-                    <FormInput type="text" value={thucung.mathucung} readOnly />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tên thú cưng:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.tenthucung}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Danh mục:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.tendanhmuc}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <ImageWrapper>
+                      <ChiTietHinhAnh src={thulac.hinhanhthulac} />
+                    </ImageWrapper>
+                  </ModalFormItem>
+                  <div style={{ display: "flex", flex: "1" }}>
+                    <ModalFormItem style={{ flex: "1" }}>
+                      <FormSpan>Tên thú cưng lạc:</FormSpan>
+                      <FormInput
+                        type="text"
+                        value={thulac.tenthulac}
+                        readOnly
+                      />
+                    </ModalFormItem>
+                    <ModalFormItem style={{ flex: "1" }}>
+                      <FormSpan>Ngày tạo:</FormSpan>
+                      <FormInput
+                        type="text"
+                        value={thulac.ngaytao.substring(0, 10)}
+                        readOnly
+                      />
+                    </ModalFormItem>
+                    <ModalFormItem style={{ flex: "1" }}>
+                      <FormSpan>Mã người mua:</FormSpan>
+                      <FormInput
+                        type="text"
+                        value={thulac.manguoimua}
+                        readOnly
+                      />
+                    </ModalFormItem>
+                  </div>
                 </div>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giới tính:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.gioitinhthucung}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tuổi:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.tuoithucung}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tiêm chủng:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.datiemchung}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Bảo hành:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={thucung.baohanhsuckhoe}
-                      readOnly
-                    />
-                  </ModalChiTietItem>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tiêu đề:</FormSpan>
-                    <FormInput type="text" value={thucung.tieude} readOnly />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Ghi chú:</FormSpan>
-                    <FormInput type="text" value={thucung.ghichu} readOnly />
-                  </ModalChiTietItem>
-                </div>
-                <ModalChiTietItem>
-                  <FormSpan>Mô tả:</FormSpan>
-                  <FormInput type="text" value={thucung.mota} readOnly />
-                </ModalChiTietItem>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Số lượng:</FormSpan>
-                    <FormInput type="text" value={thucung.soluong} readOnly />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giá bán:</FormSpan>
+                <Position style={{ display: "flex", flex: "1" }}>
+                  <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
+                    <FormSpan>Địa chỉ liên hệ:</FormSpan>
                     <FormInput
                       type="text"
                       value={
-                        thucung.giaban
-                          ? format_money(thucung.giaban.toString())
-                          : null
+                        thulac.diachilienhe +
+                        ", " +
+                        thulac.tenxa +
+                        ", " +
+                        thulac.tenquanhuyen +
+                        ", " +
+                        thulac.tenthanhpho
                       }
                       readOnly
                     />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giảm giá:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Email liên hệ:</FormSpan>
                     <FormInput
                       type="text"
-                      value={
-                        thucung.giamgia
-                          ? format_money(thucung.giamgia.toString())
-                          : null
-                      }
+                      value={thulac.emaillienhe}
                       readOnly
                     />
-                  </ModalChiTietItem>
-                </div>
-                <ModalChiTietItem>
-                  <FormSpan>Hình ảnh:</FormSpan>
-                  <ImageWrapper>
-                    {thuCungModalHinhAnh.map((hinhanh, index) => {
-                      return <ChiTietHinhAnh src={hinhanh} />;
-                    })}
-                  </ImageWrapper>
-                </ModalChiTietItem>
+                  </ModalFormItem>
+                </Position>
+                <PositionTwo
+                  style={{
+                    display: "flex",
+                    flex: "1",
+                    marginTop: "15px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
+                    <FormSpan>Mã thú cưng lạc:</FormSpan>
+                    <FormInput type="text" value={thulac.mathulac} readOnly />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Trạng thái thú cưng:</FormSpan>
+                    <FormInput type="text" value={thulac.tentrangthaithucung} readOnly />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số điện thoại liên hệ:</FormSpan>
+                    <FormInput
+                      type="text"
+                      value={thulac.sdtlienhe}
+                      readOnly
+                    />
+                  </ModalFormItem>
+                </PositionTwo>
+                <PositionThree style={{
+                  display: "flex",
+                  flex: "1",
+                  marginTop: "15px",
+                  marginBottom: "10px",
+                }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormTextArea
+                      rows="4"
+                      cols="50"
+                      onChange={(e) => setthuLacModalDacDiem(e.target.value)}
+                      placeholder="Nhập vào đặc điểm thị thú cưng lạc"
+                      value={thuLacModalDacDiem}
+                      readOnly
+                    />
+                  </ModalFormItem>
+                </PositionThree>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
@@ -1142,149 +1161,185 @@ const Modal = ({
     );
   }
   //  =============== Thêm thú cưng ===============
-  console.log("daTiemChungMoi: ", daTiemChungMoi);
-  console.log("baoHanhSucKhoeMoi: ", baoHanhSucKhoeMoi);
-  if (type === "themthucunglac") {
+  if (type === "themthulac") {
     return (
       <>
         {showModal ? (
           <Background ref={modalRef} onClick={closeModal}>
-            <ThemThuCungWrapper
+            <ThemNhanVienWrapper
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H2>Thêm thú cưng mới</H2>
+              <H2>Thêm thú cưng lạc mới</H2>
               <ModalForm>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tên thú cưng:</FormSpan>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Tên thú cưng lạc:</FormSpan>
                     <FormInput
                       type="text"
-                      onChange={(e) => setTenThuCungMoi(e.target.value)}
-                      placeholder="Tên của thú cưng"
+                      onChange={(e) => setTenThuLacMoi(e.target.value)}
+                      placeholder="Tên của thú lạc"
                     />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Danh mục:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Trạng thái thú lạc:</FormSpan>
                     <FormSelect
                       onChange={(e) => {
-                        setMaDanhMucMoi(e.target.value);
+                        setMaTrangThaiThuCungMoi(e.target.value);
                       }}
                     >
-                      {danhMuc.map((danhmuc, key) => {
+                      {trangThaiThuCung.map((item, key) => {
                         return (
-                          <FormOption value={danhmuc.madanhmuc}>
+                          <FormOption value={item.trangthaithucung}>
                             {" "}
-                            {danhmuc.tendanhmuc}{" "}
+                            {item.tentrangthaithucung}{" "}
                           </FormOption>
                         );
                       })}
                     </FormSelect>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giới tính:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Ngày tạo:</FormSpan>
+                    <FormInput
+                      type="date"
+                      onChange={(e) => setNgayTaoMoi(e.target.value)}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Mã người mua:</FormSpan>
                     <FormSelect
                       onChange={(e) => {
-                        setGioiTinhThuCungMoi(e.target.value);
+                        setMaNguoiMuaMoi(e.target.value);
                       }}
                     >
-                      <FormOption value="Đực"> Đực </FormOption>
-                      <FormOption value="Cái"> Cái </FormOption>
+                      {maNguoiMua.map((item, key) => {
+                        return (
+                          <FormOption value={item.manguoimua}>
+                            {" "}
+                            {item.manguoimua}{" "}
+                          </FormOption>
+                        );
+                      })}
                     </FormSelect>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tuổi thú cưng:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setTuoiThuCungMoi(e.target.value)}
-                      placeholder="Tuổi của thú cưng"
-                    />
-                  </ModalChiTietItem>
+                  </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormLabel>
-                      <FormCheckbox
-                        type="checkbox"
-                        onChange={(e) => handleCheckboxDaTiem(e.target.value)}
-                        value="Đã tiêm chủng"
-                      />
-                      <FormSpan>Đã tiêm chủng</FormSpan>
-                    </FormLabel>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormLabel>
-                      <FormCheckbox
-                        type="checkbox"
-                        onChange={(e) => handleCheckboxBaoHanh(e.target.value)}
-                        value="Được bảo hành sức khỏe"
-                      />
-                      <FormSpan>Bảo hành sức khỏe</FormSpan>
-                    </FormLabel>
-                  </ModalChiTietItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc tỉnh:</FormSpan>
+                    <FormSelect
+                      onChange={(e) => {
+                        setTinhThanhPho(e.target.value);
+                      }}
+                    >
+                      <FormOption value="">-- Chọn thành phố --</FormOption>
+                      {mangTinhThanhPho.map((tinhthanhpho, key) => {
+                        return (
+                          <FormOption value={tinhthanhpho.mathanhpho}>
+                            {" "}
+                            {tinhthanhpho.tenthanhpho}{" "}
+                          </FormOption>
+                        );
+                      })}
+                    </FormSelect>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc huyện:</FormSpan>
+                    <FormSelect
+                      onChange={(e) => {
+                        setQuanHuyen(e.target.value);
+                      }}
+                    >
+                      {mangQuanHuyen.length > 0 ? (
+                        mangQuanHuyen.map((quanhuyen, key) => {
+                          return (
+                            <FormOption value={quanhuyen.maquanhuyen}>
+                              {" "}
+                              {quanhuyen.tenquanhuyen}{" "}
+                            </FormOption>
+                          );
+                        })
+                      ) : (
+                        <FormOption value="">
+                          -- Bạn chưa chọn Thành phố --{" "}
+                        </FormOption>
+                      )}
+                    </FormSelect>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc xã:</FormSpan>
+                    <FormSelect
+                      onChange={(e) => {
+                        setXaPhuongThiTran(e.target.value);
+                      }}
+                    >
+                      {mangXaPhuongThiTran.length > 0 ? (
+                        mangXaPhuongThiTran.map((xaphuong, key) => {
+                          return (
+                            <FormOption value={xaphuong.maxa}>
+                              {" "}
+                              {xaphuong.tenxa}{" "}
+                            </FormOption>
+                          );
+                        })
+                      ) : (
+                        <FormOption value="">
+                          -- Bạn chưa chọn Huyện --{" "}
+                        </FormOption>
+                      )}
+                    </FormSelect>
+                  </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tiêu đề:</FormSpan>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Địa chỉ:</FormSpan>
                     <FormInput
                       type="text"
-                      onChange={(e) => setTieuDeMoi(e.target.value)}
-                      placeholder="Nhập vào tiêu đề hiển thị thú cưng"
+                      onChange={(e) => setDiaChiLienHeMoi(e.target.value)}
+                      placeholder="Địa chỉ liên hệ"
                     />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Ghi chú:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Email:</FormSpan>
+                    <FormInput
+                      type="email"
+                      onChange={(e) => setEmailLienHeMoi(e.target.value)}
+                      placeholder="Email liên hệ"
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số điện thoại:</FormSpan>
                     <FormInput
                       type="text"
-                      onChange={(e) => setGhiChuMoi(e.target.value)}
-                      placeholder="Ghi chú cho thú cưng này"
+                      onChange={(e) => setSdtLienHeMoi(e.target.value)}
+                      placeholder="Số điện thoại liên hệ"
                     />
-                  </ModalChiTietItem>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Họ tên chủ:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setHoTenLienHeMoi(e.target.value)}
+                      placeholder="Họ tên chủ"
+                    />
+                  </ModalFormItem>
                 </div>
-                <ModalChiTietItem>
-                  <FormSpan>Mô tả:</FormSpan>
-                  <FormTextArea
-                    rows="4"
-                    cols="50"
-                    onChange={(e) => setMoTaMoi(e.target.value)}
-                    placeholder="Mô tả về thú cưng này"
-                  />
-                </ModalChiTietItem>
                 <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Số lượng:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="1"
-                      onChange={(e) => setSoLuongMoi(e.target.value)}
-                      placeholder="Số lượng của thú cưng"
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormTextArea
+                      rows="4"
+                      cols="50"
+                      onChange={(e) => setDacDiemMoi(e.target.value)}
+                      placeholder="Nhập vào đặc điểm thú cưng lạc"
+                      // value={thuLacModalDacDiem}
                     />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giá bán:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="0"
-                      onChange={(e) => setGiaBanMoi(e.target.value)}
-                      placeholder="Giá thú cưng"
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giảm giá:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="0"
-                      onChange={(e) => setGiamGiaMoi(e.target.value)}
-                      placeholder="Giá sau khi giảm"
-                    />
-                  </ModalChiTietItem>
+                  </ModalFormItem>
                 </div>
-                <ModalChiTietItem>
+                <ModalFormItem>
+                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
                   <ImageWrapper>
-                    {hinhAnhMoi.length > 0 ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
-                      hinhAnhMoi.map((hinhanh, index) => {
-                        return <ChiTietHinhAnh src={hinhanh} />;
-                      })
+                    {hinhAnhMoi != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
+                      <ChiTietHinhAnh src={hinhAnhMoi} />
                     ) : (
                       //Khi mảng hình trống thì hiện No Available Image
                       <ChiTietHinhAnh
@@ -1305,32 +1360,29 @@ const Modal = ({
                     </Label>
                     <FormInput
                       type="file"
-                      onChange={(e) => handleShowImg(e.target.files)}
+                      onChange={(e) => handleShowImg(e.target.files[0])}
                       id="imageInput"
-                      style={{ display: 'none' }}
-                      multiple="true"
+                      style={{ display: "none" }}
                     />
                   </FormLabel>
-                </ModalChiTietItem>
+                </ModalFormItem>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
                   <ButtonClick
                     onClick={() =>
-                      handleThemThuCung({
-                        madanhmucmoi: maDanhMucMoi,
-                        tenthucungmoi: tenThuCungMoi,
-                        gioitinhthucungmoi: gioiTinhThuCungMoi,
-                        tuoithucungmoi: tuoiThuCungMoi,
-                        datiemchungmoi: daTiemChungMoi,
-                        baohanhsuckhoemoi: baoHanhSucKhoeMoi,
-                        tieudemoi: tieuDeMoi,
-                        motamoi: moTaMoi,
-                        ghichumoi: ghiChuMoi,
-                        soluongmoi: soLuongMoi,
-                        giabanmoi: giaBanMoi,
-                        giamgiamoi: giamGiaMoi,
-                        hinhanhmoi: hinhAnhMoi,
+                      handleThemThuLac({
+                        tenthulacmoi: tenThuLacMoi,
+                        trangthaithucungmoi: maTrangThaiThuCungMoi,
+                        dacdiemmoi: dacDiemMoi,
+                        manguoimuamoi: maNguoiMuaMoi,
+                        maxamoi: xaPhuongThiTran,
+                        hotenlienhemoi: hoTenLienHeMoi,
+                        emaillienhemoi: emailLienHeMoi,
+                        sdtlienhemoi: sdtLienHeMoi,
+                        diachilienhemoi: diaChiLienHeMoi,
+                        ngaytaomoi: ngayTaoMoi,
+                        hinhanhthulacmoi: hinhAnhMoi,
                       })
                     }
                   >
@@ -1349,251 +1401,287 @@ const Modal = ({
               >
                 <CloseOutlined />
               </CloseModalButton>
-            </ThemThuCungWrapper>
+            </ThemNhanVienWrapper>
           </Background>
         ) : null}
       </>
     );
   }
-  // =============== Chỉnh sửa thú cưng ===============
-  if (type === "chinhsuathucunglac") {
+  // =============== Chỉnh sửa thú cưng lạc ===============
+  if (type === "chinhsuathulac") {
     return (
       <>
         {showModal ? (
           <Background ref={modalRef} onClick={closeModal}>
-            <ThemThuCungWrapper
+            <ThemNhanVienWrapper
               showModal={showModal}
               style={{ flexDirection: `column` }}
             >
-              <H2>Cập nhật thông tin thú cưng</H2>
+              <H2>Cập nhật thông tin thú cưng lạc</H2>
               <ModalForm>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tên thú cưng:</FormSpan>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Tên thú cưng lạc:</FormSpan>
                     <FormInput
                       type="text"
                       onChange={(e) =>
-                        setThuCungModalTenThuCung(e.target.value)
+                        setthuLacModalTenThuLac(e.target.value)
                       }
-                      value={thuCungModalTenThuCung}
+                      value={thuLacModalTenThuLac}
                     />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Danh mục:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Họ tên chủ:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setHoTenLienHeMoi(e.target.value)}
+                      value={thuLacModalHoTenLienHe}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Trạng thái thú lạc:</FormSpan>
                     <FormSelect
                       onChange={(e) => {
-                        setThuCungModalMaDanhMuc(e.target.value);
+                        setthuLacModalTrangThaiThuCung(e.target.value);
                       }}
                     >
-                      {danhMuc.map((danhmuc, key) => {
-                        if (danhmuc.madanhmuc === thuCungModalMaDanhMuc) {
+                      {trangThaiThuCung.map((item, key) => {
+                        if (item.trangthaithucung === thuLacModalTrangThaiThuCung) {
                           return (
-                            <FormOption value={danhmuc.madanhmuc} selected>
+                            <FormOption value={item.trangthaithucung} selected>
                               {" "}
-                              {danhmuc.tendanhmuc}{" "}
+                              {item.tentrangthaithucung}{" "}
                             </FormOption>
                           );
                         } else {
                           return (
-                            <FormOption value={danhmuc.madanhmuc}>
+                            <FormOption value={item.trangthaithucung}>
                               {" "}
-                              {danhmuc.tendanhmuc}{" "}
+                              {item.tentrangthaithucung}{" "}
                             </FormOption>
                           );
                         }
                       })}
                     </FormSelect>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giới tính:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Ngày tạo:</FormSpan>
+                    <FormInput
+                      type="date"
+                      onChange={(e) => setthuLacModalNgayTao(e.target.value)}
+                      value={thuLacModalNgayTao}
+                    />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc tỉnh:</FormSpan>
                     <FormSelect
                       onChange={(e) => {
-                        setThuCungModalGioiTinhThuCung(e.target.value);
+                        setthuLacModalMaThanhPho(e.target.value);
                       }}
                     >
-                      {thuCungModalGioiTinhThuCung === "Đực" ? (
-                        <FormOption value="Đực" selected>
-                          {" "}
-                          Đực{" "}
-                        </FormOption>
+                      <FormOption value="">-- Chọn thành phố --</FormOption>
+                      {mangTinhThanhPhoUpdate.map((tinhthanhpho, key) => {
+                        if (
+                          tinhthanhpho.tenthanhpho === thuLacModalTenThanhPho
+                        ) {
+                          return (
+                            <FormOption
+                              value={tinhthanhpho.mathanhpho}
+                              selected
+                            >
+                              {" "}
+                              {tinhthanhpho.tenthanhpho}{" "}
+                            </FormOption>
+                          );
+                        } else {
+                          return (
+                            <FormOption value={tinhthanhpho.mathanhpho}>
+                              {" "}
+                              {tinhthanhpho.tenthanhpho}{" "}
+                            </FormOption>
+                          );
+                        }
+                      })}
+                    </FormSelect>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc huyện:</FormSpan>
+                    <FormSelect
+                      onChange={(e) => {
+                        setthuLacModalMaQuanHuyen(e.target.value);
+                      }}
+                    >
+                      {mangQuanHuyenUpdate.length > 0 ? (
+                        mangQuanHuyenUpdate.map((quanhuyen, key) => {
+                          if (
+                            quanhuyen.tenquanhuyen === thuLacModalTenQuanHuyen
+                          ) {
+                            return (
+                              <FormOption
+                                value={quanhuyen.maquanhuyen}
+                                selected
+                              >
+                                {" "}
+                                {quanhuyen.tenquanhuyen}{" "}
+                              </FormOption>
+                            );
+                          } else {
+                            return (
+                              <FormOption value={quanhuyen.maquanhuyen}>
+                                {" "}
+                                {quanhuyen.tenquanhuyen}{" "}
+                              </FormOption>
+                            );
+                          }
+                        })
                       ) : (
-                        <FormOption value="Đực"> Đực </FormOption>
-                      )}
-                      {thuCungModalGioiTinhThuCung === "Cái" ? (
-                        <FormOption value="Cái" selected>
-                          {" "}
-                          Cái{" "}
+                        <FormOption value="">
+                          -- Bạn chưa chọn Thành phố --{" "}
                         </FormOption>
-                      ) : (
-                        <FormOption value="Cái"> Cái </FormOption>
                       )}
                     </FormSelect>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tuổi thú cưng:</FormSpan>
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Thuộc xã:</FormSpan>
+                    <FormSelect
+                      onChange={(e) => {
+                        setthuLacModalMaXa(e.target.value);
+                      }}
+                    >
+                      {mangXaPhuongThiTranUpdate.length > 0 ? (
+                        mangXaPhuongThiTranUpdate.map((xaphuong, key) => {
+                          if (xaphuong.tenxa === thuLacModalTenXa) {
+                            return (
+                              <FormOption value={xaphuong.maxa} selected>
+                                {" "}
+                                {xaphuong.tenxa}{" "}
+                              </FormOption>
+                            );
+                          } else {
+                            return (
+                              <FormOption value={xaphuong.maxa}>
+                                {" "}
+                                {xaphuong.tenxa}{" "}
+                              </FormOption>
+                            );
+                          }
+                        })
+                      ) : (
+                        <FormOption value="">
+                          -- Bạn chưa chọn Huyện{" "}
+                        </FormOption>
+                      )}
+                    </FormSelect>
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Email:</FormSpan>
+                    <FormInput
+                      type="email"
+                      onChange={(e) => setthuLacModalEmailLienHe(e.target.value)}
+                      value={thuLacModalEmailLienHe}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số điện thoại:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setthuLacModalSdtLienHe(e.target.value)}
+                      value={thuLacModalSdtLienHe}
+                    />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Địa chỉ:</FormSpan>
                     <FormInput
                       type="text"
                       onChange={(e) =>
-                        setThuCungModalTuoiThuCung(e.target.value)
+                        setthuLacModalDiaChiLienHe(e.target.value)
                       }
-                      value={thuCungModalTuoiThuCung}
+                      value={thuLacModalDiaChiLienHe}
                     />
-                  </ModalChiTietItem>
+                  </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormLabel>
-                      {thuCungModalDaTiemChung === "Đã tiêm chủng" ? (
-                        <FormCheckbox
-                          type="checkbox"
-                          checked={true}
-                          onChange={(e) => handleCheckboxDaTiemUpdate(e)}
-                          value="Đã tiêm chủng"
-                        />
-                      ) : (
-                        <FormCheckbox
-                          type="checkbox"
-                          checked={false}
-                          onChange={(e) => handleCheckboxDaTiemUpdate(e)}
-                          value="Đã tiêm chủng"
-                        />
-                      )}
-                      <FormSpan>Đã tiêm chủng</FormSpan>
-                    </FormLabel>
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormLabel>
-                      {thuCungModalBaoHanhSucKhoe ===
-                        "Được bảo hành sức khỏe" ? (
-                        <FormCheckbox
-                          type="checkbox"
-                          checked={true}
-                          onChange={(e) => handleCheckboxBaoHanhUpdate(e)}
-                          value="Được bảo hành sức khỏe"
-                        />
-                      ) : (
-                        <FormCheckbox
-                          type="checkbox"
-                          checked={false}
-                          onChange={(e) => handleCheckboxBaoHanhUpdate(e)}
-                          value="Được bảo hành sức khỏe"
-                        />
-                      )}
-                      <FormSpan>Bảo hành sức khỏe</FormSpan>
-                    </FormLabel>
-                  </ModalChiTietItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormTextArea
+                      rows="4"
+                      cols="50"
+                      onChange={(e) => setthuLacModalDacDiem(e.target.value)}
+                      placeholder="Nhập vào đặc điểm thị thú cưng lạc"
+                      value={thuLacModalDacDiem}
+                    />
+                  </ModalFormItem>
                 </div>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Tiêu đề:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setThuCungModalTieuDe(e.target.value)}
-                      value={thuCungModalTieuDe}
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Ghi chú:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setThuCungModalGhiChu(e.target.value)}
-                      value={thuCungModalGhiChu}
-                    />
-                  </ModalChiTietItem>
-                </div>
-                <ModalChiTietItem>
-                  <FormSpan>Mô tả:</FormSpan>
-                  <FormTextArea
-                    rows="4"
-                    cols="50"
-                    onChange={(e) => setThuCungModalMoTa(e.target.value)}
-                    value={thuCungModalMoTa}
-                  />
-                </ModalChiTietItem>
-                <div style={{ display: "flex" }}>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Số lượng:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="1"
-                      onChange={(e) => setThuCungModalSoLuong(e.target.value)}
-                      value={thuCungModalSoLuong}
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giá bán:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="0"
-                      onChange={(e) => setThuCungModalGiaBan(e.target.value)}
-                      value={thuCungModalGiaBan}
-                    />
-                  </ModalChiTietItem>
-                  <ModalChiTietItem style={{ flex: "1" }}>
-                    <FormSpan>Giảm giá:</FormSpan>
-                    <FormInput
-                      type="number"
-                      min="0"
-                      onChange={(e) => setThuCungModalGiamGia(e.target.value)}
-                      value={thuCungModalGiamGia}
-                    />
-                  </ModalChiTietItem>
-                </div>
-                <ModalChiTietItem>
+                <ModalFormItem>
+                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
                   <ImageWrapper>
-                    {thuCungModalHinhAnhChange.length > 0 //Khi mảng hình có hình thì hiện các hình trong mảng
-                      ? thuCungModalHinhAnhChange.map(
-                        (hinhanhupdate, index) => {
-                          return <ChiTietHinhAnh src={hinhanhupdate} />;
-                        }
-                      )
-                      : thuCungModalHinhAnh.length > 0
-                        ? thuCungModalHinhAnh.map((hinhanh, index) => {
-                          return <ChiTietHinhAnh src={hinhanh} />;
-                        })
-                        : null}
+                    {thuLacModalHinhAnhThuLacChange != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
+                      <ChiTietHinhAnh src={thuLacModalHinhAnhThuLacChange} />
+                    ) : (
+                      //Khi mảng hình trống thì hiện No Available Image
+                      <ChiTietHinhAnh src={thuLacModalHinhAnhThuLac} />
+                    )}
                   </ImageWrapper>
                   <FormLabel>
                     <Label htmlFor="imageInput">
                       <ButtonImageContainer>
                         <ButtonImage>
                           <AddPhotoAlternateIcon />
-                          Cập nhật hình ảnh
+                          Thêm hình ảnh
                         </ButtonImage>
                       </ButtonImageContainer>
                     </Label>
                     <FormInput
                       type="file"
-                      onChange={(e) => handleChangeImg(e.target.files)}
+                      onChange={(e) => handleChangeImg(e.target.files[0])}
                       id="imageInput"
-                      style={{ display: 'none' }}
-                      multiple="true"
+                      style={{ display: "none" }}
                     />
                   </FormLabel>
-                </ModalChiTietItem>
+                </ModalFormItem>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
                   <ButtonClick
-                    onClick={() =>
-                      handleCapNhatThuCung({
-                        mathucung: thucung.mathucung,
-                        madanhmucmoi: thuCungModalMaDanhMuc,
-                        tenthucungmoi: thuCungModalTenThuCung,
-                        gioitinhthucungmoi: thuCungModalGioiTinhThuCung,
-                        tuoithucungmoi: thuCungModalTuoiThuCung,
-                        datiemchungmoi: thuCungModalDaTiemChung,
-                        baohanhsuckhoemoi: thuCungModalBaoHanhSucKhoe,
-                        tieudemoi: thuCungModalTieuDe,
-                        motamoi: thuCungModalMoTa,
-                        ghichumoi: thuCungModalGhiChu,
-                        soluongmoi: thuCungModalSoLuong,
-                        giabanmoi: thuCungModalGiaBan,
-                        giamgiamoi: thuCungModalGiamGia,
-                        thucungmodalhinganhchange: thuCungModalHinhAnhChange,
-                        thucungmodalhinhanh: thuCungModalHinhAnh,
-                      })
-                    }
+                    // onClick={() => handleCapNhatThuCung({
+                    //     mathucung: thucung.mathucung,
+                    //     madanhmucmoi: thuCungModalMaDanhMuc,
+                    //     tenthucungmoi: thuCungModalTenThuCung,
+                    //     gioitinhthucungmoi: thuCungModalGioiTinhThuCung,
+                    //     tuoithucungmoi: thuCungModalTuoiThuCung,
+                    //     datiemchungmoi: thuCungModalDaTiemChung,
+                    //     baohanhsuckhoemoi: thuCungModalBaoHanhSucKhoe,
+                    //     tieudemoi: thuCungModalTieuDe,
+                    //     motamoi: thuCungModalMoTa,
+                    //     ghichumoi: thuCungModalGhiChu,
+                    //     soluongmoi: thuCungModalSoLuong,
+                    //     giabanmoi: thuCungModalGiaBan,
+                    //     giamgiamoi: thuCungModalGiamGia,
+                    //     thucungmodalhinganhchange: thuCungModalHinhAnhChange,
+                    //     thucungmodalhinhanh: thuCungModalHinhAnh,
+                    // })}
+                    onClick={() => {
+                      handleCapNhatThuLac({
+                        mathulac: thuLacModalMaThuLac,
+                        tenthulacmoi: thuLacModalTenThuLac,
+                        trangthaithucungmoi: thuLacModalTrangThaiThuCung,
+                        dacdiemmoi: thuLacModalDacDiem,
+                        maxamoi: thuLacModalMaXa,
+                        hotenlienhemoi: thuLacModalHoTenLienHe,
+                        emaillienhemoi: thuLacModalEmailLienHe,
+                        sdtlienhemoi: thuLacModalSdtLienHe,
+                        diachilienhemoi: thuLacModalDiaChiLienHe,
+                        ngaytaomoi: thuLacModalNgayTao,
+                        hinhanhthulacmoi: thuLacModalHinhAnhThuLac,
+                        hinhanhthulacmoichange: thuLacModalHinhAnhThuLacChange,
+                      });
+                    }}
                   >
                     Cập nhật
                   </ButtonClick>
@@ -1610,14 +1698,14 @@ const Modal = ({
               >
                 <CloseOutlined />
               </CloseModalButton>
-            </ThemThuCungWrapper>
+            </ThemNhanVienWrapper>
           </Background>
         ) : null}
       </>
     );
   }
   // // =============== Xóa thú cưng ===============
-  if (type === "xoathucunglac") {
+  if (type === "xoathulac") {
     return (
       <>
         {showModal ? (
@@ -1635,18 +1723,20 @@ const Modal = ({
             >
               <ModalContent>
                 <h2>
-                  Bạn muốn xóa thú cưng có mã{" "}
+                  Bạn muốn xóa thú cưng lạc có mã{" "}
                   <span style={{ color: `var(--color-primary)` }}>
-                    {thucung.mathucung}
+                    {thulac.mathulac}
                   </span>{" "}
                   này?
                 </h2>
-                <p>Thông tin thú cưng không thể khôi phục. Bạn có chắc chắn?</p>
+                <p>
+                  Thông tin thú cưng lạc không thể khôi phục. Bạn có chắc chắn?
+                </p>
                 <Button>
                   <ButtonContainer>
                     <ButtonClick
                       onClick={() => {
-                        handleXoaThuCung({ mathucung: thucung.mathucung });
+                        handleXoaThuLac({ mathulac: thulac.mathulac });
                       }}
                     >
                       Đồng ý
