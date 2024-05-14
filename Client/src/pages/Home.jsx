@@ -14,8 +14,8 @@ import AllProducts from "../components/AllProducts";
 import MultipleSelectCheckmarks from "../components/dropdowns";
 // import Table from "../components/stickyTable";
 import Toggle from "../components/ComponentNoUsing/Darkmode";
-import FindLostPets from "../components/FindLostPets";
 import ContactSocial from "../components/ContactSocial";
+import FindLostPets from "../components/FindLostPets";
 import FeedBack from "../components/FeedBack";
 
 
@@ -32,6 +32,7 @@ const Home = () => {
       <AllProducts />
       {/* <FindLostPets/> */}
       <Newsletter />
+      <FindLostPets/>
       <FeedBack/>
       <Footer />
       <ContactSocial />

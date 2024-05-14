@@ -735,7 +735,7 @@ const Modal = ({
     // setthuLacModalMaThuLac(thuLacModalMaThuLacOld);
     setthuLacModalTenThuLac(thuLacModalTenThuLacOld);
     setthuLacModalTrangThaiThuCung(thuLacModalTrangThaiThuCungOld);
-    setthuLacModalEmailLienHeOld(thuLacModalDacDiemOld);
+    setthuLacModalDacDiemOld(thuLacModalDacDiemOld);
     setthuLacModalMaNguoiMuaOld(thuLacModalMaNguoiMuaOld);
     setthuLacModalMaXa(thuLacModalMaXaOld);
     setthuLacModalEmailLienHe(thuLacModalEmailLienHeOld);

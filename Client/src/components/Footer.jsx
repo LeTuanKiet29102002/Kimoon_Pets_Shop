@@ -18,7 +18,7 @@ const Container = styled.div`
   background: linear-gradient(to right, #ff7e5f, #feb47b);
   ${mobile({ flexDirection: "column" })}
   color:white;
-  margin-top:10px;
+  /* margin-top:10px; */
   /* margin: 20px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
     border-radius: 30px; */

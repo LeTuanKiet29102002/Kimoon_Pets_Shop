@@ -38,7 +38,7 @@ const ContactShop = () => {
       <Announcement />
       <Wrapper>
         <IMG>
-          {/* <img src="http://thietkeshop247.com.vn/kcfinder/upload/images/Thiet-ke-shop-thu-cung-dep.jpg%282%29.jpg" alt="anh kimoon shop" /> */}
+          {/* <img src="http://thietkeshop247.com.vn/kcfinder/upload/images/Thiet-ke-shop-thu-cung-dep.jpg%282%29.jpg" alt="anh Kimoon Pets" /> */}
         </IMG>
         <h3 style={{ color: "var(--color-primary)", fontWeight: 300, textAlign: "center" }}>CHÍNH SÁCH HỖ TRỢ TRẢ GÓP LÃI SUẤT 0% TẠI KIMOON PETS</h3>
         <h2 style={{ textAlign: "center" }}>
@@ -91,7 +91,7 @@ const ContactShop = () => {
           className="wp-caption aligncenter"
         >
           <img
-            style={{boxShadow: "4px 4px 10px #000000", borderRadius: "10px"}}
+            style={{ boxShadow: "4px 4px 10px #000000", borderRadius: "10px" }}
             className="wp-image-10702 size-full"
             src="https://pethouse.com.vn/wp-content/uploads/2023/05/danh-sach-ngan-hang-ho-tro-tra-gop-qua-the-tin-dung.png"
             alt="danh sach ngan hang ho tro tra gop qua the tin dung"

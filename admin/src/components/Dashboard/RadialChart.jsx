@@ -67,7 +67,7 @@ const RadialChart = () => {
     ]
     return (
         <Box height="75vh">
-            <h2 style={{marginTop:"50px",marginBottom:"0.8rem"}}>Thống kê số lượng các thú cưng tại Kimoon Shop</h2>
+            <h2 style={{ marginTop: "50px", marginBottom: "0.8rem" }}>Thống kê số lượng các thú cưng tại Kimoon Pets</h2>
             <ResponsiveRadialBar
                 data={data}
                 valueFormat=">-.2f"

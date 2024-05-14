@@ -14,15 +14,7 @@ router.post("/getKhachHang", async (req, res) => {
     })
 })
 
-//LẤY FEEDBACK
-router.post("/getFeedBack", async (req, res) => {
-    const sql = "select * from feedback d join nguoimua m on d.manguoimua = m.manguoimua ";
-    con.query(sql, (err, result) => {
-        if(err) throw err;
-        res.status(200).json(result);
-        console.log("LẤY Feedback-success!");
-    })
-})
+
 
 //TÌM KIẾM KHÁCH HÀNG
 router.post("/findKhachHang", async (req, res) => {

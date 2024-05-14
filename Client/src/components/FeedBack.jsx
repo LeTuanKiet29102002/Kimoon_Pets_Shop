@@ -143,7 +143,7 @@ const FeedBack = () => {
     const fetchData = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:3001/api/user/getFeedBack",
+          "http://localhost:3001/api/feedback/getFeedBack",
           {}
         );
         setFeedBack(res.data);

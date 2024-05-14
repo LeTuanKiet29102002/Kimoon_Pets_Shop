@@ -1,802 +1,202 @@
-// import axios from "axios";
-// import { useEffect, useRef, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import styled from "styled-components";
-// import Announcement from "../components/Announcement";
-// import Footer from "../components/Footer";
-// import Navbar from "../components/Navbar";
-// import {
-//   getStorage,
-//   ref,
-//   uploadBytesResumable,
-//   getDownloadURL,
-// } from "firebase/storage";
-// import app from "../firebase";
-// import "../css/main.css";
-// import { Link } from "react-router-dom";
-// import Toast from "../components/Toast";
-// import { updateInfo } from "../redux/userRedux";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import axios from "axios";
+import Left from "../assets/svg/icons8-pets-100.png";
+import Right from "../assets/svg/icons8-person-100.png";
+import Tren from "../assets/svg/quotation-marktren.png";
+import Duoi from "../assets/svg/quotation-markduoi.png";
 
-// const Container = styled.div`
-//   background-color: #fcf5f5;
-//   padding: 20px 0;
-// `;
 
-// const LineTitle = styled.h2`
-//   position: relative;
-//   width: 200px;
-//   padding: 0 20px;
-//   min-width: 311px;
-//   margin: auto;
-//   &::before,
-//   &::after {
-//     content: "";
-//     position: absolute;
-//     bottom: 0;
-//     left: 0;
-//     height: 4px;
-//     border-radius: 2px;
-//   }
 
-//   &::before {
-//     width: 100%;
-//     background: #f2f2f2;
-//   }
+const Container = styled.div`
+  background-color: #f8f9fa;
+  padding: 50px;
+`;
 
-//   &::after {
-//     width: 100%;
-//     background: #e73700;
-//   }
-// `;
+const ItemFindLostPets = styled.div`
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin: 0 10px !important; /* Đảm bảo rằng khoảng cách được thêm vào hai bên */
+  width: 400px !important; /* Giữ nguyên chiều rộng để tránh bị đẩy gần nhau */
+  height: 300px;
 
-// const Wrapper = styled.div`
-//   max-width: 1200px;
-//   margin: 20px auto;
-//   overflow: hidden;
-//   background-color: #f8f9fa;
-//   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
-//   display: flex;
-//   border-radius: 5px;
-// `;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
 
-// const Box1 = styled.div`
-//   max-width: 600px;
-//   padding: 10px 40px;
-//   user-select: none;
-//   flex: 1;
-// `;
+  h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
 
-// const Box2 = styled.div`
-//   width: 100%;
-//   padding: 10px 40px;
-//   flex: 1;
-// `;
+  p {
+    font-size: 16px;
+    color: #6c757d;
+  }
+`;
 
-// const Title1 = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-// `;
+const Image = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius:50%;
+`
 
-// // const CartItem = styled.div`
-// // display: flex;
-// // width: 100%;
-// // font-size: 1.1rem;
-// // background: #ddd;
-// // margin-top: 10px;
-// // padding: 10px 12px;
-// // border-radius: 5px;
-// // cursor: pointer;
-// // border: 1px solid transparent;
-// // `
+const H3 = styled.h3`
+    text-align: center;
+    font-weight: 600;
+    margin-top: 30px;
+`
 
-// // const Circle = styled.span`
-// // height: 12px;
-// // width: 12px;
-// // background: #ccc;
-// // border-radius: 50%;
-// // margin-right: 15px;
-// // border: 4px solid transparent;
-// // display: inline-block
-// // `
+const P = styled.p`
+    font-size: 16px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 40px;
+`
 
-// // const Course = styled.div`
-// // width: 100%
-// // `
+const P1 = styled.p`
+    font-size: 20px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 0;
+`
 
-// // const Content = styled.div`
-// // display: flex;
-// // align-items: center;
-// // justify-content: space-between;
-// // `
+const P2 = styled.p`
+    font-size: 20px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 20px;
+`
 
-// const InfomationTitle = styled.div`
-//   font-size: 1.2rem;
-// `;
 
-// const InfomationForm = styled.div``;
+const HeaderContent = styled.div`
+display: flex;
+justify-content:center;
+align-items:center;
+`
+const IconLeft = styled.img`
+  margin-left:20px;
 
-// const ModalChiTietItem = styled.div`
-//   margin: 2px 0px;
-//   display: flex;
-//   flex-direction: column;
-// `;
+`
+const IconRight = styled.img`
+  margin-left:20px;
 
-// const FormSpan = styled.span`
-//   font-size: 1.1rem;
-//   font-weight: 700;
-//   color: var(--color-dark-light);
-//   margin-bottom: 3px;
-// `;
-// const FormInput = styled.input`
-//   background-color: var(--color-white);
-//   color: var(--color-dark);
-//   width: auto;
-//   padding: 8px 20px;
-//   margin: 5px 0;
-//   display: inline-block;
-//   outline: 0;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   box-sizing: border-box;
-//   &:focus {
-//     border: 1px solid var(--color-success);
-//     box-shadow: var(--color-success) 0px 1px 4px,
-//       var(--color-success) 0px 0px 0px 3px;
-//   }
-// `;
+`
+const RunningNumberContainer = styled.div`
+  color: var(--color-primary);
+  font-weight:bold;
+  margin-left: 10px;
+  font-size:30px;
+`;
 
-// const FormSelect = styled.select`
-//   background-color: var(--color-white);
-//   color: var(--color-dark);
-//   width: auto;
-//   padding: 8px 20px;
-//   margin: 5px 0;
-//   outline: 0;
-//   display: inline-block;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   box-sizing: border-box;
-//   &:focus {
-//     border: 1px solid var(--color-success);
-//     box-shadow: var(--color-success) 0px 1px 4px,
-//       var(--color-success) 0px 0px 0px 3px;
-//   }
-// `;
+const H1 = styled.img`
+  width: 10px;
+  height: 10px;
+  color: var(--color-primary);
+  margin: 20px 0;
+`
+const H5 = styled.h5`
+  font-size:20px;
+  align-items: center;
+  margin-top:8px;
+`
 
-// const FormOption = styled.option`
-//   margin: auto;
-// `;
+const Comment = styled.div`
 
-// const FormTextArea = styled.textarea`
-//   background-color: var(--color-white);
-//   color: var(--color-dark);
-//   width: auto;
-//   padding: 8px 20px;
-//   margin: 5px 0;
-//   display: inline-block;
-//   outline: 0;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   box-sizing: border-box;
-//   &:focus {
-//     border: 1px solid var(--color-success);
-//     box-shadow: var(--color-success) 0px 1px 4px,
-//       var(--color-success) 0px 0px 0px 3px;
-//   }
-// `;
-// const Total = styled.div`
-//   margin-top: 15px;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-// `;
+`
+const CommentHead = styled.div`
+  display: flex;
+  justify-content:space-around;
+`
 
-// const TotalItem = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-// `;
 
-// const ButtonContainer = styled.div`
-//   justify-content: center;
-//   position: relative;
-//   float: right;
-//   margin: 10px 22px 22px 0;
-//   display: flex;
-//   &::after {
-//     content: "";
-//     border: 2px solid black;
-//     position: absolute;
-//     top: 5px;
-//     right: -5px;
-//     background-color: transperent;
-//     width: 150px;
-//     height: 100%;
-//     z-index: 5;
-//     border-radius: 5px;
-//   }
-// `;
 
-// const Button = styled.button`
-//   padding: 10px;
-//   width: 150px;
-//   border: 2px solid black;
-//   background-color: black;
-//   color: white;
-//   cursor: pointer;
-//   font-weight: 500;
-//   z-index: 10;
-//   border-radius: 5px;
 
-//   &:hover {
-//     background-color: #fe6430;
-//   }
-//   &:active {
-//     background-color: #333;
-//     transform: translate(5px, 5px);
-//     transition: transform 0.25s;
-//   }
-// `;
+const FindLostPets = () => {
+  const [FindLostPets, setFindLostPets] = useState([]);
 
-// const Avatar = styled.img`
-//   width: 100%;
-//   max-height: 400px;
-//   overflow: hidden;
-//   object-fit: contain;
-// `;
+  // useEffect(() => {
+  //   // Giả lập dữ liệu
+  //   const fakeData = [
+  //     { name: "Item 1", description: "Description for item 1" },
+  //     { name: "Item 2", description: "Description for item 2" },
+  //     { name: "Item 3", description: "Description for item 3" },
+  //     { name: "Item 4", description: "Description for item 4" },
+  //     { name: "Item 5", description: "Description for item 5" },
+  //     { name: "Item 6", description: "Description for item 6" },
+  //     { name: "Item 7", description: "Description for item 7" },
+  //     { name: "Item 8", description: "Description for item 8" },
+  //     { name: "Item 9", description: "Description for item 9" },
+  //     { name: "Item 10", description: "Description for item 10" },
+  //   ];
+  //   setDanhMuc(fakeData);
+  // }, []);
 
-// const FindLostPets = () => {
-//   // User từ redux
-//   const user = useSelector((state) => state.user.currentUser);
-//   const dispatch = useDispatch(); //Để gọi hàm từ redux updateInfo
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost:3001/api/lostpets/getThuCungLac",
+          {}
+        );
+        setFindLostPets(res.data);
+      } catch (err) {
+        console.log("Error occurred:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
-//   // ===== TOAST =====
-//   const [dataToast, setDataToast] = useState({
-//     message: "alorrrrr alo",
-//     type: "success",
-//   });
-//   const toastRef = useRef(null); // useRef có thể gọi các hàm bên trong của Toast
-//   // bằng các dom event, javascript, ...
+  // console.log("check FindLostPets", FindLostPets);
 
-//   const showToastFromOut = (dataShow) => {
-//     console.log("showToastFromOut da chay", dataShow);
-//     setDataToast(dataShow);
-//     toastRef.current.show();
-//   };
+  const settings = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    dots: true,
+    arrows: true,
+    centerMode: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          centerMode: false,
+        },
+      },
+    ],
+  };
 
-//   // Các state khởi tạo
-//   const [maXa, setMaXa] = useState("");
-//   const [maNguoiMua, setMaNguoiMua] = useState("");
-//   const [hoTenNguoiMua, setHoTenNguoiMua] = useState("");
-//   const [ngaySinhNguoiMua, setNgaySinhNguoiMua] = useState("");
-//   const [gioiTinhNguoiMua, setGioiTinhNguoiMua] = useState("");
-//   const [sdtNguoiMua, setSdtNguoiMua] = useState("");
-//   const [diaChiNguoiMua, setDiaChiNguoiMua] = useState("");
-//   const [hinhDaiDienNguoiMua, setHinhDaiDienNguoiMua] = useState("");
-//   const [hinhDaiDienNguoiMuaChange, setHinhDaiDienNguoiMuaChange] =
-//     useState("");
+  return (
+    <Container>
+      <H3>Hãy tìm thú cưng lạc của bạn và những người xung quanh của bạn tại đây</H3>
+      <Slider className="slick-slider" {...settings}>
+        {FindLostPets.map((item, index) => (
+          <ItemFindLostPets key={index} className="item">
+            <CommentHead>
+              <Image src={item.hinhdaidien} />
+              <H5>Anh/Chị:  <strong>{item.hotennguoimua}</strong></H5>
+            </CommentHead>
+            <Comment>
+              <p>Đặc điểm nhận dạng<H1 src={Tren} />{item.dacdiem}<H1 src={Duoi} /></p>
+            </Comment>
+            <h5>
+              {item.rating === 5 ? `🌕🌕🌕🌕🌕` : item.rating === 4 ? `🌕🌕🌕🌕🌑` : item.rating === 3 ? `🌕🌕🌕🌑🌑` : item.rating === 2 ? `🌕🌕🌑🌑🌑` : item.rating === 1 ? `🌕🌑🌑🌑🌑` : item.rating === 0 ? `🌑🌑🌑🌑🌑` : `🌑🌑🌑🌑🌑`
+              }
+            </h5>
+          </ItemFindLostPets>
+        ))}
+      </Slider>
+    </Container>
+  );
+};
 
-//   const [maQuanHuyen, setMaQuanHuyen] = useState("");
-//   const [maThanhPho, setMaThanhPho] = useState("");
-//   const [tenXa, setTenXa] = useState("");
-//   const [tenQuanHuyen, setTenQuanHuyen] = useState("");
-//   const [tenThanhPho, setTenThanhPho] = useState("");
-
-//   useEffect(() => {
-//     setMaNguoiMua(user.manguoimua);
-//     setHoTenNguoiMua(user.hotennguoimua);
-//     setNgaySinhNguoiMua(user.ngaysinhnguoimua);
-//     setGioiTinhNguoiMua(user.giotinhnguoimua);
-//     setSdtNguoiMua(user.sdtnguoimua);
-//     setDiaChiNguoiMua(user.diachinguoimua);
-//     setHinhDaiDienNguoiMua(user.hinhdaidien);
-//     setMaXa(user.maxa);
-//     setMaQuanHuyen(user.maquanhuyen);
-//     setMaThanhPho(user.mathanhpho);
-//     setTenXa(user.tenxa);
-//     setTenQuanHuyen(user.tenquanhuyen);
-//     setTenThanhPho(user.tenthanhpho);
-//   }, []);
-
-//   // Effect Tỉnh - Huyện - Xã
-//   const [mangTinhThanhPho, setMangTinhThanhPho] = useState([]);
-//   const [mangQuanHuyen, setMangQuanHuyen] = useState([]);
-//   const [mangXaPhuongThiTran, setMangXaPhuongThiTran] = useState([]);
-//   useEffect(() => {
-//     const getTinhThanhPho = async () => {
-//       const thanhphores = await axios.post(
-//         "http://localhost:3001/api/user/getTinhThanhPho",
-//         {}
-//       );
-//       setMangTinhThanhPho(thanhphores.data);
-//       console.log("Tỉnh TP [res]: ", thanhphores.data);
-//     };
-//     getTinhThanhPho();
-//   }, []);
-
-//   useEffect(() => {
-//     const getQuanHuyen = async () => {
-//       const quanhuyenres = await axios.post(
-//         "http://localhost:3001/api/user/getQuanHuyen",
-//         { mathanhpho: maThanhPho }
-//       );
-//       setMangQuanHuyen(quanhuyenres.data);
-//       console.log("Quận huyện  [res]: ", quanhuyenres.data);
-//     };
-//     getQuanHuyen();
-//   }, [maThanhPho]);
-
-//   useEffect(() => {
-//     const getXaPhuongThiTran = async () => {
-//       const xaphuongthitranres = await axios.post(
-//         "http://localhost:3001/api/user/getXaPhuongThiTran",
-//         { maquanhuyen: maQuanHuyen }
-//       );
-//       setMangXaPhuongThiTran(xaphuongthitranres.data);
-//       console.log("Xã phường  res: ", xaphuongthitranres.data);
-//     };
-//     getXaPhuongThiTran();
-//   }, [maQuanHuyen]);
-
-//   // Thay đổi hình ảnh
-//   const handleChangeImg = (hinhmoi) => {
-//     setHinhDaiDienNguoiMuaChange("");
-//     const hinhanhunique = new Date().getTime() + hinhmoi;
-//     const storage = getStorage(app);
-//     const storageRef = ref(storage, hinhanhunique);
-//     const uploadTask = uploadBytesResumable(storageRef, hinhmoi);
-
-//     // Listen for state changes, errors, and completion of the upload.
-//     uploadTask.on(
-//       "state_changed",
-//       (snapshot) => {
-//         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-//         const progress =
-//           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//         console.log("Upload is " + progress + "% done");
-//         switch (snapshot.state) {
-//           case "paused":
-//             console.log("Upload is paused");
-//             break;
-//           case "running":
-//             console.log("Upload is running");
-//             break;
-//           default:
-//         }
-//       },
-//       (error) => {
-//         // A full list of error codes is available at
-//         // https://firebase.google.com/docs/storage/web/handle-errors
-//         switch (error.code) {
-//           case "storage/unauthorized":
-//             // User doesn't have permission to access the object
-//             break;
-//           case "storage/canceled":
-//             // User canceled the upload
-//             break;
-
-//           // ...
-
-//           case "storage/unknown":
-//             // Unknown error occurred, inspect error.serverResponse
-//             break;
-//         }
-//       },
-//       () => {
-//         // Upload completed successfully, now we can get the download URL
-//         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-//           console.log("File available at", downloadURL);
-//           try {
-//             setHinhDaiDienNguoiMuaChange(downloadURL);
-//           } catch (err) {
-//             console.log("Lỗi cập nhật hình ảnh:", err);
-//           }
-//         });
-//       }
-//     );
-//   };
-
-//   // XỬ LÝ CẬP NHẬT
-//   const FindLostPets = async ({
-//     manguoimua,
-//     maxa,
-//     hotennguoimua,
-//     ngaysinhnguoimua,
-//     gioitinhnguoimua,
-//     sdtnguoimua,
-//     diachinguoimua,
-//     hinhdaidiennguoimua,
-//     hinhdaidiennguoimuachange,
-//   }) => {
-//     console.log("Đầu vào: ", {
-//       manguoimua,
-//       maxa,
-//       hotennguoimua,
-//       ngaysinhnguoimua,
-//       gioitinhnguoimua,
-//       sdtnguoimua,
-//       diachinguoimua,
-//       hinhdaidiennguoimua,
-//       hinhdaidiennguoimuachange,
-//     });
-
-//     if (
-//       manguoimua != "" &&
-//       maxa != "" &&
-//       hotennguoimua != "" &&
-//       ngaysinhnguoimua != "" &&
-//       gioitinhnguoimua != "" &&
-//       sdtnguoimua != "" &&
-//       diachinguoimua != ""
-//       // && hinhdaidiennguoimua != ""
-//       // && hinhdaidiennguoimuachange != ""
-//     ) {
-//       try {
-//         const sdtres = await axios.post(
-//           "http://localhost:3001/api/user/checkSdtNguoiMua",
-//           { sdtnguoimua: sdtnguoimua, manguoimua: manguoimua }
-//         );
-//         if (sdtres.data.message == "Chưa có sdt người mua này!") {
-//           try {
-//             if (hinhdaidiennguoimuachange != "") {
-//               const updatenguoimuares = await axios.post(
-//                 "http://localhost:3001/api/user/updateNguoiMua",
-//                 {
-//                   maxa: maxa,
-//                   hotennguoimua: hotennguoimua,
-//                   ngaysinhnguoimua: ngaysinhnguoimua,
-//                   gioitinhnguoimua: gioitinhnguoimua,
-//                   sdtnguoimua: sdtnguoimua,
-//                   diachinguoimua: diachinguoimua,
-//                   hinhdaidien: hinhdaidiennguoimuachange,
-//                   manguoimua: manguoimua,
-//                 }
-//               );
-//               console.log("KQ trả về update: ", updatenguoimuares);
-//               if (
-//                 updatenguoimuares.data.message ===
-//                 "Cập nhật thông tin thành công"
-//               ) {
-//                 try {
-//                   const laythongtinsauupdateres = await axios.post(
-//                     "http://localhost:3001/api/user/findNguoiMua",
-//                     { manguoimua: manguoimua }
-//                   );
-//                   console.log(
-//                     "laythongtinsauupdateres: ",
-//                     laythongtinsauupdateres
-//                   );
-//                   dispatch(updateInfo(laythongtinsauupdateres.data));
-//                 } catch (err) {
-//                   console.log("Lỗi khi lấy user sau khi update: ", err);
-//                 }
-//                 const dataShow = {
-//                   message: "Cập nhật thông tin thành công!",
-//                   type: "success",
-//                 };
-//                 showToastFromOut(dataShow);
-//                 setHinhDaiDienNguoiMuaChange("");
-//               } else {
-//                 const dataShow = {
-//                   message: "Cập nhật thông tin thất bại!",
-//                   type: "danger",
-//                 };
-//                 showToastFromOut(dataShow);
-//                 setHinhDaiDienNguoiMuaChange("");
-//               }
-//             } else {
-//               const updatenguoimuares = await axios.post(
-//                 "http://localhost:3001/api/user/updateNguoiMua",
-//                 {
-//                   maxa: maxa,
-//                   hotennguoimua: hotennguoimua,
-//                   ngaysinhnguoimua: ngaysinhnguoimua,
-//                   gioitinhnguoimua: gioitinhnguoimua,
-//                   sdtnguoimua: sdtnguoimua,
-//                   diachinguoimua: diachinguoimua,
-//                   hinhdaidien: hinhdaidiennguoimua,
-//                   manguoimua: manguoimua,
-//                 }
-//               );
-//               console.log("KQ trả về update: ", updatenguoimuares);
-//               if (
-//                 updatenguoimuares.data.message ===
-//                 "Cập nhật thông tin thành công"
-//               ) {
-//                 try {
-//                   const laythongtinsauupdateres = await axios.post(
-//                     "http://localhost:3001/api/user/findNguoiMua",
-//                     { manguoimua: manguoimua }
-//                   );
-//                   console.log(
-//                     "laythongtinsauupdateres: ",
-//                     laythongtinsauupdateres
-//                   );
-//                   dispatch(updateInfo(laythongtinsauupdateres.data));
-//                 } catch (err) {
-//                   console.log("Lỗi khi lấy user sau khi update: ", err);
-//                 }
-//                 const dataShow = {
-//                   message: "Cập nhật thông tin thành công!",
-//                   type: "success",
-//                 };
-//                 showToastFromOut(dataShow);
-//                 setHinhDaiDienNguoiMuaChange("");
-//               } else {
-//                 const dataShow = {
-//                   message: "Cập nhật thông tin thất bại!",
-//                   type: "danger",
-//                 };
-//                 showToastFromOut(dataShow);
-//                 setHinhDaiDienNguoiMuaChange("");
-//               }
-//             }
-//           } catch (err) {
-//             const dataShow = {
-//               message: "Thất bại! Có lỗi khi cập nhật ",
-//               type: "danger",
-//             };
-//             showToastFromOut(dataShow);
-//           }
-//         } else {
-//           const dataShow = {
-//             message: "Số điện thoại này đã được đăng ký",
-//             type: "danger",
-//           };
-//           showToastFromOut(dataShow); //Hiện toast thông báo
-//         }
-//       } catch (err) {
-//         console.log("Lỗi khi bắt Số điện thoại trùng!");
-//       }
-//     } else {
-//       const dataShow = {
-//         message: "Thông tin của bạn còn thiếu! Hãy kiểm tra lại",
-//         type: "danger",
-//       };
-//       showToastFromOut(dataShow); //Hiện toast thông báo
-//     }
-//   };
-
-//   console.log("User: ", user);
-//   return (
-//     <Container>
-//       <LineTitle>Sell pets and find lost pets</LineTitle>
-//       <Wrapper>
-//         <Box1>
-//           <Title1>
-//             <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-//               Cập nhật thông tin cá nhân
-//             </p>
-//           </Title1>
-//           {hinhDaiDienNguoiMuaChange != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
-//             <Avatar src={hinhDaiDienNguoiMuaChange} />
-//           ) : //Khi mảng hình trống thì hiện No Available Image
-//           hinhDaiDienNguoiMua != "" ? (
-//             <Avatar src={hinhDaiDienNguoiMua} />
-//           ) : (
-//             <Avatar src="https://firebasestorage.googleapis.com/v0/b/kimooons-50c17.appspot.com/o/1651671554060%5Bobject%20File%5D?alt=media&token=a08b5233-bc37-491a-8211-b33cb58ae0c3" />
-//           )}
-//           <p style={{ fontWeight: "500", marginTop: "10px" }}>
-//             Hình đại diện của bạn:
-//           </p>
-//           <FormInput
-//             type="file"
-//             style={{ width: "100%", marginTop: "0px" }}
-//             onChange={(e) => handleChangeImg(e.target.files[0])}
-//           />
-//         </Box1>
-//         <Box2>
-//           <InfomationTitle>
-//             <p style={{ fontWeight: "bold", margin: "10px 0 0 0" }}>
-//               Thông tin chi tiết
-//             </p>
-//             <p style={{ fontSize: "1rem" }}>
-//               Hoàn tất cập nhật bằng việc cung cấp những thông tin sau
-//             </p>
-//           </InfomationTitle>
-//           <InfomationForm>
-//             <ModalChiTietItem>
-//               <FormSpan>Địa chỉ email:</FormSpan>
-//               <FormInput
-//                 type="text"
-//                 value={user ? user.emailnguoimua : null}
-//                 disabled
-//               />
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Họ tên:</FormSpan>
-//               <FormInput
-//                 type="text"
-//                 onChange={(e) => {
-//                   setHoTenNguoiMua(e.target.value);
-//                 }}
-//                 value={hoTenNguoiMua}
-//                 placeholder="Họ tên của bạn là"
-//               />
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Giới tính:</FormSpan>
-//               <FormSelect
-//                 onChange={(e) => {
-//                   setGioiTinhNguoiMua(e.target.value);
-//                 }}
-//               >
-//                 {gioiTinhNguoiMua === "Nam" ? (
-//                   <>
-//                     <FormOption value="Nam" selected>
-//                       {" "}
-//                       Nam{" "}
-//                     </FormOption>
-//                     <FormOption value="Nữ"> Nữ </FormOption>
-//                   </>
-//                 ) : gioiTinhNguoiMua === "Nữ" ? (
-//                   <>
-//                     <FormOption value="Nam"> Nam </FormOption>
-//                     <FormOption value="Nữ" selected>
-//                       {" "}
-//                       Nữ{" "}
-//                     </FormOption>
-//                   </>
-//                 ) : (
-//                   <>
-//                     <FormOption value="Nam"> Nam </FormOption>
-//                     <FormOption value="Nữ"> Nữ </FormOption>
-//                   </>
-//                 )}
-//               </FormSelect>
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Ngày sinh:</FormSpan>
-//               <FormInput
-//                 type="date"
-//                 onChange={(e) => setNgaySinhNguoiMua(e.target.value)}
-//                 value={ngaySinhNguoiMua}
-//               />
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Số điện thoại:</FormSpan>
-//               <FormInput
-//                 type="text"
-//                 onChange={(e) => setSdtNguoiMua(e.target.value)}
-//                 value={sdtNguoiMua}
-//                 placeholder="Số điện thoại của bạn là"
-//               />
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Địa chỉ:</FormSpan>
-//               <FormInput
-//                 type="text"
-//                 onChange={(e) => setDiaChiNguoiMua(e.target.value)}
-//                 value={diaChiNguoiMua}
-//                 placeholder="Địa chỉ của bạn là"
-//               />
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Thuộc tỉnh:</FormSpan>
-//               <FormSelect
-//                 onChange={(e) => {
-//                   setMaThanhPho(e.target.value);
-//                 }}
-//               >
-//                 <FormOption value="">-- Chọn thành phố --</FormOption>
-//                 {mangTinhThanhPho.map((tinhthanhpho, key) => {
-//                   if (tinhthanhpho.tenthanhpho === tenThanhPho) {
-//                     return (
-//                       <FormOption value={tinhthanhpho.mathanhpho} selected>
-//                         {" "}
-//                         {tinhthanhpho.tenthanhpho}{" "}
-//                       </FormOption>
-//                     );
-//                   } else {
-//                     return (
-//                       <FormOption value={tinhthanhpho.mathanhpho}>
-//                         {" "}
-//                         {tinhthanhpho.tenthanhpho}{" "}
-//                       </FormOption>
-//                     );
-//                   }
-//                 })}
-//               </FormSelect>
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Thuộc huyện:</FormSpan>
-//               <FormSelect
-//                 onChange={(e) => {
-//                   setMaQuanHuyen(e.target.value);
-//                 }}
-//               >
-//                 {mangQuanHuyen.length > 0 ? (
-//                   mangQuanHuyen.map((quanhuyen, key) => {
-//                     if (quanhuyen.tenquanhuyen === tenQuanHuyen) {
-//                       return (
-//                         <FormOption value={quanhuyen.maquanhuyen} selected>
-//                           {" "}
-//                           {quanhuyen.tenquanhuyen}{" "}
-//                         </FormOption>
-//                       );
-//                     } else {
-//                       return (
-//                         <FormOption value={quanhuyen.maquanhuyen}>
-//                           {" "}
-//                           {quanhuyen.tenquanhuyen}{" "}
-//                         </FormOption>
-//                       );
-//                     }
-//                   })
-//                 ) : (
-//                   <FormOption value="">
-//                     -- Bạn chưa chọn Thành phố --{" "}
-//                   </FormOption>
-//                 )}
-//               </FormSelect>
-//             </ModalChiTietItem>
-//             <ModalChiTietItem>
-//               <FormSpan>Thuộc xã:</FormSpan>
-//               <FormSelect
-//                 onChange={(e) => {
-//                   setMaXa(e.target.value);
-//                 }}
-//               >
-//                 {mangXaPhuongThiTran.length > 0 ? (
-//                   mangXaPhuongThiTran.map((xaphuong, key) => {
-//                     if (xaphuong.tenxa === tenXa) {
-//                       return (
-//                         <FormOption value={xaphuong.maxa} selected>
-//                           {" "}
-//                           {xaphuong.tenxa}{" "}
-//                         </FormOption>
-//                       );
-//                     } else {
-//                       return (
-//                         <FormOption value={xaphuong.maxa}>
-//                           {" "}
-//                           {xaphuong.tenxa}{" "}
-//                         </FormOption>
-//                       );
-//                     }
-//                   })
-//                 ) : (
-//                   <FormOption value="">-- Bạn chưa chọn Huyện </FormOption>
-//                 )}
-//               </FormSelect>
-//             </ModalChiTietItem>
-//           </InfomationForm>
-//           <Total>
-//             <ButtonContainer>
-//               <Button
-//                 onClick={() => {
-//                   FindLostPets({
-//                     manguoimua: maNguoiMua,
-//                     maxa: maXa,
-//                     hotennguoimua: hoTenNguoiMua,
-//                     ngaysinhnguoimua: ngaySinhNguoiMua,
-//                     gioitinhnguoimua: gioiTinhNguoiMua,
-//                     sdtnguoimua: sdtNguoiMua,
-//                     diachinguoimua: diaChiNguoiMua,
-//                     hinhdaidiennguoimua: hinhDaiDienNguoiMua,
-//                     hinhdaidiennguoimuachange: hinhDaiDienNguoiMuaChange,
-//                   });
-//                 }}
-//               >
-//                 Cập nhật
-//               </Button>
-//             </ButtonContainer>
-//             <Link to="/">
-//               <ButtonContainer>
-//                 <Button>Trở lại</Button>
-//               </ButtonContainer>
-//             </Link>
-//           </Total>
-//         </Box2>
-//       </Wrapper>
-
-//       {/* === TOAST === */}
-//       <Toast
-//         ref={toastRef}
-//         dataToast={dataToast} // Thông tin cần hiện lên: Đối tượng { message,type }
-//       />
-//     </Container>
-//   );
-// };
-
-// export default FindLostPets;
+export default FindLostPets;

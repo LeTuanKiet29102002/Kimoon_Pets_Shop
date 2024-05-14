@@ -49,7 +49,7 @@ router.post("/register", (req, res) => {
       if (result.length === 0) {
         console.log("Chưa có email này");
         var sql1 = "insert into nguoimua (hotennguoimua, maxa, emailnguoimua, matkhau, hinhdaidien) values (?, '00001', ?, ?, ?)";
-        con.query(sql1, [req.body.tennguoimuadangky, req.body.emailnguoimuadangky, CryptoJS.AES.encrypt(req.body.matkhaudangky, process.env.PRIVATE_KEY).toString(),'https://grn-admin.mpoint.vn/uploads/avatar-mac-dinh.png'], function (err, result1) {
+        con.query(sql1, [req.body.tennguoimuadangky, req.body.emailnguoimuadangky, CryptoJS.AES.encrypt(req.body.matkhaudangky, process.env.PRIVATE_KEY).toString(), 'https://grn-admin.mpoint.vn/uploads/avatar-mac-dinh.png'], function (err, result1) {
           if (err) throw err;
           var sql2 = "select * from nguoimua where emailnguoimua = ?";
           con.query(sql2, [req.body.emailnguoimuadangky], function (err, result2) {
@@ -58,13 +58,13 @@ router.post("/register", (req, res) => {
             console.log("1 record inserted");
             //Mailer
             var noidung = "";
-            noidung += '<div><p>Cảm ơn bạn đã đăng ký tại <font color="#fd5d32"><b>Kimoon Shop</b></font>. Chúng tôi rất vui mừng thông báo rằng tài khoản của bạn đã được tạo thành công!</p></div>';
+            noidung += '<div><p>Cảm ơn bạn đã đăng ký tại <font color="#fd5d32"><b>Kimoon Pets</b></font>. Chúng tôi rất vui mừng thông báo rằng tài khoản của bạn đã được tạo thành công!</p></div>';
             noidung += '<p><b>Tên đăng nhập:</b> ' + result2[0].hotennguoimua +
               '<br /><b>Email đăng ký:</b> ' + result2[0].emailnguoimua;
             // '<br /><b>Liên kết xác thực tài khoản:</b> <a href="' + linkXacThuc + '" style="color: #fd5d32; text-decoration: none;">Xác thực ngay</a></p>';
             noidung += '<div><p>Để bắt đầu sử dụng dịch vụ của chúng tôi, vui lòng xác thực địa chỉ email của bạn và kích hoạt tài khoản. Sau khi xác thực, bạn có thể truy cập vào các tính năng nổi bật của chúng tôi và bắt đầu trải nghiệm.</p></div>';
             noidung += '<div><p>Nếu bạn cần hỗ trợ, đừng ngần ngại liên hệ với chúng tôi tại <font color="#fd5d32"><b>letuankiet29102k2@gmail.com</b></font> hoặc gọi đến số <font color="#32e5fd"><b>0123456789</b></font>.</p></div>';
-            noidung += '<div><p>Chúc bạn một ngày tuyệt vời và trải nghiệm thú vị tại <font color="#fd5d32"><b>Kimoon Shop</b></font>!</p></div>';
+            noidung += '<div><p>Chúc bạn một ngày tuyệt vời và trải nghiệm thú vị tại <font color="#fd5d32"><b>Kimoon Pets</b></font>!</p></div>';
 
 
             const mailOptions = {

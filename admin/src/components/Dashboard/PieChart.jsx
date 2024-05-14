@@ -3,7 +3,7 @@
 // yarn add @nivo/pie
 import { ResponsivePie } from '@nivo/pie';
 import { Box } from "@mui/material";
-import {useEffect ,useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // make sure parent container have a defined height when using
@@ -32,7 +32,7 @@ const MyResponsivePie = () => {
         getSoLuongTrangThaiDonHang();
     }, []);
 
-    
+
     console.log("Số lượng trạng thái đơn hàng: ", soLuongTrangThaiDonHang);
     const data = [
         {
@@ -62,7 +62,7 @@ const MyResponsivePie = () => {
     ];
     return (
         <Box height="75vh" marginTop='20px'>
-            <h2 style={{marginTop:"50px",marginBottom:"0.8rem"}}>Thống kê trạng thái các đơn hàng tại Kimoon Shop</h2>
+            <h2 style={{ marginTop: "50px", marginBottom: "0.8rem" }}>Thống kê trạng thái các đơn hàng tại Kimoon Pets</h2>
             <ResponsivePie
                 data={data}
                 margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

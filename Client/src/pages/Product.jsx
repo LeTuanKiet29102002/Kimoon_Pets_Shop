@@ -14,7 +14,8 @@ import "../css/main.css"
 import format_money from "../utils";
 import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
 import { useDispatch, useSelector } from "react-redux";
-import Toast from "../components/Toast"
+import Toast from "../components/Toast";
+import Rating from "../components/Rating";
 
 const Container = styled.div`
 
@@ -420,6 +421,7 @@ const Product = () => {
                     ref={toastRef}
                     dataToast={dataToast}   // Thông tin cần hiện lên: Đối tượng { message,type }
                 />
+                <Rating/>
                 <Footer />
             </Container>
         </>
