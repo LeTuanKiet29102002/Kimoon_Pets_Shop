@@ -13,6 +13,7 @@ import format_money from "../utils"
 import { logoutCart } from "../redux/cartRedux";
 import Toast from "../components/Toast";
 import PayButton from '../components/PayButton';
+import ZaloPayButton from '../components/ZaloPayButton';
 // import Paypal from '../components/Paypal';
 import Money from "../assets/svg/icons8-money.gif";
 
@@ -134,6 +135,7 @@ const FormSelect = styled.select`
 
 const FormOption = styled.option`
     margin: auto;
+
 `
 
 const FormTextArea = styled.textarea`
@@ -593,15 +595,16 @@ const DatMua = () => {
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>Tổng cộng</p>
                                     <p style={{ color: "var(--color-primary)", fontWeight: "bold" }}>{format_money((cart.tongtiengiohang).toString())} VNĐ</p>
                                 </TotalItem>
-                                <ModalChiTietItem style={{ marginTop: "10px", marginBottom: "20px" }}>
+                                <ModalChiTietItem style={{ marginTop: "10px", marginBottom: "60px" }}>
                                     <FormSpan>Phương thức thanh toán:</FormSpan>
                                     <FormSelect onChange={(e) => setPaymentMethod(e.target.value)}>
                                         <FormOption value="cash">Thanh toán bằng tiền mặt</FormOption>
                                         <FormOption value="stripe">Thanh toán bằng Stripe</FormOption>
+                                        <FormOption value="zalopay">Thanh toán bằng ZaloPay</FormOption>
                                     </FormSelect>
                                 </ModalChiTietItem>
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    {paymentMethod !== 'stripe' &&
+                                    {paymentMethod !== 'stripe'&& paymentMethod !== 'zalopay' &&
                                         <ButtonContainerPay>
                                             <ButtonPay
                                                 onClick={() => {
@@ -621,6 +624,7 @@ const DatMua = () => {
                                         </ButtonContainerPay>
                                     }
                                     {paymentMethod === 'stripe' && <PayButton CartItems={cart} style={{ display: 'none' }} />}
+                                    {paymentMethod === 'zalopay' && <ZaloPayButton CartItems={cart} style={{ display: 'none' }} />}
                                     {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
                                     {/* <PayButton CartItems={cart} /> */}
                                     <Link to="/">
@@ -722,10 +726,11 @@ const DatMua = () => {
                                         {/* <FormOption value="">-- Chọn phương thức thanh toán --</FormOption> */}
                                         <FormOption value="cash">Thanh toán bằng tiền mặt</FormOption>
                                         <FormOption value="stripe">Thanh toán bằng Stripe</FormOption>
+                                        <FormOption value="zalopay">Thanh toán bằng ZaloPay</FormOption>
                                     </FormSelect>
                                 </ModalChiTietItem>
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    {paymentMethod !== 'stripe' &&
+                                    {paymentMethod !== 'stripe'&& paymentMethod !== 'zalopay' &&
                                         <ButtonContainerPay>
                                             <ButtonPay
                                                 onClick={() => {
@@ -746,6 +751,7 @@ const DatMua = () => {
                                     }
                                     {/* <Paypal amount={format_money((cart.tongtiengiohang).toString())}/> */}
                                     {paymentMethod === 'stripe' && <PayButton CartItems={cart} style={{ display: 'none' }} />}
+                                    {paymentMethod === 'zalopay' && <ZaloPayButton CartItems={cart} style={{ display: 'none' }} />}
                                     <Link to="/">
                                         <ButtonContainer>
                                             <Button>Trở lại</Button>

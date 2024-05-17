@@ -472,11 +472,102 @@ router.get("/", async (req, res) => {
     })
 })
 
-//TỔNG LƯỢNG THÚ CƯNG THEO DANH MỤC TRONG NGÀY
 
-//LẤY SỐ LƯỢNG THÚ CƯNG ĐÃ BÁN TRONG NGÀY 
+// Lấy số lượng thú cưng đã bán, số lượng thú cưng còn lại và tổng số lượng thú cưng theo từng loại danh mục
+// Định nghĩa endpoint để lấy thông tin thú cưng
+// router.get('/pets-info', (req, res) => {
+//     const sql = `
+//         SELECT 
+//             dm.tendanhmuc,
+//             SUM(tc.soluong) AS tong_so_luong,
+//             IFNULL(SUM(ctdh.soluongchitietdathang), 0) AS so_luong_da_ban,
+//             SUM(tc.soluong) - IFNULL(SUM(ctdh.soluongchitietdathang), 0) AS so_luong_con_lai
+//         FROM 
+//             danhmuc dm
+//         LEFT JOIN 
+//             thucung tc ON dm.madanhmuc = tc.madanhmuc
+//         LEFT JOIN 
+//             (SELECT mathucung, SUM(soluongchitietdathang) AS soluongchitietdathang
+//              FROM chitietdathang
+//              GROUP BY mathucung) ctdh ON tc.mathucung = ctdh.mathucung
+//         GROUP BY 
+//             dm.tendanhmuc;
+//     `;
+
+//     con.query(sql, (err, results) => {
+//         if (err) {
+//             console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+//             res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu' });
+//             return;
+//         }
+
+//         res.json(results);
+//     });
+// });
 
 
-//LẤY SỐ LƯỢNG THÚ CƯNG ĐANG CÒN TRONG NGÀY
+router.get('/api/pets-info', (req, res) => {
+    const sql = `
+        SELECT 
+            dm.tendanhmuc,
+            SUM(tc.soluong) AS tong_so_luong,
+            IFNULL(SUM(ctdh.soluongchitietdathang), 0) AS so_luong_da_ban,
+            SUM(tc.soluong) + IFNULL(SUM(ctdh.soluongchitietdathang), 0) AS tong_so_luong_cung_cap
+        FROM 
+            danhmuc dm
+        LEFT JOIN 
+            thucung tc ON dm.madanhmuc = tc.madanhmuc
+        LEFT JOIN 
+            (SELECT mathucung, SUM(soluongchitietdathang) AS soluongchitietdathang
+             FROM chitietdathang
+             GROUP BY mathucung) ctdh ON tc.mathucung = ctdh.mathucung
+        GROUP BY 
+            dm.tendanhmuc;
+    `;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+            res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu' });
+            return;
+        }
+
+        res.json(results);
+    });
+});
+
+
+// API để lấy top 5 thú cưng bán chạy nhất
+router.get('/top5banhang', (req, res) => {
+    const sql = `
+        SELECT 
+            tc.tenthucung, 
+            SUM(ctdh.soluongchitietdathang) AS soluong_ban_duoc,
+            SUM(ctdh.tongtienchitietdathang) AS doanhthu
+        FROM 
+            thucung tc
+        JOIN 
+            chitietdathang ctdh ON tc.mathucung = ctdh.mathucung
+        JOIN 
+            dathang dh ON ctdh.madathang = dh.madathang
+        GROUP BY 
+            tc.tenthucung
+        ORDER BY 
+            soluong_ban_duoc DESC
+        LIMIT 5;
+    `;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+            res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu', details: err });
+            return;
+        }
+
+        res.json(results);
+    });
+});
+
+
 
 module.exports = router;

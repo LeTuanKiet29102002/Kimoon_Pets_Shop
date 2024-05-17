@@ -9,10 +9,6 @@ var transporter = nodemailer.createTransport({
     service: "gmail",
     port: 3000,
     secure: true,
-    // auth: {
-    //   user: 'truonghoanglong588@gmail.com',
-    //   pass: 'grkaaxhoeradbtop'
-    // }
     auth: {
         user: "letuankiet29102k2@gmail.com",
         // pass: "grkaaxhoeradbtop",

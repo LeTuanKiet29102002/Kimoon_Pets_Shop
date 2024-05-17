@@ -1037,7 +1037,7 @@ const RatingStar = () => {
                                         getLabelText={getLabelText}
                                         onChange={(event, newValue) => {
                                             // setRatingModal(newValue);
-                                            setValue(ratingModal);
+                                            setValue(newValue);
 
                                         }}
                                         onChangeActive={(event, newHover) => {

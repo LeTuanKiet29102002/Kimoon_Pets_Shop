@@ -25,6 +25,7 @@ import {
 import { Line } from "react-chartjs-2";
 import MyResponsivePie from "./PieChart";
 import RadialChart from "./RadialChart";
+import Top5BanHangChart from "./Top5Chart";
 
 ChartJS.register(
   CategoryScale,
@@ -213,7 +214,7 @@ const ChartFull = styled.div`
   height: 550px;
   overflow: hidden;
   ${Chart}.active & {
-    height: 1700px;
+    height: 2300px;
   }
 `
 
@@ -604,9 +605,10 @@ const Main = () => {
           </RecentOrders>
           <MyResponsivePie />
           <RadialChart />
+          <Top5BanHangChart />
         </ChartFull>
       </Chart>
-      <A onClick={handleShowFullChart}>{isShowFullChart?'Hide':'Show all'}</A>
+      <A onClick={handleShowFullChart}>{isShowFullChart ? 'Hide' : 'Show all'}</A>
     </Container>
   );
 };
