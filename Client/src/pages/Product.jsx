@@ -16,6 +16,7 @@ import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "../components/Toast";
 import Rating from "../components/Rating";
+import SuggestPets from "../components/SuggestPets";
 
 const Container = styled.div`
 
@@ -415,7 +416,8 @@ const Product = () => {
                         </AddContainer>
                     </InfoContainer>
                 </Wrapper>
-                <Newsletter />
+                {/* <Newsletter /> */}
+                <SuggestPets/>
                 {/* === TOAST === */}
                 <Toast
                     ref={toastRef}

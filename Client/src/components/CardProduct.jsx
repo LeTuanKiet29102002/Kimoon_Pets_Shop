@@ -333,7 +333,7 @@ const Label = styled.span`
 `;
 
 const CardProduct = ({ item }) => {
-  console.log("check so luong:", item.soluong);
+  console.log("check so luong:", item.madanhmuc);
   //Add cart then click icon
   const handleAddCart = () => {
     alert('hello');
@@ -358,7 +358,7 @@ const CardProduct = ({ item }) => {
           <Detail>
             <DetailPrice>
               <strike style={{ color: "#878788" }}>
-                <span style={{ color: "#767677" }}>
+                <span style={{ color: "#767677" ,textDecoration:"line-through"}}>
                   {format_money(item.giaban.toString())}
                   <u>đ</u>
                 </span>
@@ -391,12 +391,12 @@ const CardProduct = ({ item }) => {
           <DetailSoldOut>
             <DetailPriceSoldOut>
               <strike style={{ color: "#878788" }}>
-                <span style={{ color: "#767677" }}>
+                <span style={{ color: "#767677",textDecoration:"line-through" }} >
                   {format_money(item.giaban.toString())}
                   <u>đ</u>
                 </span>
               </strike>
-              <span style={{ color: "#fe6433", marginLeft: "6px" }}>
+              <span style={{ color: "#fe6433", marginLeft: "6px"  }}>
                 {format_money(item.giamgia.toString())}
                 <u>đ</u>
               </span>{" "}

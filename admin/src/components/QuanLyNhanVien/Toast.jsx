@@ -13,6 +13,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     text-align: center;
+    z-index: 10000000;
 `
 const Icon = styled.div`
     flex: 20%;

@@ -310,7 +310,7 @@ const CapNhatThongTin = () => {
     const formattedDate = user.ngaysinhnguoimua ? moment(user.ngaysinhnguoimua).format('YYYY-MM-DD') : "";
     setNgaySinhNguoiMua(formattedDate);
     // setNgaySinhNguoiMua(user.ngaysinhnguoimua);
-    setGioiTinhNguoiMua(user.giotinhnguoimua);
+    setGioiTinhNguoiMua(user.gioitinhnguoimua);
     setSdtNguoiMua(user.sdtnguoimua);
     setDiaChiNguoiMua(user.diachinguoimua);
     setHinhDaiDienNguoiMua(user.hinhdaidien);
@@ -653,6 +653,11 @@ const CapNhatThongTin = () => {
             </ModalChiTietItem>
             <ModalChiTietItem>
               <FormSpan>Giới tính:</FormSpan>
+              {/* <FormInput
+                type="text"
+                onChange={(e) => setGioiTinhNguoiMua(e.target.value)}
+                value={gioiTinhNguoiMua}
+              /> */}
               <FormSelect
                 onChange={(e) => {
                   setGioiTinhNguoiMua(e.target.value);

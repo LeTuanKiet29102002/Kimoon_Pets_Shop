@@ -4,6 +4,7 @@ import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ButtonThree from "./ComponentNoUsing/ButtonThree";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   height: 40vh;
@@ -180,6 +181,7 @@ const InputEffect = styled.div`
 
 const Newsletter = () => {
   const navigate = useNavigate();
+  
 
   return (
     <Container>

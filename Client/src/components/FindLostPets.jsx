@@ -9,8 +9,6 @@ import Right from "../assets/svg/icons8-person-100.png";
 import Tren from "../assets/svg/quotation-marktren.png";
 import Duoi from "../assets/svg/quotation-markduoi.png";
 
-
-
 const Container = styled.div`
   background-color: #f8f9fa;
   padding: 50px;
@@ -24,7 +22,7 @@ const ItemFindLostPets = styled.div`
   transition: all 0.3s ease;
   margin: 0 10px !important; /* Đảm bảo rằng khoảng cách được thêm vào hai bên */
   width: 400px !important; /* Giữ nguyên chiều rộng để tránh bị đẩy gần nhau */
-  height: 300px;
+  height: 600px;
 
   &:hover {
     transform: translateY(-5px);
@@ -45,55 +43,52 @@ const ItemFindLostPets = styled.div`
 const Image = styled.img`
   width: 40px;
   height: 40px;
-  border-radius:50%;
-`
+  border-radius: 50%;
+`;
 
 const H3 = styled.h3`
-    text-align: center;
-    font-weight: 600;
-    margin-top: 30px;
-`
+  text-align: center;
+  font-weight: 600;
+  margin-top: 30px;
+`;
 
 const P = styled.p`
-    font-size: 16px;
-    color: #6c757d;
-    text-align: center;
-    margin-bottom: 40px;
-`
+  font-size: 16px;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 40px;
+`;
 
 const P1 = styled.p`
-    font-size: 20px;
-    color: #6c757d;
-    text-align: center;
-    margin-bottom: 0;
-`
+  font-size: 20px;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 0;
+`;
 
 const P2 = styled.p`
-    font-size: 20px;
-    color: #6c757d;
-    text-align: center;
-    margin-bottom: 20px;
-`
-
+  font-size: 20px;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 20px;
+`;
 
 const HeaderContent = styled.div`
-display: flex;
-justify-content:center;
-align-items:center;
-`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const IconLeft = styled.img`
-  margin-left:20px;
-
-`
+  margin-left: 20px;
+`;
 const IconRight = styled.img`
-  margin-left:20px;
-
-`
+  margin-left: 20px;
+`;
 const RunningNumberContainer = styled.div`
   color: var(--color-primary);
-  font-weight:bold;
+  font-weight: bold;
   margin-left: 10px;
-  font-size:30px;
+  font-size: 30px;
 `;
 
 const H1 = styled.img`
@@ -101,23 +96,66 @@ const H1 = styled.img`
   height: 10px;
   color: var(--color-primary);
   margin: 20px 0;
-`
+`;
 const H5 = styled.h5`
-  font-size:20px;
+  font-size: 20px;
   align-items: center;
-  margin-top:8px;
-`
+  margin-top: 8px;
+`;
+
+const H4 = styled.h4`
+  font-size: 20px;
+  align-items: center;
+  text-align: center;
+  color:var(--color-primary);
+`;
 
 const Comment = styled.div`
 
-`
+`;
+
+const Contact = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+
+`;
+const SDT = styled.div`
+
+`;
+
+const DiaChi = styled.div`
+
+`;
+
+const Email = styled.div`
+
+`;
+
 const CommentHead = styled.div`
   display: flex;
-  justify-content:space-around;
-`
+  justify-content: space-around;
+`;
+const ImagePet = styled.img`
+  display: flex;
+  margin:auto;
+  width: 200px;
+  height: 250px;
+  border-radius: 5px;
+  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.5);
+`;
 
+const Description = styled.div`
+  height: 80px;
+  overflow: auto; /* Thêm thanh cuộn khi nội dung vượt quá */
+`;
 
-
+const Pp = styled.div`
+  overflow: auto;
+  /* height: 80; */
+`;
 
 const FindLostPets = () => {
   const [FindLostPets, setFindLostPets] = useState([]);
@@ -177,21 +215,42 @@ const FindLostPets = () => {
 
   return (
     <Container>
-      <H3>Hãy tìm thú cưng lạc của bạn và những người xung quanh của bạn tại đây</H3>
+      <H3>
+        Hãy tìm thú cưng lạc của bạn và những người xung quanh của bạn tại đây
+      </H3>
       <Slider className="slick-slider" {...settings}>
         {FindLostPets.map((item, index) => (
           <ItemFindLostPets key={index} className="item">
             <CommentHead>
               <Image src={item.hinhdaidien} />
-              <H5>Anh/Chị:  <strong>{item.hotennguoimua}</strong></H5>
+              <H5>
+                {item.gioitinhnguoimua === '' ? 'Chị' : 'Anh'}: <strong>{item.hotennguoimua}</strong>
+              </H5>
             </CommentHead>
             <Comment>
-              <p>Đặc điểm nhận dạng<H1 src={Tren} />{item.dacdiem}<H1 src={Duoi} /></p>
+              <H4>
+                Đã bị lạc:<strong>{item.tenthulac}</strong>
+              </H4>
+              <p>
+              <strong>
+                Đặc điểm nhận dạng
+              </strong>
+              </p>
+              <Description>
+                <Pp>
+                  <H1 src={Tren} />
+                  {item.dacdiem}
+                  <H1 src={Duoi} />
+                </Pp>
+              </Description>
             </Comment>
-            <h5>
-              {item.rating === 5 ? `🌕🌕🌕🌕🌕` : item.rating === 4 ? `🌕🌕🌕🌕🌑` : item.rating === 3 ? `🌕🌕🌕🌑🌑` : item.rating === 2 ? `🌕🌕🌑🌑🌑` : item.rating === 1 ? `🌕🌑🌑🌑🌑` : item.rating === 0 ? `🌑🌑🌑🌑🌑` : `🌑🌑🌑🌑🌑`
-              }
-            </h5>
+            <ImagePet src={item.hinhanhthulac} />
+            <Contact>
+              Thông tin liên hệ nhanh:
+              <SDT>{item.sdtlienhe}</SDT>
+              <Email>{item.emaillienhe}</Email>
+              <DiaChi>{item.diachilienhe}</DiaChi>
+            </Contact>
           </ItemFindLostPets>
         ))}
       </Slider>

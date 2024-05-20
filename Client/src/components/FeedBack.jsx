@@ -18,13 +18,14 @@ const Container = styled.div`
 
 const ItemFeedBack = styled.div`
   background: #ffffff;
+  position:relative;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   margin: 0 10px !important; /* Đảm bảo rằng khoảng cách được thêm vào hai bên */
   width: 400px !important; /* Giữ nguyên chiều rộng để tránh bị đẩy gần nhau */
-  height: 300px;
+  height: 400px;
 
   &:hover {
     transform: translateY(-5px);
@@ -115,6 +116,17 @@ const CommentHead = styled.div`
   display: flex;
   justify-content:space-around;
 `
+
+const Slogan = styled.div`
+  position: absolute;
+  bottom: 10px;
+  text-align:center;
+  display: flex;
+  align-items:center;
+  font-size:14px;
+  color:var(--color-primary);
+  font-weight:300;
+`;
 
 
 
@@ -227,6 +239,9 @@ const FeedBack = () => {
               {item.rating === 5 ? `🌕🌕🌕🌕🌕` : item.rating === 4 ? `🌕🌕🌕🌕🌑` : item.rating === 3 ? `🌕🌕🌕🌑🌑` : item.rating === 2 ? `🌕🌕🌑🌑🌑` : item.rating === 1 ? `🌕🌑🌑🌑🌑` : item.rating === 0 ? `🌑🌑🌑🌑🌑` : `🌑🌑🌑🌑🌑`
               }
             </h5>
+            <Slogan>
+            "Kimoon Pets - Thanh toán linh hoạt, lấy thú nhanh nhẹn"
+            </Slogan>
           </ItemFeedBack>
         ))}
       </Slider>

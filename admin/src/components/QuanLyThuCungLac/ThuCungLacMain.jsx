@@ -377,7 +377,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                             margin: "5px",
                         }} />
                     </Td>
-                    <Td>{thulacitem.sdtnguoimua}</Td>
+                    <Td>{thulacitem.sdtlienhe?thulacitem.sdtlienhe:thulacitem.sdtnguoimua}</Td>
                     <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <ImgDanhMuc src={thulacitem.hinhanhthulac} style={{
                             borderRadius: "20%",
@@ -525,7 +525,7 @@ const ThuCungLacMain = ({ reRenderData, setReRenderData }) => {
                                                 margin: "5px",
                                             }} />
                                         </Td>
-                                        <Td>{thulacitem.sdtnguoimua}</Td>
+                                        <Td>{thulacitem.sdtlienhe?thulacitem.sdtlienhe:thulacitem.sdtnguoimua}</Td>
                                         <Td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <ImgDanhMuc src={thulacitem.hinhanhthulac} style={{
                                                 borderRadius: "20%",

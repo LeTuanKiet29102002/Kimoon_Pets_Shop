@@ -200,7 +200,7 @@ router.post("/updateFeedBack", async (req, res) => {
     try {
         const ngaysuamoi = new Date().toISOString();
         const sql = "UPDATE feedback SET rating = ?, comments = ?, updated_at = ? WHERE feedback_id = ?;";
-        con.query(sql, [req.body.rating, req.body.comments, ngaysuamoi, req.body.feedback_id], (err, result) => {
+        con.query(sql, [req.body.ratingmoi, req.body.commentsmoi, ngaysuamoi, req.body.feedback_id], (err, result) => {
             if (err) {
                 console.error("Lỗi cập nhật feedback:", err);
                 res.status(500).json({ error: "Đã xảy ra lỗi khi cập nhật thông tin feedback." });
