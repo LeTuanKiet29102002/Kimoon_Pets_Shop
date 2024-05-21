@@ -311,6 +311,9 @@ router.post("/getThongKeTheoDanhMuc", async (req, res) => {
     })
 })
 
+
+
+
 // Lấy thống kê theo doanh thu chó
 router.post("/getDoanhThuCho", async (req, res) => {
     if(req.body.ngay != "" && req.body.thang != "" && req.body.nam != "") {
@@ -568,6 +571,267 @@ router.get('/top5banhang', (req, res) => {
     });
 });
 
+//Thống kế chi tiết thú cưng về doanh thu 
+// Định nghĩa endpoint để lấy thống kê doanh thu cho tất cả các thú cưng
+router.get('/doanhthu', (req, res) => {
+    const sql = `SELECT mathucung, SUM(tongtienchitietdathang) AS doanhthu 
+                 FROM chitietdathang 
+                 GROUP BY mathucung`;
 
+    con.query(sql, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ message: 'Không tìm thấy doanh thu cho bất kỳ thú cưng nào' });
+            return;
+        }
+
+        res.json({ doanhthu: results });
+    });
+});
+
+// Định nghĩa endpoint để lấy thống kê doanh thu cho từng thú cưng
+router.post('/doanhthu-thucung', (req, res) => {
+    const sql = `
+        SELECT 
+            t.mathucung,
+            t.tenthucung,
+            t.soluong AS soluongthucungconlai,
+            SUM(chitietdathang.soluongchitietdathang) AS soluongthucungdaban,
+            SUM(chitietdathang.tongtienchitietdathang) AS tongdoanhthu
+        FROM
+            thucung AS t
+        LEFT JOIN
+            chitietdathang ON t.mathucung = chitietdathang.mathucung
+        GROUP BY
+            t.mathucung
+    `;
+
+    con.query(sql, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ message: 'Không tìm thấy thông tin doanh thu cho bất kỳ thú cưng nào' });
+            return;
+        }
+
+        res.json({ doanhthu_thucung: results });
+    });
+});
+
+
+// Định nghĩa endpoint để lấy thống kê doanh thu cho từng thú cưng có phần trăm
+router.post('/doanhthu-thucung-phantram', (req, res) => {
+    const sql = `
+        SELECT 
+            t.mathucung,
+            t.tenthucung,
+            t.soluong AS soluongthucungconlai,
+            COALESCE(SUM(chitietdathang.soluongchitietdathang), 0) AS soluongthucungdaban,
+            COALESCE(SUM(chitietdathang.tongtienchitietdathang), 0) AS tongdoanhthu,
+            (COALESCE(SUM(chitietdathang.tongtienchitietdathang), 0) / 
+            (SELECT SUM(COALESCE(chitietdathang.tongtienchitietdathang, 0)) FROM thucung
+             LEFT JOIN chitietdathang ON thucung.mathucung = chitietdathang.mathucung)) * 100 AS phantramdoanhthu
+        FROM
+            thucung AS t
+        LEFT JOIN
+            chitietdathang ON t.mathucung = chitietdathang.mathucung
+        GROUP BY
+            t.mathucung
+    `;
+
+    con.query(sql, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ message: 'Không tìm thấy thông tin doanh thu cho bất kỳ thú cưng nào' });
+            return;
+        }
+
+        res.json({ doanhthu_thucung: results });
+    });
+});
+
+
+// Định nghĩa endpoint để lấy thống kê doanh thu cho từng thú cưng trong một khoảng thời gian cụ thể
+// router.post('/doanhthu-thucung-theo-ngay/:ngayBatDau/:ngayKetThuc', (req, res) => {
+//     const ngayBatDau = req.params.ngayBatDau;
+//     const ngayKetThuc = req.params.ngayKetThuc;
+
+//     const sql = `
+//         SELECT 
+//             t.mathucung,
+//             t.tenthucung,
+//             t.soluong AS soluongthucungconlai,
+//             SUM(chitietdathang.soluongchitietdathang) AS soluongthucungdaban,
+//             SUM(chitietdathang.tongtienchitietdathang) AS tongdoanhthu
+//         FROM
+//             thucung AS t
+//         LEFT JOIN
+//             chitietdathang ON t.mathucung = chitietdathang.mathucung
+//         JOIN
+//             dathang ON chitietdathang.madathang = dathang.madathang
+//         WHERE
+//             dathang.ngaydathang BETWEEN ? AND ?
+//         GROUP BY
+//             t.mathucung
+//     `;
+
+//     con.query(sql, [ngayBatDau, ngayKetThuc], (error, results) => {
+//         if (error) {
+//             res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+//             return;
+//         }
+
+//         if (results.length === 0) {
+//             res.status(404).json({ message: 'Không tìm thấy thông tin doanh thu cho bất kỳ thú cưng nào trong khoảng thời gian đã chọn' });
+//             return;
+//         }
+
+//         res.json({ doanhthu_thucung: results });
+//     });
+// });
+
+//Theo ngay có tính phan tram
+// router.post('/doanhthu-thucung-theo-ngay/:ngayBatDau/:ngayKetThuc', (req, res) => {
+//     const ngayBatDau = req.params.ngayBatDau;
+//     const ngayKetThuc = req.params.ngayKetThuc;
+
+//     // Truy vấn tổng doanh thu của tất cả các thú cưng trong khoảng thời gian đã chọn
+//     const totalRevenueSql = `
+//         SELECT 
+//             SUM(chitietdathang.tongtienchitietdathang) AS totalRevenue
+//         FROM
+//             chitietdathang
+//         JOIN
+//             dathang ON chitietdathang.madathang = dathang.madathang
+//         WHERE
+//             dathang.ngaydathang BETWEEN ? AND ?
+//     `;
+
+//     con.query(totalRevenueSql, [ngayBatDau, ngayKetThuc], (error, totalRevenueResults) => {
+//         if (error) {
+//             res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+//             return;
+//         }
+
+//         if (totalRevenueResults.length === 0 || !totalRevenueResults[0].totalRevenue) {
+//             res.status(404).json({ message: 'Không tìm thấy tổng doanh thu trong khoảng thời gian đã chọn' });
+//             return;
+//         }
+
+//         const totalRevenue = totalRevenueResults[0].totalRevenue;
+
+//         // Truy vấn doanh thu của từng thú cưng trong khoảng thời gian đã chọn
+//         const sql = `
+//             SELECT 
+//                 t.mathucung,
+//                 t.tenthucung,
+//                 t.soluong AS soluongthucungconlai,
+//                 SUM(chitietdathang.soluongchitietdathang) AS soluongthucungdaban,
+//                 SUM(chitietdathang.tongtienchitietdathang) AS tongdoanhthu,
+//                 (SUM(chitietdathang.tongtienchitietdathang) / ?) * 100 AS phantramdoanhthu
+//             FROM
+//                 thucung AS t
+//             LEFT JOIN
+//                 chitietdathang ON t.mathucung = chitietdathang.mathucung
+//             JOIN
+//                 dathang ON chitietdathang.madathang = dathang.madathang
+//             WHERE
+//                 dathang.ngaydathang BETWEEN ? AND ?
+//             GROUP BY
+//                 t.mathucung
+//         `;
+
+//         con.query(sql, [totalRevenue, ngayBatDau, ngayKetThuc], (error, results) => {
+//             if (error) {
+//                 res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+//                 return;
+//             }
+
+//             if (results.length === 0) {
+//                 res.status(404).json({ message: 'Không tìm thấy thông tin doanh thu cho bất kỳ thú cưng nào trong khoảng thời gian đã chọn' });
+//                 return;
+//             }
+
+//             res.json({ doanhthu_thucung: results });
+//         });
+//     });
+// });
+
+
+
+router.post('/doanhthu-thucung-theo-ngay/:ngayBatDau/:ngayKetThuc', (req, res) => {
+    const ngayBatDau = req.params.ngayBatDau;
+    const ngayKetThuc = req.params.ngayKetThuc;
+
+    // Truy vấn tổng doanh thu của tất cả các thú cưng trong khoảng thời gian đã chọn
+    const totalRevenueSql = `
+        SELECT 
+            SUM(chitietdathang.tongtienchitietdathang) AS totalRevenue
+        FROM
+            chitietdathang
+        JOIN
+            dathang ON chitietdathang.madathang = dathang.madathang
+        WHERE
+            dathang.ngaydathang BETWEEN ? AND ?
+    `;
+
+    con.query(totalRevenueSql, [ngayBatDau, ngayKetThuc], (error, totalRevenueResults) => {
+        if (error) {
+            res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+            return;
+        }
+
+        const totalRevenue = totalRevenueResults[0].totalRevenue || 0;
+
+        // Truy vấn doanh thu của từng thú cưng trong khoảng thời gian đã chọn
+        const sql = `
+            SELECT 
+                t.mathucung,
+                t.tenthucung,
+                t.soluong AS soluongthucungconlai,
+                SUM(chitietdathang.soluongchitietdathang) AS soluongthucungdaban,
+                SUM(chitietdathang.tongtienchitietdathang) AS tongdoanhthu,
+                CASE
+                    WHEN ? = 0 THEN 0
+                    ELSE (SUM(chitietdathang.tongtienchitietdathang) / ?) * 100
+                END AS phantramdoanhthu
+            FROM
+                thucung AS t
+            LEFT JOIN
+                chitietdathang ON t.mathucung = chitietdathang.mathucung
+            JOIN
+                dathang ON chitietdathang.madathang = dathang.madathang
+            WHERE
+                dathang.ngaydathang BETWEEN ? AND ?
+            GROUP BY
+                t.mathucung
+        `;
+
+        con.query(sql, [totalRevenue, totalRevenue, ngayBatDau, ngayKetThuc], (error, results) => {
+            if (error) {
+                res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+                return;
+            }
+
+            if (results.length === 0) {
+                res.status(404).json({ message: 'Không tìm thấy thông tin doanh thu cho bất kỳ thú cưng nào trong khoảng thời gian đã chọn' });
+                return;
+            }
+
+            res.json({ doanhthu_thucung: results });
+        });
+    });
+});
 
 module.exports = router;

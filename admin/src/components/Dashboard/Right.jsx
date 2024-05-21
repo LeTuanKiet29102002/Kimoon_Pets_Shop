@@ -12,6 +12,12 @@ import RightTop from "./RightTop";
 import axios from "axios";
 import format_money from "../../utils";
 import Clock from './Clock';
+import { CSVLink, CSVDownload } from "react-csv";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import BackupIcon from '@mui/icons-material/Backup';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+
 
 const Container = styled.div`
   margin-top: 1.4rem;
@@ -105,16 +111,30 @@ const Item = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    &:hover {
+    flex-direction: column;
+    /* &:hover {
       background: var(--greyLight-1);
       color: white;
-    }
+    } */
     & div {
       display: flex;
       justify-items: center;
       gap: 0.6rem;
     }
   }
+`;
+
+const Date = styled.div`
+  display: inline-block;
+  background: var(--color-light);
+  border-radius: var(--border-radius-1);
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+`;
+
+const InputDate = styled.input`
+  background: transparent;
+  color: var(--color-dark);
 `;
 
 const ItemRight = styled.div`
@@ -125,12 +145,91 @@ const ItemRight = styled.div`
   width: 100%;
 `;
 
+const StyledMuiButton = styled(Button)`
+  && {
+
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+
+  }
+  &:hover {
+    box-shadow: 0px 4px 10px #00000000;
+
+  }
+`;
+
 const Right = () => {
   // Các state cần thiết
   const [adminLog, setAdminLog] = useState();
   const [soDonHang, setSoDonHang] = useState("");
   const [doanhThuHomNay, setDoanhThuHomNay] = useState("");
   const [donCanDuyetHomNay, setDonCanDuyetHomNay] = useState("");
+  const [ngayBatDau, setNgayBatDau] = useState("");
+  const [ngayKetThuc, setNgayKetThuc] = useState("");
+
+  const [dataDoanhThuExport, setDataDoanhThuExport] = useState([]);
+  const [dataDoanhThuDayExport, setDataDoanhThuDayExport] = useState([]);
+
+  // Export thú cưng
+  useEffect(() => {
+    const getDoanhThuThuCung = async () => {
+      try {
+        const doanhthuthucungres = await axios.post("http://localhost:3001/api/products/doanhthu-thucung-phantram", {});
+        const listDoanhThuThuCung = doanhthuthucungres.data.doanhthu_thucung;
+        console.log("check list thu cung:", listDoanhThuThuCung);
+
+        let result = [['Mã thú cưng', 'Tên thú cưng', 'Số lượng thú cưng còn lại', 'Số lượng thú cưng đã bán', 'Tổng doanh thu', 'Phần trăm doanh thu']];
+
+        listDoanhThuThuCung.forEach((item) => {
+          let arr = [];
+          arr.push(item.mathucung);
+          arr.push(item.tenthucung);
+          arr.push(item.soluongthucungconlai || 0); // Đảm bảo hiển thị 0 nếu không có dữ liệu
+          arr.push(item.soluongthucungdaban || 0); // Đảm bảo hiển thị 0 nếu không có dữ liệu
+          arr.push(item.tongdoanhthu || 0); // Đảm bảo hiển thị 0 nếu không có dữ liệu
+          arr.push(`${item.phantramdoanhthu.toFixed(2)}%`); // Chuyển đổi giá trị phần trăm và thêm ký hiệu %
+          result.push(arr);
+        });
+
+        setDataDoanhThuExport(result);
+      } catch (err) {
+        console.log("Lỗi lấy thú cưng:", err);
+      }
+    };
+
+    getDoanhThuThuCung();
+  }, []);
+
+  // Export thú cưng theo ngày cụ thể 
+  useEffect(() => {
+    const getDoanhThuThuCung = async () => {
+      if (!ngayBatDau || !ngayKetThuc) return;
+
+      try {
+        const doanhthudaythucungres = await axios.post(`http://localhost:3001/api/products/doanhthu-thucung-theo-ngay/${ngayBatDau}/${ngayKetThuc}`);
+        const listDoanhThuThuCungDay = doanhthudaythucungres.data.doanhthu_thucung;
+        console.log("check list thu cung:", listDoanhThuThuCungDay);
+
+        let result = [['Mã thú cưng', 'Tên thú cưng', 'Số lượng thú cưng còn lại', 'Số lượng thú cưng đã bán', 'Tổng doanh thu', 'Phần trăm doanh thu']];
+
+        listDoanhThuThuCungDay.forEach((item) => {
+          let arr = [];
+          arr.push(item.mathucung);
+          arr.push(item.tenthucung);
+          arr.push(item.soluongthucungconlai || 0);
+          arr.push(item.soluongthucungdaban || 0);
+          arr.push(item.tongdoanhthu || 0);
+          arr.push(`${item.phantramdoanhthu.toFixed(2)}%`);
+          result.push(arr);
+        });
+
+        setDataDoanhThuDayExport(result);
+      } catch (err) {
+        console.log("Lỗi lấy thú cưng:", err);
+      }
+    };
+
+    getDoanhThuThuCung();
+  }, [ngayBatDau, ngayKetThuc]);
 
   useEffect(() => {
     const getlog = async () => {
@@ -269,8 +368,59 @@ const Right = () => {
           </ItemRight>
         </Item>
         <Item className="add-product">
-          <Clock/>
+          <h3>Xuất ra doanh thu chi tiết thú cưng <strong style={{color:"green"}}>theo ngày</strong></h3>
+          <div>
+            <label>
+              Ngày bắt đầu:
+              <Date>
+                <InputDate
+                  type="date"
+                  value={ngayBatDau}
+                  onChange={(e) => setNgayBatDau(e.target.value)}
+                />
+              </Date>
+            </label>
+            <label>
+              Ngày kết thúc:
+              <Date>
+                <InputDate
+                  type="date"
+                  value={ngayKetThuc}
+                  onChange={(e) => setNgayKetThuc(e.target.value)}
+                />
+              </Date>
+            </label>
+          </div>
+          <Stack direction="row" spacing={2} mx={7}>
+            <CSVLink
+              data={dataDoanhThuDayExport}
+              filename={"ChiTietDoanhThuThuCungTheoNgay.csv"}
+            >
+              <StyledMuiButton
+                variant="outlined"
+                color="success"
+                startIcon={<CloudDownloadIcon />}
+              >
+                Export
+              </StyledMuiButton>
+            </CSVLink>
+          </Stack>
+          <h3>Xuất ra <strong style={{color:"green"}}>tổng</strong> doanh thu chi tiết tất cả thú cưng</h3>
+          <Stack direction="row" spacing={2} mx={7}>
+            {/* <Button variant="contained" color="success"><CloudDownloadIcon />Export</Button>
+          <Button variant="contained" color="warning"><BackupIcon />Import</Button> */}
+            <CSVLink data={dataDoanhThuExport}
+              filename={"ChiTietTongDoanhThuThuCung.csv"}
+            // asyncOnClick={true}
+            // onClick={getThuCungExport}
+            >
+              <StyledMuiButton variant="outlined" color="success" startIcon={<CloudDownloadIcon />}>
+                Export
+              </StyledMuiButton>
+            </CSVLink>
+          </Stack>
         </Item>
+
       </SalesAnalytics>
     </Container>
   );
