@@ -11,6 +11,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import MiniImage from "../components/MiniImage";
 import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
+import { themSanPhamYeuThich, capNhatSoLuongYeuThich } from "../redux/wishlistRedux";
 import { useDispatch } from "react-redux";
 
 const Container = styled.div``;
@@ -67,11 +68,12 @@ const Info = styled.div`
 
 // Thông tin - Thông tin sản phẩm
 const Product = styled.div`
-  width: 100%;
+  width: 60%;
   display: flex;
   border: 1px solid white;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
+  border-radius: 5px;
   ${mobile({ flexDirection: "column" })}
   &:hover {
     border: 1px solid #333;
@@ -186,10 +188,13 @@ const RemoveProduct = styled.div`
 `;
 
 const Favorite = () => {
-  const cart = useSelector((state) => state.cart);
+  const wishlist = useSelector((state) => state.wishlist);
   const [hinhanh, setHinhAnh] = useState([]);
 
   const dispatch = useDispatch();
+  const handleRemove = (product) => {
+    dispatch(capNhatSoLuongYeuThich(product));
+  };
 
   return (
     <Container>
@@ -203,7 +208,8 @@ const Favorite = () => {
           </Link>
           <TopTexts>
             <TopText>Shopping Bag (0)</TopText>
-            <TopText>Your Wishlist ({cart.soluonggiohang})</TopText>
+            {/* <TopText>Your Wishlist</TopText> */}
+            <TopText>Your Wishlist ({wishlist.soluongyeuthich})</TopText>
           </TopTexts>
           <Link to="/datmua">
             <TopButton type="filled">CHECKOUT NOW</TopButton>
@@ -211,9 +217,9 @@ const Favorite = () => {
         </Top>
         <Bottom>
           <Info>
-            {cart.products.map((product) => {
+            {wishlist.products.map((product) => {
               const handleRemove = (soluongcapnhat) => {
-                dispatch(capNhatSanPham({ ...product, soluongcapnhat }));
+                dispatch(capNhatSoLuongYeuThich({ ...product, soluongcapnhat }));
               };
               return (
                 <>
@@ -237,9 +243,13 @@ const Favorite = () => {
                           <b style={{ marginRight: "5px" }}>ID:</b>{" "}
                           {product.data[0].mathucung}
                         </ProductId>
+                        <ProductId>
+                          <b style={{ marginRight: "5px" }}>Giá:</b>{" "}
+                          {product.data[0].giamgia}
+                        </ProductId>
                       </Details>
                     </ProductDetail>
-                    <PriceDetail>
+                    {/* <PriceDetail>
                       <ProductAmountContainer>
                         <div
                           onClick={() =>
@@ -264,10 +274,10 @@ const Favorite = () => {
                           <u>đ</u>
                         </b>
                       </ProductPrice>
-                    </PriceDetail>
-                    <RemoveProduct onClick={() => handleRemove(0)}>
-                      <Close className="remove-product" />
-                    </RemoveProduct>
+                    </PriceDetail> */}
+                    <RemoveProduct onClick={() => handleRemove(product)}>
+                    <Close className="remove-product" />
+                  </RemoveProduct>
                   </Product>
                   <Hr />
                 </>
@@ -275,12 +285,12 @@ const Favorite = () => {
             })}
           </Info>
 
-          <Summary>
+          {/* <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
               <SummaryItemPrice>
-                {format_money(cart.tongtiengiohang.toString())}{" "}
+                {format_money(wishlist.tongtiengiohang.toString())}{" "}
                 <b>
                   <u>đ</u>
                 </b>
@@ -307,7 +317,7 @@ const Favorite = () => {
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>
-                {format_money(cart.tongtiengiohang.toString())}{" "}
+                {format_money(wishlist.tongtiengiohang.toString())}{" "}
                 <b>
                   <u>đ</u>
                 </b>
@@ -316,7 +326,7 @@ const Favorite = () => {
             <Link to="/datmua">
               <Button>CHECKOUT NOW</Button>
             </Link>
-          </Summary>
+          </Summary> */}
         </Bottom>
       </Wrapper>
       <Footer />
@@ -325,3 +335,24 @@ const Favorite = () => {
 };
 
 export default Favorite;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

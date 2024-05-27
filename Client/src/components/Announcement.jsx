@@ -220,14 +220,20 @@ const Announcement = () => {
       <Title>Breaking News </Title>
       <List>
         <ListItem>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam!
+          Giảm giá cực sốc chỉ khi mua hai bé mèo cùng chủng loại🥰😘😍!
         </ListItem>
-        <ListItem>Lorem ipsum dolor sit</ListItem>
         <ListItem>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam!
+          Qùa tặng hấp dẫn cho mùa hè lên đến 100 triệu đồng cho khách hàng may mắn 😘😍🥰!!!
         </ListItem>
-        <ListItem>Siêu sale sập sàn 8/3 !!!</ListItem>
-        <ListItem>Giảm giá đến 99% cho đơn hàng thứ 100!!!</ListItem>
+        <ListItem>
+          Tri ân khách hàng đã mua tại kimoon shop từ 3 bé trở lên với phần quà trị giá lên đến 10 triệu🤑🤑🤑!!!
+        </ListItem>
+        <ListItem>
+          Siêu sale sập sàn 1/6 cho thiếu nhi 🐶🐱🐰🐠!!!
+        </ListItem>
+        <ListItem>
+          Giảm giá đến 99% cho đơn hàng thứ 100💖💖💖!!!
+        </ListItem>
       </List>
     </Container>
   );

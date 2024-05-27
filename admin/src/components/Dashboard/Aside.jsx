@@ -9,6 +9,7 @@ import {
   CategoryOutlined,
 } from "@mui/icons-material";
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
 import styled from "styled-components";
 import { useState } from "react";
 import "../../css/main.css";
@@ -128,6 +129,7 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
 
   };
 
@@ -143,6 +145,7 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
 
   };
 
@@ -158,6 +161,7 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
 
   };
 
@@ -173,6 +177,7 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
 
   };
 
@@ -188,6 +193,7 @@ const Aside = (props) => {
     setNhanVienIsActive(true);
     setDonHangIsActive(false);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
 
   };
 
@@ -203,6 +209,8 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(true);
     setThuCungLacIsActive(false);
+    setVouchersActive(false);
+
   };
 
   //Quản lý Thú cưng lạc
@@ -217,7 +225,25 @@ const Aside = (props) => {
     setNhanVienIsActive(false);
     setDonHangIsActive(false);
     setThuCungLacIsActive(true);
+    setVouchersActive(false);
+
   };
+
+    //Quản lý Vouchers
+    const [isVouchersActive, setVouchersActive] = useState(
+      props.active === "quanlyvouchers" ? true : false
+    );
+    const handleClickVouchers = () => {
+      setDashBoardIsActive(false);
+      setDanhMucIsActive(false);
+      setThuCungIsActive(false);
+      setKhachHangIsActive(false);
+      setNhanVienIsActive(false);
+      setDonHangIsActive(false);
+      setThuCungLacIsActive(false);
+      setVouchersActive(true);
+
+    };
 
   // Đăng xuất
   const admin = useSelector((state) => state.admin.currentAdmin);
@@ -327,6 +353,18 @@ const Aside = (props) => {
                   />
                 </IconSpan>
                 <H3>Quản lý Thú cưng lạc</H3>
+              </LinkStyled>
+              <LinkStyled
+                to={"/quanlyvouchers"}
+                className={isVouchersActive ? "active" : null}
+                onClick={handleClickVouchers}
+              >
+                <IconSpan>
+                  <ConfirmationNumberOutlinedIcon
+                    style={{ fontSize: "1.6rem", transition: "all 300ms ease" }}
+                  />
+                </IconSpan>
+                <H3>Quản lý Vouchers</H3>
               </LinkStyled>
             </>
           ) : admin.machucvu === 4 ? (

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { loginFailure, loginStart, loginSuccess, logoutUser } from "./userRedux"
 import { logoutCart } from "./cartRedux";
+import {logoutWishlist} from "./wishlistRedux";
 import { Navigate } from "react-router-dom";
 
 // Hàm đăng ký
@@ -43,5 +44,6 @@ export const logout = async (dispatch, user) => {
     console.log("USER: ",user);
     const res = await axios.post("http://localhost:3001/api/auth/logout", {manguoimua: user.manguoimua}, {withCredentials: true});
     dispatch(logoutCart()); //Khởi tạo lại người dùng
+    dispatch(logoutWishlist()); //Khởi tạo lại yêu thích
     dispatch(logoutUser()); //Khởi tạo lại giỏ hàng
 }

@@ -13,6 +13,7 @@ import SliderImage from "../components/SliderImage"
 import "../css/main.css"
 import format_money from "../utils";
 import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
+import { themSanPhamYeuThich, capNhatSanPhamYeuThich } from "../redux/wishlistRedux";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "../components/Toast";
 import Rating from "../components/Rating";
@@ -210,24 +211,29 @@ const Product = () => {
     const [giamgiastring, setGiamGiaString] = useState();
     const [soluong, setSoLuong] = useState();
     const [soluongmua, setSoLuongMua] = useState(1);
+    const [soluongyeuthich, setSoLuongYeuThich] = useState(1);
     const dispatch = useDispatch();
 
     const cart = useSelector(state => state.cart);
+    const wishlist = useSelector(state => state.wishlist);
     useEffect(() => {
         const getProduct = async () => {
             const thucung = await axios.get("http://localhost:3001/api/products/find/" + mathucung);
             setProduct(thucung);
             const hinhanhthucung = await axios.post("http://localhost:3001/api/products/findImage", { mathucung: mathucung });
-            hinhanhthucung.data.map((thucung, index) => {
-                setImage(prev => {
-                    const isHave = image.includes(thucung.hinhanh);
-                    if (isHave) {
-                        return [...prev];
-                    } else {
-                        return [...prev, thucung.hinhanh];
-                    }
-                });
-            })
+            // hinhanhthucung.data.map((thucung, index) => {
+            //     setImage(prev => {
+            //         const isHave = image.includes(thucung.hinhanh);
+            //         if (isHave) {
+            //             return [...prev];
+            //         } else {
+            //             return [...prev, thucung.hinhanh];
+            //         }
+            //     });
+            // })
+            // Thay đổi ở đây: Thiết lập lại trạng thái image với danh sách ảnh mới
+            const newImages = hinhanhthucung.data.map(thucung => thucung.hinhanh);
+            setImage(newImages);
             setTieuDe(thucung.data[0].tieude);
             setMoTa(thucung.data[0].mota);
             setTenThuCung(thucung.data[0].tenthucung);
@@ -311,12 +317,17 @@ const Product = () => {
         navigate("/datmua");
     }
 
+    const handleAddWishlist = () => {
+        dispatch(themSanPhamYeuThich({ ...product, soluongyeuthich }));
+        const dataShow = { message: "Đã thêm thú cưng vào yêu thích", type: "success" };
+        showToastFromOut(dataShow); //Hiện toast thông báo
+    }
+
     const handleSoldOut = () => {
         const dataShow = { message: "Sorry! Mặt hàng này đã hết ạ!", type: "danger" };
         showToastFromOut(dataShow);
     }
 
-    console.log(cart);
     return (
         <>
             <Container>
@@ -403,6 +414,9 @@ const Product = () => {
                                     </ButtonContainer>
                                     <ButtonContainer>
                                         <Button onClick={handleMuaNgay}>Mua ngay</Button>
+                                    </ButtonContainer>
+                                    <ButtonContainer>
+                                        <Button onClick={handleAddWishlist}>❤</Button>
                                     </ButtonContainer>
                                 </>
                                 :

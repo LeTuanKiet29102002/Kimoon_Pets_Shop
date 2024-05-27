@@ -17,6 +17,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import BackupIcon from '@mui/icons-material/Backup';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+// import SupperChart from './SupperChart';
+
 
 
 const Container = styled.div`
@@ -329,7 +331,7 @@ const Right = () => {
           </Icon>
           <ItemRight>
             <Info>
-              <h3>TODAY ORDERS</h3>
+              <h3>ĐƠN ĐÃ ĐẶT</h3>
               <small className="text-muted">Last 24 Hours</small>
             </Info>
             <h5 className="success">+39%</h5>
@@ -342,12 +344,12 @@ const Right = () => {
           </Icon>
           <ItemRight>
             <Info>
-              <h3>TODAY SALES</h3>
+              <h3>TỔNG DOANH THU</h3>
               <small className="text-muted">Last 24 Hours</small>
             </Info>
             <h5 className="danger">-17%</h5>
             <h3>
-              {doanhThuHomNay === "" ? "Chưa có" : doanhThuHomNay}{" "}
+              {doanhThuHomNay === "" ? "0" : doanhThuHomNay}{" "}
               <span style={{ textDecoration: "underline" }}>
                 <b>đ</b>
               </span>
@@ -368,7 +370,7 @@ const Right = () => {
           </ItemRight>
         </Item>
         <Item className="add-product">
-          <h3>Xuất ra doanh thu chi tiết thú cưng <strong style={{color:"green"}}>theo ngày</strong></h3>
+          <h3>Xuất ra doanh thu chi tiết thú cưng <strong style={{ color: "green" }}>theo ngày</strong></h3>
           <div>
             <label>
               Ngày bắt đầu:
@@ -405,7 +407,7 @@ const Right = () => {
               </StyledMuiButton>
             </CSVLink>
           </Stack>
-          <h3>Xuất ra <strong style={{color:"green"}}>tổng</strong> doanh thu chi tiết tất cả thú cưng</h3>
+          <h3>Xuất ra <strong style={{ color: "green" }}>tổng</strong> doanh thu chi tiết tất cả thú cưng</h3>
           <Stack direction="row" spacing={2} mx={7}>
             {/* <Button variant="contained" color="success"><CloudDownloadIcon />Export</Button>
           <Button variant="contained" color="warning"><BackupIcon />Import</Button> */}
@@ -419,8 +421,8 @@ const Right = () => {
               </StyledMuiButton>
             </CSVLink>
           </Stack>
+          {/* <SupperChart/> */}
         </Item>
-
       </SalesAnalytics>
     </Container>
   );

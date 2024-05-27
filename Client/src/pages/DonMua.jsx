@@ -27,7 +27,7 @@ flex-direction: column;
 const Table = styled.table`
     background: var(--color-white);
     width: 100%;
-    border-radius: var(--card-border-radius);
+    border-radius: 10px;
     padding: var(--card-padding);
     text-align: center;
     box-shadow: var(--box-shadow);
@@ -44,6 +44,7 @@ const Thead = styled.thead`
 const Tr = styled.tr`
     &:last-child td {
         border: none;
+
     }
     &:hover {
         background: var(--color-light);
@@ -51,6 +52,7 @@ const Tr = styled.tr`
 `
 
 const Th = styled.th`
+    padding: 10px 10px;
 
 `
 
@@ -61,6 +63,7 @@ const Tbody = styled.tbody`
 const Td = styled.td`
     height: 2.8rem;
     border-bottom: 1px solid var(--color-light);
+
 `
 
 const ButtonInfo = styled.button`

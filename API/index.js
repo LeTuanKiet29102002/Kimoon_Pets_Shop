@@ -11,6 +11,7 @@ const productRoute = require("./routes/product");
 const orderRoute = require("./routes/order");
 const lostpetsRoute = require("./routes/lostpets");
 const feedbackRoute = require("./routes/feedback");
+const vouchersRoute = require("./routes/vouchers");
 
 dotenv.config();
 app.use(cors({
@@ -28,6 +29,7 @@ app.use("/api/zalopay", zalopayRoute);
 app.use("/api/products", productRoute);
 app.use("/api/lostpets", lostpetsRoute);
 app.use("/api/feedback", feedbackRoute);
+app.use("/api/vouchers", vouchersRoute);
 app.use("/api/order", orderRoute);
 
 app.listen(process.env.PORT || 5000, () => {

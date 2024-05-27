@@ -614,7 +614,7 @@ const LoginRegister = () => {
           <Pass>
             <Input
               type={isReShowPassword ? 'text' : 'password'}
-              placeholder="Re-Mật khẩu của bạn"
+              placeholder="Nhập lại mật khẩu của bạn"
               onChange={(e) => handleChangeRePassword(e)}
             />
             <Span onClick={handleShowHideRePassword}>

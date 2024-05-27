@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MiniCartImage from "./MiniCartImage";
 import format_money from "../utils";
-import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
+import { themSanPhamYeuThich, capNhatSanPhamYeuThich,capNhatSoLuongYeuThich } from "../redux/wishlistRedux";
 import { useDispatch } from "react-redux";
 
 const Container = styled.div`
@@ -206,12 +206,14 @@ const Button = styled.button`
 `;
 
 const FavoriteProducts = ({ item }) => {
-  const cart = useSelector((state) => state.cart);
+  const wishlist = useSelector((state) => state.wishlist);
+  console.log('check wishlist', wishlist);
   const dispatch = useDispatch();
   return (
     <Container>
       <Wrapper>
-        <Badge badgeContent={cart.soluonggiohang} color="primary">
+        {/* <Badge color="primary"> */}
+        <Badge badgeContent={wishlist.soluongyeuthich} color="primary">
           <FavoriteBorderIcon style={{ color: "#fe6433" }} />
         </Badge>
         <MiniCartList>
@@ -219,9 +221,9 @@ const FavoriteProducts = ({ item }) => {
           <NoCartMsg>Chưa có sản phẩm</NoCartMsg>
           <Heading>Sản phẩm đã thêm</Heading>
           <UlItem>
-            {cart.products.map((product) => {
+            {wishlist.products.map((product) => {
               const handleRemove = (soluongcapnhat) => {
-                dispatch(capNhatSanPham({ ...product, soluongcapnhat }));
+                dispatch(capNhatSoLuongYeuThich({ ...product, soluongcapnhat }));
               };
               return (
                 <>
@@ -244,7 +246,7 @@ const FavoriteProducts = ({ item }) => {
                         <ItemDescription>
                           Phân loại: {product.data[0].tendanhmuc}
                         </ItemDescription>
-                        <div onClick={() => handleRemove(0)}>
+                        <div onClick={() => handleRemove(product)}>
                           <Remove>Xóa</Remove>
                         </div>
                       </ItemBody>
@@ -267,3 +269,25 @@ const FavoriteProducts = ({ item }) => {
 };
 
 export default FavoriteProducts;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

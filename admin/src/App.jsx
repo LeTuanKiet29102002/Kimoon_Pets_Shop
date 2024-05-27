@@ -6,6 +6,7 @@ import QuanLyDonHang from "./pages/QuanLyDonHang";
 import QuanLyKhachHang from "./pages/QuanLyKhachHang";
 import QuanLyNhanVien from "./pages/QuanLyNhanVien";
 import QuanLyThuCungLac from "./pages/QuanLyThuCungLac";
+import QuanLyVouchers from "./pages/QuanLyVouchers";
 import { useState } from "react";
 import LoginAdmin from "./pages/LoginAdmin";
 import { useSelector } from "react-redux";
@@ -32,6 +33,7 @@ const App = () => {
                 <Route path="/quanlynhanvien" element={<QuanLyNhanVien />} />
                 <Route path="/quanlydonhang" element={<QuanLyDonHang />} />
                 <Route path="/quanlythucunglac" element={<QuanLyThuCungLac />} />
+                <Route path="/quanlyvouchers" element={<QuanLyVouchers />} />
               </>
             ) : admin.machucvu === 4 ? (
               <>

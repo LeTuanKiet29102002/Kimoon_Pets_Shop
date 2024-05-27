@@ -206,6 +206,7 @@ const Button = styled.button`
 
 const MiniCart = ({ item }) => {
   const cart = useSelector((state) => state.cart);
+  console.log('check carttt', cart);
   const dispatch = useDispatch();
   return (
     <Container>

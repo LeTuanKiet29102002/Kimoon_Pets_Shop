@@ -216,8 +216,8 @@ const FeedBack = () => {
 
   return (
     <Container>
-      <H3>Our Clients' Satisfaction is Our Top Priority</H3>
-      <P>We have a reputation for helping clients around the world find success on their most important projects</P>
+      <H3>Sự hài lòng của khách hàng là ưu tiên hàng đầu của chúng tôi</H3>
+      <P>Chúng tôi nổi tiếng trong việc giúp khách hàng trên khắp thế giới có thể mua thú cưng một cáh tiên lợi và nhanh chóng nhất</P>
       <hr></hr>
       <HeaderContent>
         <IconLeft src={Left} /><P1>Số lượng thú cưng đa dạng lên tới</P1><RunningNumberContainer>{numberPets}+</RunningNumberContainer>

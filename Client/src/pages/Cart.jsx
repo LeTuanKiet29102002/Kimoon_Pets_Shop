@@ -72,6 +72,7 @@ const Product = styled.div`
     border: 1px solid white;
     justify-content: space-between;
     position: relative;
+    border-radius:5px;
     ${mobile({ flexDirection: "column" })}
     &:hover {
       border: 1px solid #333;

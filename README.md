@@ -31,3 +31,6 @@ in will have the right to operate on the entire system as well as perform intera
 Although I have tried to complete the topic in the best way, but with limited time and limited professional knowledge, it is inevitable that there will be shortcomings. 
 We look forward to receiving your comments to improve the topic.<br>
 Sincerely thank you!<br>
+# Run Pay
+ngrok http http://localhost:3001
+stripe listen --forward-to localhost:3001/api/stripe/webhook
