@@ -21,8 +21,9 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.h1`
-  font-weight: 300;
-  text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
 `
 
 // TOP
@@ -153,7 +154,9 @@ const Summary = styled.div`
 `
 
 const SummaryTitle = styled.h1`
-    font-weight: 200;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
 `
 
 const SummaryItem = styled.div`
@@ -188,6 +191,7 @@ const RemoveProduct = styled.div`
 `
 
 const Cart = () => {
+  const wishlist = useSelector((state) => state.wishlist);
   const cart = useSelector(state => state.cart);
   const [hinhanh, setHinhAnh] = useState([]);
 
@@ -198,17 +202,17 @@ const Cart = () => {
       <Navbar />
       <Announcement />
       <Wrapper>
-        <Title>YOUR BAG</Title>
+        <Title>GIỎ HÀNG CỦA BẠN</Title>
         <Top>
           <Link to="/">
-            <TopButton>CONTINUE SHOPPING</TopButton>
+            <TopButton>TIẾP TỤC MUA HÀNG</TopButton>
           </Link>
           <TopTexts>
-            <TopText>Shopping Bag ({cart.soluonggiohang})</TopText>
-            <TopText>Your Wishlist (0)</TopText>
+            <TopText>Số lượng trong giỏ ({cart.soluonggiohang})</TopText>
+            <TopText>Số lượng yêu thích ({wishlist.soluongyeuthich})</TopText>
           </TopTexts>
-          <Link to="/pay">
-            <TopButton type="filled">CHECKOUT NOW</TopButton>
+          <Link to="/datmua">
+            <TopButton type="filled">THANH TOÁN NGAY</TopButton>
           </Link>
         </Top>
         <Bottom>
@@ -251,17 +255,17 @@ const Cart = () => {
           </Info>
 
           <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+            <SummaryTitle>TÓM TẮT GIỎ HÀNG</SummaryTitle>
             <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
+              <SummaryItemText>Tổng tiền hàng</SummaryItemText>
               <SummaryItemPrice>{format_money((cart.tongtiengiohang).toString())} <b><u>đ</u></b></SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
+              <SummaryItemText>Dự tính vận chuyển</SummaryItemText>
               <SummaryItemPrice>50.000 <b><u>đ</u></b></SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
+              <SummaryItemText>Mã giảm giá</SummaryItemText>
               <SummaryItemPrice>-50.000 <b><u>đ</u></b></SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
@@ -269,7 +273,7 @@ const Cart = () => {
               <SummaryItemPrice>{format_money((cart.tongtiengiohang).toString())} <b><u>đ</u></b></SummaryItemPrice>
             </SummaryItem>
             <Link to="/datmua">
-              <Button>CHECKOUT NOW</Button>
+              <Button>THANH TOÁN NGAY</Button>
             </Link>
           </Summary>
         </Bottom>

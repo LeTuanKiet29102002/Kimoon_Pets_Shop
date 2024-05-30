@@ -577,7 +577,7 @@ const LoginRegister = () => {
             Đăng nhập
           </Button>
           {error && <Error>Something went wrong...</Error>}
-          <Link onClick={handleResetPassword}>DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={handleResetPassword}>Nếu bạn quên mật khẩu hãy click vào đây!</Link>
         </Form>
       </SignInPage>
       {/* Trang đăng ký */}

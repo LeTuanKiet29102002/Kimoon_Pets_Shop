@@ -13,6 +13,7 @@ import MiniImage from "../components/MiniImage";
 import { themSanPham, capNhatSanPham } from "../redux/cartRedux";
 import { themSanPhamYeuThich, capNhatSoLuongYeuThich } from "../redux/wishlistRedux";
 import { useDispatch } from "react-redux";
+import Top5BanHangChart from "../components/Top5";
 
 const Container = styled.div``;
 
@@ -22,8 +23,9 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-  font-weight: 300;
-  text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
 `;
 
 // TOP
@@ -188,6 +190,7 @@ const RemoveProduct = styled.div`
 `;
 
 const Favorite = () => {
+  const cart = useSelector(state => state.cart);
   const wishlist = useSelector((state) => state.wishlist);
   const [hinhanh, setHinhAnh] = useState([]);
 
@@ -201,18 +204,18 @@ const Favorite = () => {
       <Navbar />
       <Announcement />
       <Wrapper>
-        <Title>YOUR FAVORITE PETS</Title>
+        <Title>THÚ CƯNG YÊU THÍCH CỦA BẠN</Title>
         <Top>
           <Link to="/">
-            <TopButton>CONTINUE SHOPPING</TopButton>
+            <TopButton>TIẾP TỤC MUA HÀNG</TopButton>
           </Link>
           <TopTexts>
-            <TopText>Shopping Bag (0)</TopText>
-            {/* <TopText>Your Wishlist</TopText> */}
-            <TopText>Your Wishlist ({wishlist.soluongyeuthich})</TopText>
+            <TopText>Số lượng trong giỏ ({cart.soluonggiohang})</TopText>
+            {/* <TopText>Số lượng yêu thích</TopText> */}
+            <TopText>Số lượng yêu thích ({wishlist.soluongyeuthich})</TopText>
           </TopTexts>
           <Link to="/datmua">
-            <TopButton type="filled">CHECKOUT NOW</TopButton>
+            <TopButton type="filled">TOP THÚ CƯNG ĐƯỢC YÊU THÍCH</TopButton>
           </Link>
         </Top>
         <Bottom>
@@ -276,14 +279,17 @@ const Favorite = () => {
                       </ProductPrice>
                     </PriceDetail> */}
                     <RemoveProduct onClick={() => handleRemove(product)}>
-                    <Close className="remove-product" />
-                  </RemoveProduct>
+                      <Close className="remove-product" />
+                    </RemoveProduct>
                   </Product>
                   <Hr />
                 </>
               );
             })}
           </Info>
+          {/* <Summary>
+            <Top5BanHangChart />
+          </Summary> */}
 
           {/* <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
@@ -324,7 +330,7 @@ const Favorite = () => {
               </SummaryItemPrice>
             </SummaryItem>
             <Link to="/datmua">
-              <Button>CHECKOUT NOW</Button>
+              <Button>THANH TOÁN NGAY</Button>
             </Link>
           </Summary> */}
         </Bottom>

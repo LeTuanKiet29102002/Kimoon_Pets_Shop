@@ -608,7 +608,7 @@ const Main = () => {
           <Top5BanHangChart />
         </ChartFull>
       </Chart>
-      <A onClick={handleShowFullChart}>{isShowFullChart ? 'Hide' : 'Show all'}</A>
+      <A onClick={handleShowFullChart}>{isShowFullChart ? 'Ẩn' : 'Tất cả'}</A>
     </Container>
   );
 };

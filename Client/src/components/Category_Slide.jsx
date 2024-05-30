@@ -50,7 +50,7 @@ const CategoriesSlide = () => {
 
   return (
     <section className="game-section">
-      <h2 className="line-title">Category Pets</h2>
+      <h2 className="line-title">Danh mục thú cưng</h2>
       <div className="owl-carousel custom-carousel owl-theme">
         {danhmuc.map((item, index) => (
           <div

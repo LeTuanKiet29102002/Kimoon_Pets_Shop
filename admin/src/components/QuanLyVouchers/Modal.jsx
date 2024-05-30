@@ -382,9 +382,9 @@ const Modal = ({
     if (modalRef.current === e.target) {
       setShowModal(false);
       // setthuCungModalHinhAnh([]); //Modal chi tiết vouchers khi tắt sẽ xóa mảng hình
-      setHinhAnhMoi([]); //Modal thêm vouchers khi tắt sẽ xóa mảng hình
-      setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
-      setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
+      // setHinhAnhMoi([]); //Modal thêm vouchers khi tắt sẽ xóa mảng hình
+      // setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
+      // setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
     }
   };
 
@@ -393,9 +393,9 @@ const Modal = ({
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
         // setthuCungModalHinhAnh([]); //Modal chi tiết vouchers khi tắt sẽ xóa mảng hình
-        setHinhAnhMoi([]); //Modal thêm vouchers khi tắt sẽ xóa mảng hình
-        setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
-        setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
+        // setHinhAnhMoi([]); //Modal thêm vouchers khi tắt sẽ xóa mảng hình
+        // setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
+        // setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
       }
     },
     [setShowModal, showModal]
@@ -407,113 +407,76 @@ const Modal = ({
   }, [keyPress]);
 
   // =============== Xử lý cập nhật vouchers ===============
-  const handleCapNhatThuLac = async ({
-    mathulac,
-    tenthulacmoi,
-    trangthaithucungmoi,
-    dacdiemmoi,
-    maxamoi,
-    hotenlienhemoi,
-    emaillienhemoi,
-    sdtlienhemoi,
-    diachilienhemoi,
-    ngaytaomoi,
-    hinhanhthulacmoi,
-    hinhanhthulacmoichange,
+  const handleCapNhatVouchers = async ({
+    mavoucher,
+    codevouchermoi,
+    tenvouchermoi,
+    dieukienvouchermoi,
+    soluongvouchermoi,
+    tinhtrangvouchermoi,
+    giavouchermoi,
+    motavouchermoi,
+    ngaytaovouchermoi,
+    ngayhethanvouchermoi,
   }) => {
     console.log("Đầu vào Cập nhật vouchers:", {
-      mathulac,
-      tenthulacmoi,
-      trangthaithucungmoi,
-      dacdiemmoi,
-      maxamoi,
-      hotenlienhemoi,
-      emaillienhemoi,
-      sdtlienhemoi,
-      diachilienhemoi,
-      ngaytaomoi,
-      hinhanhthulacmoi,
-      hinhanhthulacmoichange,
+      mavoucher,
+      codevouchermoi,
+      tenvouchermoi,
+      dieukienvouchermoi,
+      soluongvouchermoi,
+      tinhtrangvouchermoi,
+      giavouchermoi,
+      motavouchermoi,
+      ngaytaovouchermoi,
+      ngayhethanvouchermoi
     });
 
     if (
-      mathulac !== "" &&
-      tenthulacmoi !== "" &&
-      trangthaithucungmoi !== "" &&
-      dacdiemmoi !== "" &&
-      maxamoi !== "" &&
-      hotenlienhemoi !== "" &&
-      emaillienhemoi !== "" &&
-      sdtlienhemoi !== "" &&
-      diachilienhemoi !== "" &&
-      ngaytaomoi !== "" &&
-      hinhanhthulacmoi !== ""
-      // && nhanvienmodalhinhanhdaidiennhanvienchange !== ""
+      mavoucher !== "" &&
+      codevouchermoi !== "" &&
+      tenvouchermoi !== "" &&
+      dieukienvouchermoi !== "" &&
+      soluongvouchermoi !== "" &&
+      tinhtrangvouchermoi !== "" &&
+      giavouchermoi !== "" &&
+      motavouchermoi !== "" &&
+      ngaytaovouchermoi !== "" &&
+      ngayhethanvouchermoi !== ""
     ) {
       try {
-        // setthuCungModalHinhAnhChange([]);
-        if (hinhanhthulacmoichange !== "") {
-          const updatethulacres = await axios.post(
-            "http://localhost:3001/api/lostpets/updateThuCungLac",
-            {
-              mathulac,
-              tenthulacmoi,
-              trangthaithucungmoi,
-              dacdiemmoi,
-              maxamoi,
-              hotenlienhemoi,
-              emaillienhemoi,
-              sdtlienhemoi,
-              diachilienhemoi,
-              ngaytaomoi,
-              hinhanhthulacmoi: hinhanhthulacmoichange,
-            }
-          );
-          console.log("KQ trả về update: ", updatethulacres);
-          setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
-          setShowModal((prev) => !prev);
-          handleClose();
-          const dataShow = {
-            message: "Thay đổi vouchers có mã " + mathulac + " thành công!",
-            type: "success",
-          };
-          showToastFromOut(dataShow);
-          setthuLacModalHinhAnhThuLacChange([]);
-        } else {
-          const updatethulacres = await axios.post(
-            "http://localhost:3001/api/lostpets/updateThuCungLac",
-            {
-              mathulac,
-              tenthulacmoi,
-              trangthaithucungmoi,
-              dacdiemmoi,
-              maxamoi,
-              hotenlienhemoi,
-              emaillienhemoi,
-              sdtlienhemoi,
-              diachilienhemoi,
-              ngaytaomoi,
-              hinhanhthulacmoi: hinhanhthulacmoi,
-            }
-          );
-          console.log("KQ trả về update: ", updatethulacres);
-          setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
-          setShowModal((prev) => !prev);
-          handleClose();
-          const dataShow = {
-            message: "Thay đổi vouchers có mã " + mathulac + " thành công!",
-            type: "success",
-          };
-          showToastFromOut(dataShow);
-          // setthuCungModalHinhAnh([]);
-        }
+        const updatevouchersres = await axios.post(
+          "http://localhost:3001/api/vouchers/updateVouchers",
+          {
+            mavoucher,
+            codevouchermoi,
+            tenvouchermoi,
+            dieukienvouchermoi,
+            soluongvouchermoi,
+            tinhtrangvouchermoi,
+            giavouchermoi,
+            motavouchermoi,
+            ngaytaovouchermoi,
+            ngayhethanvouchermoi
+          }
+        );
+        console.log("KQ trả về update: ", updatevouchersres);
+        setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
+        setShowModal((prev) => !prev);
+        handleClose();
+        const dataShow = {
+          message: "Thay đổi vouchers có mã " + mavoucher + " thành công!",
+          type: "success",
+        };
+        showToastFromOut(dataShow);
+
       } catch (err) {
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - ThuCungMain & ThuCungRight.jsx
         setShowModal((prev) => !prev);
         handleClose();
         const dataShow = {
           message:
-            "Thất bại! Không thể cập nhật vouchers có mã " + mathulac,
+            "Thất bại! Không thể cập nhật vouchers có mã " + mavoucher,
           type: "danger",
         };
         showToastFromOut(dataShow);
@@ -526,224 +489,94 @@ const Modal = ({
       showToastFromOut(dataShow); //Hiện toast thông báo
     }
   };
-  //  test
-  const [thuLacModal, setthuLacModal] = useState();
-  const [thuLacModalTenThuLac, setthuLacModalTenThuLac] = useState();
-  const [thuLacModalMaThuLac, setthuLacModalMaThuLac] = useState();
-  const [thuLacModalTrangThaiThuCung, setthuLacModalTrangThaiThuCung] = useState();
-  const [thuLacModalDacDiem, setthuLacModalDacDiem] = useState();
-  const [thuLacModalMaNguoiMua, setthuLacModalMaNguoiMua] = useState();
-  const [thuLacModalMaXa, setthuLacModalMaXa] = useState();
-  const [thuLacModalHoTenLienHe, setthuLacModalHoTenLienHe] = useState();
-  const [thuLacModalEmailLienHe, setthuLacModalEmailLienHe] = useState();
-  const [thuLacModalSdtLienHe, setthuLacModalSdtLienHe] = useState();
-  const [thuLacModalDiaChiLienHe, setthuLacModalDiaChiLienHe] = useState();
-  const [thuLacModalNgayTao, setthuLacModalNgayTao] = useState();
-  const [thuLacModalHinhAnhThuLac, setthuLacModalHinhAnhThuLac] = useState([]);
-  const [thuLacModalHinhAnhThuLacChange, setthuLacModalHinhAnhThuLacChange] = useState("");
 
-  const [thuLacModalTenXa, setthuLacModalTenXa] = useState();
-  const [thuLacModalTenQuanHuyen, setthuLacModalTenQuanHuyen] = useState();
-  const [thuLacModalTenThanhPho, setthuLacModalTenThanhPho] = useState();
-  const [thuLacModalMaQuanHuyen, setthuLacModalMaQuanHuyen] = useState();
-  const [thuLacModalMaThanhPho, setthuLacModalMaThanhPho] = useState();
+
+  //  test
+  const [VouchersModal, setVouchersModal] = useState();
+  const [VouchersModalMaVouchers, setVouchersModalMaVouchers] = useState();
+  const [VouchersModalCodeVouchers, setVouchersModalCodeVouchers] = useState();
+  const [VouchersModalTenVouchers, setVouchersModalTenVouchers] = useState();
+  const [VouchersModalDieuKienVouchers, setVouchersModalDieuKienVouchers] = useState();
+  const [VouchersModalSoLuongVouchers, setVouchersModalSoLuongVouchers] = useState();
+  const [VouchersModalTinhTrangVouchers, setVouchersModalTinhTrangVouchers] = useState();
+  const [VouchersModalGiaVouchers, setVouchersModalGiaVouchers] = useState();
+  const [VouchersModalMoTaVouchers, setVouchersModalMoTaVouchers] = useState();
+  const [VouchersModalNgayTaoVouchers, setVouchersModalNgayTaoVouchers] = useState();
+  const [VouchersModalNgayHetHanVouchers, setVouchersModalNgayHetHanVouchers] = useState();
+
 
   //Old
-  const [thuLacModalOld, setthuLacModalOld] = useState();
-  const [thuLacModalMaThuLacOld, setthuLacModalMaThuLacOld] = useState();
-  const [thuLacModalDacDiemOld, setthuLacModalDacDiemOld] = useState();
-  const [thuLacModalMaNguoiMuaOld, setthuLacModalMaNguoiMuaOld] = useState();
-  const [thuLacModalTenThuLacOld, setthuLacModalTenThuLacOld] = useState();
-  const [thuLacModalTrangThaiThuCungOld, setthuLacModalTrangThaiThuCungOld] = useState();
-  const [thuLacModalEmailLienHeOld, setthuLacModalEmailLienHeOld] = useState();
-  const [thuLacModalHoTenLienHeOld, setthuLacModalHoTenLienHeOld] = useState();
-  const [thuLacModalSdtLienHeOld, setthuLacModalSdtLienHeOld] = useState();
-  const [thuLacModalDiaChiLienHeOld, setthuLacModalDiaChiLienHeOld] = useState();
-  const [thuLacModalNgayTaoOld, setthuLacModalNgayTaoOld] = useState();
-  const [thuLacModalHinhAnhThuLacOld, setthuLacModalHinhAnhThuLacOld] = useState("");
-  const [thuLacModalTenXaOld, setthuLacModalTenXaOld] = useState();
-  const [thuLacModalTenQuanHuyenOld, setthuLacModalTenQuanHuyenOld] = useState();
-  const [thuLacModalTenThanhPhoOld, setthuLacModalTenThanhPhoOld] = useState();
-  const [thuLacModalMaXaOld, setthuLacModalMaXaOld] = useState();
-  const [thuLacModalMaQuanHuyenOld, setthuLacModalMaQuanHuyenOld] = useState();
-  const [thuLacModalMaThanhPhoOld, setthuLacModalMaThanhPhoOld] = useState();
+  const [VouchersModalOld, setVouchersModalOld] = useState();
+  const [VouchersModalMaVouchersOld, setVouchersModalMaVouchersOld] = useState();
+  const [VouchersModalCodeVouchersOld, setVouchersModalCodeVouchersOld] = useState();
+  const [VouchersModalSoLuongVouchersOld, setVouchersModalSoLuongVouchersOld] = useState();
+  const [VouchersModalTinhTrangVouchersOld, setVouchersModalTinhTrangVouchersOld] = useState();
+  const [VouchersModalTenVouchersOld, setVouchersModalTenVouchersOld] = useState();
+  const [VouchersModalDieuKienVouchersOld, setVouchersModalDieuKienVouchersOld] = useState();
+  const [VouchersModalGiaVouchersOld, setVouchersModalGiaVouchersOld] = useState();
+  const [VouchersModalMoTaVouchersOld, setVouchersModalMoTaVouchersOld] = useState();
+  const [VouchersModalNgayTaoVouchersOld, setVouchersModalNgayTaoVouchersOld] = useState();
+  const [VouchersModalNgayHetHanVouchersOld, setVouchersModalNgayHetHanVouchersOld] = useState();
+
   useEffect(() => {
     // setthuCungModalHinhAnh([]);
     // setthuCungModalHinhAnhChange([]);
-    setHinhAnhMoi([]);
-    const getThuLac = async () => {
+    const getVouchers = async () => {
       try {
-        const thulacres = await axios.post(
-          "http://localhost:3001/api/lostpets/findThuCungLacById",
-          { mathulac: vouchers.mathulac }
+        const vouchersres = await axios.post(
+          "http://localhost:3001/api/vouchers/findVouchersById",
+          { mavoucher: vouchers.mavoucher }
         );
-        console.log("check lac:", thulacres);
-        setthuLacModal(thulacres.data);
-        setthuLacModalMaThuLac(thulacres.data[0].mathulac);
-        setthuLacModalTenThuLac(thulacres.data[0].tenthulac);
-        setthuLacModalTrangThaiThuCung(thulacres.data[0].trangthaithucung);
-        setthuLacModalDacDiem(thulacres.data[0].dacdiem);
-        setthuLacModalMaNguoiMua(thulacres.data[0].manguoimua);
-        setthuLacModalEmailLienHe(thulacres.data[0].emaillienhe);
-        setthuLacModalHoTenLienHe(thulacres.data[0].hotenlienhe);
-        setthuLacModalNgayTao(thulacres.data[0].ngaytao);
-        setthuLacModalSdtLienHe(thulacres.data[0].sdtlienhe);
-        setthuLacModalDiaChiLienHe(thulacres.data[0].diachilienhe);
-        setthuLacModalHinhAnhThuLac(thulacres.data[0].hinhanhthulac);
-        setthuLacModalTenXa(thulacres.data[0].tenxa);
-        setthuLacModalTenQuanHuyen(thulacres.data[0].tenquanhuyen);
-        setthuLacModalTenThanhPho(thulacres.data[0].tenthanhpho);
-        setthuLacModalMaXa(thulacres.data[0].maxa);
-        setthuLacModalMaQuanHuyen(thulacres.data[0].maquanhuyen);
-        setthuLacModalMaThanhPho(thulacres.data[0].mathanhpho);
+        console.log("check vouchers:", vouchersres);
+        setVouchersModal(vouchersres.data);
+        setVouchersModalMaVouchers(vouchersres.data[0].mavoucher);
+        setVouchersModalCodeVouchers(vouchersres.data[0].codevoucher);
+        setVouchersModalTenVouchers(vouchersres.data[0].tenvoucher);
+        setVouchersModalDieuKienVouchers(vouchersres.data[0].dieukienvoucher);
+        setVouchersModalSoLuongVouchers(vouchersres.data[0].soluongvoucher);
+        setVouchersModalTinhTrangVouchers(vouchersres.data[0].tinhtrangvoucher);
+        setVouchersModalGiaVouchers(vouchersres.data[0].giavoucher);
+        setVouchersModalMoTaVouchers(vouchersres.data[0].motavoucher);
+        setVouchersModalNgayTaoVouchers(vouchersres.data[0].ngaytaovoucher);
+        setVouchersModalNgayHetHanVouchers(vouchersres.data[0].ngayhethanvoucher);
 
-        setthuLacModalOld(thulacres.data);
-        setthuLacModalMaThuLacOld(thulacres.data[0].mathulac);
-        setthuLacModalTenThuLacOld(thulacres.data[0].tenthulac);
-        setthuLacModalTrangThaiThuCungOld(thulacres.data[0].trangthaithucung);
-        setthuLacModalDacDiemOld(thulacres.data[0].dacdiem);
-        setthuLacModalMaNguoiMuaOld(thulacres.data[0].manguoimua);
-        setthuLacModalEmailLienHeOld(thulacres.data[0].emaillienhe);
-        setthuLacModalHoTenLienHeOld(thulacres.data[0].hotenlienhe);
-        setthuLacModalNgayTaoOld(thulacres.data[0].ngaytao);
-        setthuLacModalSdtLienHeOld(thulacres.data[0].sdtlienhe);
-        setthuLacModalDiaChiLienHeOld(thulacres.data[0].diachilienhe);
-        setthuLacModalHinhAnhThuLacOld(thulacres.data[0].hinhanhthulac);
-        setthuLacModalTenXaOld(thulacres.data[0].tenxa);
-        setthuLacModalTenQuanHuyenOld(thulacres.data[0].tenquanhuyen);
-        setthuLacModalTenThanhPhoOld(thulacres.data[0].tenthanhpho);
-        setthuLacModalMaXaOld(thulacres.data[0].maxa);
-        setthuLacModalMaQuanHuyenOld(thulacres.data[0].maquanhuyen);
-        setthuLacModalMaThanhPhoOld(thulacres.data[0].mathanhpho);
-        console.log("Nhân viên modal hahaha: ", thuLacModal);
+        setVouchersModalOld(vouchersres.data);
+        setVouchersModalMaVouchersOld(vouchersres.data[0].mavoucher);
+        setVouchersModalCodeVouchersOld(vouchersres.data[0].codevoucher);
+        setVouchersModalTenVouchersOld(vouchersres.data[0].tenvoucher);
+        setVouchersModalDieuKienVouchersOld(vouchersres.data[0].dieukienvoucher);
+        setVouchersModalSoLuongVouchersOld(vouchersres.data[0].soluongvoucher);
+        setVouchersModalTinhTrangVouchersOld(vouchersres.data[0].tinhtrangvoucher);
+        setVouchersModalGiaVouchersOld(vouchersres.data[0].giavoucher);
+        setVouchersModalMoTaVouchersOld(vouchersres.data[0].motavoucher);
+        setVouchersModalNgayTaoVouchersOld(vouchersres.data[0].ngaytaovoucher);
+        setVouchersModalNgayHetHanVouchersOld(vouchersres.data[0].ngayhethanvoucher);
+
+        console.log("Nhân viên modal hahaha: ", VouchersModal);
 
       } catch (err) {
         console.log("Lỗi lấy vouchers: ", err);
       }
     };
-    getThuLac();
+    getVouchers();
   }, [vouchers]);
-  console.log("Nhân viên modal: ", thuLacModal);
+  console.log("Nhân viên modal: ", VouchersModal);
 
-  // Effect Tỉnh - Huyện - Xã cập nhật
-  const [mangTinhThanhPhoUpdate, setMangTinhThanhPhoUpdate] = useState([]);
-  const [mangQuanHuyenUpdate, setMangQuanHuyenUpdate] = useState([]);
-  const [mangXaPhuongThiTranUpdate, setMangXaPhuongThiTranUpdate] = useState(
-    []
-  );
-  useEffect(() => {
-    const getTinhThanhPhoUpdate = async () => {
-      const thanhphores = await axios.post(
-        "http://localhost:3001/api/lostpets/getTinhThanhPho",
-        {}
-      );
-      setMangTinhThanhPhoUpdate(thanhphores.data);
-      console.log("Tỉnh TPUpdate [res]: ", thanhphores.data);
-    };
-    getTinhThanhPhoUpdate();
-  }, []);
-
-  useEffect(() => {
-    const getQuanHuyenUpdate = async () => {
-      const quanhuyenres = await axios.post(
-        "http://localhost:3001/api/lostpets/getQuanHuyen",
-        { mathanhpho: thuLacModalMaThanhPho }
-      );
-      setMangQuanHuyenUpdate(quanhuyenres.data);
-      console.log("Quận huyện Update [res]: ", quanhuyenres.data);
-    };
-    getQuanHuyenUpdate();
-  }, [thuLacModalMaThanhPho]);
-
-  useEffect(() => {
-    const getXaPhuongThiTranUpdate = async () => {
-      const xaphuongthitranres = await axios.post(
-        "http://localhost:3001/api/lostpets/getXaPhuongThiTran",
-        { maquanhuyen: thuLacModalMaQuanHuyen }
-      );
-      setMangXaPhuongThiTranUpdate(xaphuongthitranres.data);
-      console.log("Xã phường Update res: ", xaphuongthitranres.data);
-    };
-    getXaPhuongThiTranUpdate();
-  }, [thuLacModalMaQuanHuyen]);
-
-  // Thay đổi hình ảnh
-  const handleChangeImg = (hinhmoi) => {
-    setthuLacModalHinhAnhThuLacChange("");
-    const hinhanhunique = new Date().getTime() + hinhmoi;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, hinhanhunique);
-    const uploadTask = uploadBytesResumable(storageRef, hinhmoi);
-
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-        }
-      },
-      (error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case "storage/unauthorized":
-            console.log("Người dùng không có quyền truy cập vào đối tượng");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          case "storage/canceled":
-            console.log("Người dùng đã hủy tải lên");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          case "storage/unknown":
-            console.log("Đã xảy ra lỗi không xác định");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          default:
-            console.log("Lỗi không xác định:", error.code);
-          // Có thể cung cấp thông báo cho người dùng ở đây
-        }
-      },
-      () => {
-        // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          try {
-            setthuLacModalHinhAnhThuLacChange(downloadURL);
-          } catch (err) {
-            console.log("Lỗi cập nhật hình ảnh:", err);
-          }
-        });
-      }
-    );
-  };
 
   const handleCloseUpdate = () => {
     // Set lại giá trị cũ sau khi đóng Modal
     // setthuCungModalHinhAnh(thuCungModalHinhAnhOld);
 
-    // setthuLacModalMaThuLac(thuLacModalMaThuLacOld);
-    setthuLacModalTenThuLac(thuLacModalTenThuLacOld);
-    setthuLacModalTrangThaiThuCung(thuLacModalTrangThaiThuCungOld);
-    setthuLacModalDacDiemOld(thuLacModalDacDiemOld);
-    setthuLacModalMaNguoiMuaOld(thuLacModalMaNguoiMuaOld);
-    setthuLacModalMaXa(thuLacModalMaXaOld);
-    setthuLacModalEmailLienHe(thuLacModalEmailLienHeOld);
-    setthuLacModalHoTenLienHe(thuLacModalHoTenLienHeOld);
-    setthuLacModalNgayTao(thuLacModalNgayTaoOld);
-    setthuLacModalSdtLienHe(thuLacModalSdtLienHeOld);
-    setthuLacModalDiaChiLienHe(thuLacModalDiaChiLienHeOld);
-    setthuLacModalHinhAnhThuLac(thuLacModalHinhAnhThuLacOld);
+    // setVouchersModalMaVouchers(VouchersModalMaVouchersOld);
+    setVouchersModalTenVouchers(VouchersModalTenVouchersOld);
+    setVouchersModalCodeVouchers(VouchersModalCodeVouchersOld);
+    setVouchersModalDieuKienVouchers(VouchersModalDieuKienVouchersOld);
+    setVouchersModalSoLuongVouchersOld(VouchersModalSoLuongVouchersOld);
+    setVouchersModalTinhTrangVouchersOld(VouchersModalTinhTrangVouchersOld);
+    setVouchersModalGiaVouchers(VouchersModalGiaVouchersOld);
+    setVouchersModalMoTaVouchers(VouchersModalMoTaVouchersOld);
+    setVouchersModalNgayTaoVouchers(VouchersModalNgayTaoVouchersOld);
+    setVouchersModalNgayHetHanVouchers(VouchersModalNgayHetHanVouchersOld);
 
     setShowModal((prev) => !prev);
     // setHinhAnhMoi([]);  //Đóng modal sẽ xóa mảng hình cũ ở Modal Thêm vouchers
@@ -751,202 +584,80 @@ const Modal = ({
   };
 
   // =============== Xử lý thêm vouchers ===============
-  const [tenThuLacMoi, setTenThuLacMoi] = useState(""); //Giới tính mặc định là "Đực"
-  const [maTrangThaiThuCungMoi, setMaTrangThaiThuCungMoi] = useState("1"); //Danh mục mặc định là Chó
-  const [dacDiemMoi, setDacDiemMoi] = useState("");
-  const [maNguoiMuaMoi, setMaNguoiMuaMoi] = useState("");
-  const [maXaMoi, setMaXaMoi] = useState("00001");
-  const [hoTenLienHeMoi, setHoTenLienHeMoi] = useState("");
-  const [emailLienHeMoi, setEmailLienHeMoi] = useState(""); //Giới tính 
-  const [sdtLienHeMoi, setSdtLienHeMoi] = useState("");
-  const [diaChiLienHeMoi, setDiaChiLienHeMoi] = useState("");
-  const [ngayTaoMoi, setNgayTaoMoi] = useState("");
-  const [hinhAnhMoi, setHinhAnhMoi] = useState(); //Mảng chứa hình ảnh
+  const [tenVouchersMoi, setTenVouchersMoi] = useState("");
+  const [codeVouchersMoi, setCodeVouchersMoi] = useState("");
+  const [dieuKienVouchersMoi, setDieuKienVouchersMoi] = useState("");
+  const [soLuongVouchersMoi, setSoLuongVouchersMoi] = useState("");
+  const [tinhTrangVouchersMoi, settinhTrangVouchersMoi] = useState(1);
+  const [giaVouchersMoi, setGiaVouchersMoi] = useState("");
+  const [moTaVouchersMoi, setMoTaVouchersMoi] = useState("");
+  const [ngayTaoVouchersMoi, setNgayTaoVouchersMoi] = useState("");
+  const [ngayHetHanVochersMoi, setNgayHetHanVouchersMoi] = useState("");
 
-  // Lấy TỈNH - HUYỆN - XÃ
-  const [tinhThanhPho, setTinhThanhPho] = useState();
-  const [quanHuyen, setQuanHuyen] = useState();
-  const [xaPhuongThiTran, setXaPhuongThiTran] = useState();
 
-  const [mangTinhThanhPho, setMangTinhThanhPho] = useState([]);
-  const [mangQuanHuyen, setMangQuanHuyen] = useState([]);
-  const [mangXaPhuongThiTran, setMangXaPhuongThiTran] = useState([]);
-
-  useEffect(() => {
-    const getTinhThanhPho = async () => {
-      const thanhphores = await axios.post(
-        "http://localhost:3001/api/lostpets/getTinhThanhPho",
-        {}
-      );
-      setMangTinhThanhPho(thanhphores.data);
-      console.log("Tỉnh TP [res]: ", thanhphores.data);
-    };
-    getTinhThanhPho();
-  }, []);
-
-  useEffect(() => {
-    const getQuanHuyen = async () => {
-      const quanhuyenres = await axios.post(
-        "http://localhost:3001/api/lostpets/getQuanHuyen",
-        { mathanhpho: tinhThanhPho }
-      );
-      setMangQuanHuyen(quanhuyenres.data);
-      console.log("Quận huyện [res]: ", quanhuyenres.data);
-    };
-    getQuanHuyen();
-  }, [tinhThanhPho]);
-
-  useEffect(() => {
-    const getXaPhuongThiTran = async () => {
-      const xaphuongthitranres = await axios.post(
-        "http://localhost:3001/api/lostpets/getXaPhuongThiTran",
-        { maquanhuyen: quanHuyen }
-      );
-      setMangXaPhuongThiTran(xaphuongthitranres.data);
-      console.log("Xã phường res: ", xaphuongthitranres.data);
-    };
-    getXaPhuongThiTran();
-  }, [quanHuyen]);
-
-  // Thay đổi hình ảnh
-  const handleShowImg = (hinhmoi) => {
-    // Chạy vòng lặp thêm từng hình trong mảng lên firebase rồi lưu vô mảng [hinhAnhMoi] ở modal Thêm vouchers
-    setHinhAnhMoi([]);
-    // console.log("hinh moi: ", hinhmoiarray[i]);
-    const hinhanhunique = new Date().getTime() + hinhmoi;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, hinhanhunique);
-    const uploadTask = uploadBytesResumable(storageRef, hinhmoi);
-
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-        }
-      },
-      (error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case "storage/unauthorized":
-            console.log("Người dùng không có quyền truy cập vào đối tượng");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          case "storage/canceled":
-            console.log("Người dùng đã hủy tải lên");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          case "storage/unknown":
-            console.log("Đã xảy ra lỗi không xác định");
-            // Có thể cung cấp thông báo cho người dùng ở đây
-            break;
-          default:
-            console.log("Lỗi không xác định:", error.code);
-          // Có thể cung cấp thông báo cho người dùng ở đây
-        }
-      },
-      () => {
-        // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          try {
-            setHinhAnhMoi(downloadURL);
-            console.log("Up thành công 1 hình: ", downloadURL);
-          } catch (err) {
-            console.log("Lỗi show hình ảnh:", err);
-          }
-        });
-      }
-    );
-    console.log("Hình mới: ", hinhmoi);
-  };
-
-  const handleThemThuLac = async ({
-    tenthulacmoi,
-    trangthaithucungmoi,
-    dacdiemmoi,
-    manguoimuamoi,
-    maxamoi,
-    hotenlienhemoi,
-    emaillienhemoi,
-    sdtlienhemoi,
-    diachilienhemoi,
-    ngaytaomoi,
-    hinhanhthulacmoi,//Hình đại diện vouchers mới
+  const handleThemVouchers = async ({
+    codevouchermoi,
+    tenvouchermoi,
+    dieukienvouchermoi,
+    soluongvouchermoi,
+    tinhtrangvouchermoi,
+    giavouchermoi,
+    motavouchermoi,
+    ngaytaovouchermoi,
+    ngayhethanvouchermoi,
   }) => {
     console.log("vouchers được thêm mới: ", {
-      tenthulacmoi,
-      trangthaithucungmoi,
-      dacdiemmoi,
-      manguoimuamoi,
-      maxamoi,
-      hotenlienhemoi,
-      emaillienhemoi,
-      sdtlienhemoi,
-      diachilienhemoi,
-      ngaytaomoi,
-      hinhanhthulacmoi, //Hình đại diện vouchers mới
+      codevouchermoi,
+      tenvouchermoi,
+      dieukienvouchermoi,
+      soluongvouchermoi,
+      tinhtrangvouchermoi,
+      giavouchermoi,
+      motavouchermoi,
+      ngaytaovouchermoi,
+      ngayhethanvouchermoi, //Hình đại diện vouchers mới
     });
     if (
-      tenthulacmoi !== "" &&
-      trangthaithucungmoi !== "" &&
-      dacdiemmoi !== "" &&
-      manguoimuamoi !== "" &&
-      maxamoi !== "" &&
-      hotenlienhemoi !== "" &&
-      emaillienhemoi !== "" &&
-      sdtlienhemoi !== "" &&
-      diachilienhemoi !== "" &&
-      ngaytaomoi !== "" &&
-      hinhanhthulacmoi !== ""
+      codevouchermoi !== "" &&
+      tenvouchermoi !== "" &&
+      dieukienvouchermoi !== "" &&
+      soluongvouchermoi !== "" &&
+      tinhtrangvouchermoi !== "" &&
+      giavouchermoi !== "" &&
+      motavouchermoi !== "" &&
+      ngaytaovouchermoi !== "" &&
+      ngayhethanvouchermoi !== ""
     ) {
       try {
-        const insertthulacres = axios.post(
-          "http://localhost:3001/api/lostpets/insertThuCungLac",
+        const insertvouchersres = axios.post(
+          "http://localhost:3001/api/vouchers/insertVouchers",
           {
-            tenthulac: tenthulacmoi,
-            trangthaithucung: trangthaithucungmoi,
-            dacdiem: dacdiemmoi,
-            manguoimua: manguoimuamoi,
-            maxa: maxamoi,
-            hotenlienhe: hotenlienhemoi,
-            emaillienhe: emaillienhemoi,
-            sdtlienhe: sdtlienhemoi,
-            diachilienhe: diachilienhemoi,
-            ngaytao: ngaytaomoi,
-            hinhanhthulac: hinhanhthulacmoi,
+            codevoucher: codevouchermoi,
+            tenvoucher: tenvouchermoi,
+            dieukienvoucher: dieukienvouchermoi,
+            soluongvoucher: soluongvouchermoi,
+            tinhtrangvoucher: tinhtrangvouchermoi,
+            giavoucher: giavouchermoi,
+            motavoucher: motavouchermoi,
+            ngaytaovoucher: ngaytaovouchermoi,
+            ngayhethanvoucher: ngayhethanvouchermoi,
           }
         );
-        console.log("KQ trả về update: ", insertthulacres);
+        console.log("KQ trả về update: ", insertvouchersres);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         const dataShow = {
           message:
-            "Thêm vouchers " + tenthulacmoi + " thành công!",
+            "Thêm vouchers " + codevouchermoi + " thành công!",
           type: "success",
         };
         showToastFromOut(dataShow);
-        setHinhAnhMoi([]); //Làm rỗng mảng hình
-        // setMangQuanHuyen([]);   //Làm rỗng mảng Quận huyện
-        // setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
       } catch (err) {
         console.log("Lỗi insert: ", err);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         const dataShow = {
-          message: "Đã có lỗi khi thêm vouchers " + tenthulacmoi,
+          message: "Đã có lỗi khi thêm vouchers " + codevouchermoi,
           type: "danger",
         };
         showToastFromOut(dataShow); //Hiện toast thông báo
@@ -961,56 +672,21 @@ const Modal = ({
     }
   };
 
-  // State chứa mảng chức vụ - Lấy về chức vụ để hiện select-option
-  const [trangThaiThuCung, setTrangThaiThuCung] = useState([]);
-  useEffect(() => {
-    const getTrangThaiThuCung = async () => {
-      try {
-        const trangthaithures = await axios.post(
-          "http://localhost:3001/api/lostpets/getTrangThaiThu",
-          {}
-        );
-        setTrangThaiThuCung(trangthaithures.data);
-        console.log("Mảng trạng thái vouchers: ", trangThaiThuCung);
-      } catch (err) {
-        console.log("Lỗi lấy trạng thái vouchers: ", err);
-      }
-    };
-    getTrangThaiThuCung();
-  }, [vouchers]);
-
-  // State chứa mảng ma nguoi mua
-  const [maNguoiMua, setMaNguoiMua] = useState([]);
-  useEffect(() => {
-    const getMaNguoiMua = async () => {
-      try {
-        const manguoimuares = await axios.post(
-          "http://localhost:3001/api/lostpets/getMaNguoiMua",
-          {}
-        );
-        setMaNguoiMua(manguoimuares.data);
-        console.log("Mảng trạng thái vouchers: ", maNguoiMua);
-      } catch (err) {
-        console.log("Lỗi lấy trạng thái vouchers: ", err);
-      }
-    };
-    getMaNguoiMua();
-  }, [vouchers]);
 
   // =============== Xử lý xóa vouchers ===============
-  const handleXoaThuLac = async ({ mathulac }) => {
-    if (mathulac !== "") {
+  const handleXoaVouchers = async ({ mavoucher }) => {
+    if (mavoucher !== "") {
       try {
-        const deletethulacres = await axios.post(
-          "http://localhost:3001/api/lostpets/deleteThuCungLac",
-          { mathulac }
+        const deletevouchersres = await axios.post(
+          "http://localhost:3001/api/vouchers/deleteVouchers",
+          { mavoucher }
         );
-        console.log("KQ trả về delete: ", deletethulacres);
+        console.log("KQ trả về delete: ", deletevouchersres);
         setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
         setShowModal((prev) => !prev);
         handleClose(); //Đóng thanh tìm kiếm
         const dataShow = {
-          message: "Đã xóa vouchers mã " + mathulac + " thành công!",
+          message: "Đã xóa vouchers mã " + mavoucher + " thành công!",
           type: "success",
         };
         showToastFromOut(dataShow);
@@ -1023,9 +699,6 @@ const Modal = ({
   // =============== Xử lý Xem chi tiết vouchers ===============
   const handleCloseChiTiet = () => {
     setShowModal((prev) => !prev);
-    setHinhAnhMoi([]); //Đóng modal sẽ xóa mảng hình cũ ở Modal Thêm vouchers
-    setMangQuanHuyen([]); //Làm rỗng mảng Quận huyện
-    setMangXaPhuongThiTran([]); //Làm rỗng mảng Phường xã
   };
   // ================================================================
   //  =============== Xem chi tiết vouchers ===============
@@ -1042,106 +715,68 @@ const Modal = ({
               <ModalForm>
                 <div style={{ display: "flex", marginTop: "15px" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <ImageWrapper>
-                      <ChiTietHinhAnh src={vouchers.hinhanhthulac} />
-                    </ImageWrapper>
-                  </ModalFormItem>
-                  <div style={{ display: "flex", flex: "1" }}>
-                    <ModalFormItem style={{ flex: "1" }}>
-                      <FormSpan>Tên vouchers:</FormSpan>
-                      <FormInput
-                        type="text"
-                        value={vouchers.tenthulac}
-                        readOnly
-                      />
-                    </ModalFormItem>
-                    <ModalFormItem style={{ flex: "1" }}>
-                      <FormSpan>Ngày tạo:</FormSpan>
-                      <FormInput
-                        type="text"
-                        value={vouchers.ngaytao.substring(0, 10)}
-                        readOnly
-                      />
-                    </ModalFormItem>
-                    <ModalFormItem style={{ flex: "1" }}>
-                      <FormSpan>Mã người mua:</FormSpan>
-                      <FormInput
-                        type="text"
-                        value={vouchers.manguoimua}
-                        readOnly
-                      />
-                    </ModalFormItem>
-                  </div>
-                </div>
-                <Position style={{ display: "flex", flex: "1" }}>
-                  <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
-                    <FormSpan>Địa chỉ liên hệ:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={
-                        vouchers.diachilienhe +
-                        ", " +
-                        vouchers.tenxa +
-                        ", " +
-                        vouchers.tenquanhuyen +
-                        ", " +
-                        vouchers.tenthanhpho
-                      }
-                      readOnly
-                    />
+                    <FormSpan>Mã vouchers:</FormSpan>
+                    <FormInput type="text" value={vouchers.mavoucher} readOnly />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Email liên hệ:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={vouchers.emaillienhe}
-                      readOnly
-                    />
-                  </ModalFormItem>
-                </Position>
-                <PositionTwo
-                  style={{
-                    display: "flex",
-                    flex: "1",
-                    marginTop: "15px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <ModalFormItem style={{ flex: "1", marginLeft: "265px" }}>
-                    <FormSpan>Mã vouchers:</FormSpan>
-                    <FormInput type="text" value={vouchers.mathulac} readOnly />
+                    <FormSpan>Code vouchers:</FormSpan>
+                    <FormInput type="text" value={vouchers.codevoucher} readOnly />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
                     <FormSpan>Trạng thái vouchers:</FormSpan>
-                    <FormInput type="text" value={vouchers.tentrangthaithucung} readOnly />
+                    <FormSpan
+                      style={{
+                        color: vouchers.tinhtrangvoucher === 1 ? 'green' : 'red',
+                        fontWeight: 'bold',
+                        marginTop: '12px',
+                        marginLeft: '40px',
+                        fontSize: "22px"
+                      }}
+                    >
+                      {vouchers.tinhtrangvoucher === 1 ? 'active' : 'inactive'}
+                    </FormSpan>
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Tên voucher:</FormSpan>
+                    <FormInput type="text" value={vouchers.tenvoucher} readOnly />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Số điện thoại liên hệ:</FormSpan>
-                    <FormInput
-                      type="text"
-                      value={vouchers.sdtlienhe}
-                      readOnly
-                    />
+                    <FormSpan>Ngày tạo vouchers:</FormSpan>
+                    <FormInput type="text" value={vouchers.ngaytaovoucher.substring(0, 10)} readOnly />
                   </ModalFormItem>
-                </PositionTwo>
-                <PositionThree style={{
-                  display: "flex",
-                  flex: "1",
-                  marginTop: "15px",
-                  marginBottom: "10px",
-                }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormSpan>Ngày hết hạn vouchers:</FormSpan>
+                    <FormInput type="text" value={vouchers.ngayhethanvoucher.substring(0, 10)} readOnly />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số lượng vouchers:</FormSpan>
+                    <FormInput type="text" value={vouchers.soluongvoucher} readOnly />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Giá voucher giảm được:</FormSpan>
+                    <FormInput type="text" value={vouchers.giavoucher} readOnly />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Dùng được cho đơn hàng từ:</FormSpan>
+                    <FormInput type="text" value={vouchers.dieukienvoucher} readOnly />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex", marginTop: "15px" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Mô tả voucher:</FormSpan>
                     <FormTextArea
                       rows="4"
                       cols="50"
-                      onChange={(e) => setthuLacModalDacDiem(e.target.value)}
-                      placeholder="Nhập vào đặc điểm thị vouchers"
-                      value={thuLacModalDacDiem}
+                      placeholder="Nhập vào đặc điểm của vouchers"
+                      value={vouchers.motavoucher}
                       readOnly
                     />
                   </ModalFormItem>
-                </PositionThree>
+                </div>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
@@ -1174,215 +809,97 @@ const Modal = ({
               <ModalForm>
                 <div style={{ display: "flex", marginTop: "15px" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Tên vouchers:</FormSpan>
+                    <FormSpan>Code voucher:</FormSpan>
                     <FormInput
                       type="text"
-                      onChange={(e) => setTenThuLacMoi(e.target.value)}
+                      onChange={(e) => setCodeVouchersMoi(e.target.value)}
+                      placeholder="Code của vouchers"
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Tên voucher:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setTenVouchersMoi(e.target.value)}
                       placeholder="Tên của vouchers"
                     />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Trạng thái vouchers:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setMaTrangThaiThuCungMoi(e.target.value);
-                      }}
-                    >
-                      {trangThaiThuCung.map((item, key) => {
-                        return (
-                          <FormOption value={item.trangthaithucung}>
-                            {" "}
-                            {item.tentrangthaithucung}{" "}
-                          </FormOption>
-                        );
-                      })}
-                    </FormSelect>
+                    <FormSpan>Tình trạng voucher:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => settinhTrangVouchersMoi(e.target.value)}
+                      placeholder="Tình trạng của vouchers"
+                    />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Dùng được cho đơn hàng từ:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setDieuKienVouchersMoi(e.target.value)}
+                    />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Ngày tạo:</FormSpan>
+                    <FormSpan>Ngày tạo voucher:</FormSpan>
                     <FormInput
                       type="date"
-                      onChange={(e) => setNgayTaoMoi(e.target.value)}
+                      onChange={(e) => setNgayTaoVouchersMoi(e.target.value)}
                     />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Mã người mua:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setMaNguoiMuaMoi(e.target.value);
-                      }}
-                    >
-                      {maNguoiMua.map((item, key) => {
-                        return (
-                          <FormOption value={item.manguoimua}>
-                            {" "}
-                            {item.manguoimua}{" "}
-                          </FormOption>
-                        );
-                      })}
-                    </FormSelect>
-                  </ModalFormItem>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc tỉnh:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setTinhThanhPho(e.target.value);
-                      }}
-                    >
-                      <FormOption value="">-- Chọn thành phố --</FormOption>
-                      {mangTinhThanhPho.map((tinhthanhpho, key) => {
-                        return (
-                          <FormOption value={tinhthanhpho.mathanhpho}>
-                            {" "}
-                            {tinhthanhpho.tenthanhpho}{" "}
-                          </FormOption>
-                        );
-                      })}
-                    </FormSelect>
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc huyện:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setQuanHuyen(e.target.value);
-                      }}
-                    >
-                      {mangQuanHuyen.length > 0 ? (
-                        mangQuanHuyen.map((quanhuyen, key) => {
-                          return (
-                            <FormOption value={quanhuyen.maquanhuyen}>
-                              {" "}
-                              {quanhuyen.tenquanhuyen}{" "}
-                            </FormOption>
-                          );
-                        })
-                      ) : (
-                        <FormOption value="">
-                          -- Bạn chưa chọn Thành phố --{" "}
-                        </FormOption>
-                      )}
-                    </FormSelect>
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc xã:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setXaPhuongThiTran(e.target.value);
-                      }}
-                    >
-                      {mangXaPhuongThiTran.length > 0 ? (
-                        mangXaPhuongThiTran.map((xaphuong, key) => {
-                          return (
-                            <FormOption value={xaphuong.maxa}>
-                              {" "}
-                              {xaphuong.tenxa}{" "}
-                            </FormOption>
-                          );
-                        })
-                      ) : (
-                        <FormOption value="">
-                          -- Bạn chưa chọn Huyện --{" "}
-                        </FormOption>
-                      )}
-                    </FormSelect>
-                  </ModalFormItem>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Địa chỉ:</FormSpan>
+                    <FormSpan>Ngày hết hạn voucher:</FormSpan>
                     <FormInput
-                      type="text"
-                      onChange={(e) => setDiaChiLienHeMoi(e.target.value)}
-                      placeholder="Địa chỉ liên hệ"
-                    />
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Email:</FormSpan>
-                    <FormInput
-                      type="email"
-                      onChange={(e) => setEmailLienHeMoi(e.target.value)}
-                      placeholder="Email liên hệ"
-                    />
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Số điện thoại:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setSdtLienHeMoi(e.target.value)}
-                      placeholder="Số điện thoại liên hệ"
-                    />
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Họ tên chủ:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setHoTenLienHeMoi(e.target.value)}
-                      placeholder="Họ tên chủ"
+                      type="date"
+                      onChange={(e) => setNgayHetHanVouchersMoi(e.target.value)}
                     />
                   </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormSpan>Giá voucher giảm được:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setGiaVouchersMoi(e.target.value)}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số lượng voucher:</FormSpan>
+                    <FormInput
+                      type="number"
+                      min="1"
+                      onChange={(e) => setSoLuongVouchersMoi(e.target.value)}
+                    />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Mô tả voucher:</FormSpan>
                     <FormTextArea
                       rows="4"
                       cols="50"
-                      onChange={(e) => setDacDiemMoi(e.target.value)}
-                      placeholder="Nhập vào đặc điểm vouchers"
-                      // value={thuLacModalDacDiem}
+                      onChange={(e) => setMoTaVouchersMoi(e.target.value)}
+                      placeholder="Nhập vào mô tả vouchers"
+                    // value={VouchersModalSoLuongVouchers}
                     />
                   </ModalFormItem>
                 </div>
-                <ModalFormItem>
-                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
-                  <ImageWrapper>
-                    {hinhAnhMoi != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
-                      <ChiTietHinhAnh src={hinhAnhMoi} />
-                    ) : (
-                      //Khi mảng hình trống thì hiện No Available Image
-                      <ChiTietHinhAnh
-                        src={
-                          "https://firebasestorage.googleapis.com/v0/b/kiet-kimoonpets.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=c656488d-0993-4bd5-8f96-c324277e2f5c"
-                        }
-                      />
-                    )}
-                  </ImageWrapper>
-                  <FormLabel>
-                    <Label htmlFor="imageInput">
-                      <ButtonImageContainer>
-                        <ButtonImage>
-                          <AddPhotoAlternateIcon />
-                          Thêm hình ảnh
-                        </ButtonImage>
-                      </ButtonImageContainer>
-                    </Label>
-                    <FormInput
-                      type="file"
-                      onChange={(e) => handleShowImg(e.target.files[0])}
-                      id="imageInput"
-                      style={{ display: "none" }}
-                    />
-                  </FormLabel>
-                </ModalFormItem>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
                   <ButtonClick
                     onClick={() =>
-                      handleThemThuLac({
-                        tenthulacmoi: tenThuLacMoi,
-                        trangthaithucungmoi: maTrangThaiThuCungMoi,
-                        dacdiemmoi: dacDiemMoi,
-                        manguoimuamoi: maNguoiMuaMoi,
-                        maxamoi: xaPhuongThiTran,
-                        hotenlienhemoi: hoTenLienHeMoi,
-                        emaillienhemoi: emailLienHeMoi,
-                        sdtlienhemoi: sdtLienHeMoi,
-                        diachilienhemoi: diaChiLienHeMoi,
-                        ngaytaomoi: ngayTaoMoi,
-                        hinhanhthulacmoi: hinhAnhMoi,
+                      handleThemVouchers({
+                        tenvouchermoi: tenVouchersMoi,
+                        codevouchermoi: codeVouchersMoi,
+                        dieukienvouchermoi: dieuKienVouchersMoi,
+                        soluongvouchermoi: soLuongVouchersMoi,
+                        tinhtrangvouchermoi: tinhTrangVouchersMoi,
+                        giavouchermoi: giaVouchersMoi,
+                        motavouchermoi: moTaVouchersMoi,
+                        ngaytaovouchermoi: ngayTaoVouchersMoi,
+                        ngayhethanvouchermoi: ngayHetHanVochersMoi,
                       })
                     }
                   >
@@ -1421,265 +938,113 @@ const Modal = ({
               <ModalForm>
                 <div style={{ display: "flex", marginTop: "15px" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Tên vouchers:</FormSpan>
+                    <FormSpan>Code voucher:</FormSpan>
                     <FormInput
                       type="text"
                       onChange={(e) =>
-                        setthuLacModalTenThuLac(e.target.value)
+                        setVouchersModalCodeVouchers(e.target.value)
                       }
-                      value={thuLacModalTenThuLac}
+                      value={VouchersModalCodeVouchers}
                     />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Họ tên chủ:</FormSpan>
+                    <FormSpan>Tên voucher:</FormSpan>
                     <FormInput
                       type="text"
-                      onChange={(e) => setHoTenLienHeMoi(e.target.value)}
-                      value={thuLacModalHoTenLienHe}
+                      onChange={(e) =>
+                        setVouchersModalTenVouchers(e.target.value)
+                      }
+                      value={VouchersModalTenVouchers}
                     />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Trạng thái vouchers:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setthuLacModalTrangThaiThuCung(e.target.value);
-                      }}
-                    >
-                      {trangThaiThuCung.map((item, key) => {
-                        if (item.trangthaithucung === thuLacModalTrangThaiThuCung) {
-                          return (
-                            <FormOption value={item.trangthaithucung} selected>
-                              {" "}
-                              {item.tentrangthaithucung}{" "}
-                            </FormOption>
-                          );
-                        } else {
-                          return (
-                            <FormOption value={item.trangthaithucung}>
-                              {" "}
-                              {item.tentrangthaithucung}{" "}
-                            </FormOption>
-                          );
-                        }
-                      })}
-                    </FormSelect>
+                    <FormSpan>Tình trạng voucher:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) =>
+                        setVouchersModalTinhTrangVouchers(e.target.value)
+                      }
+                      value={VouchersModalTinhTrangVouchers}
+                    />
+                  </ModalFormItem>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Dùng được cho đơn hàng từ:</FormSpan>
+                    <FormInput
+                      type="text"
+                      onChange={(e) => setVouchersModalDieuKienVouchers(e.target.value)}
+                      value={VouchersModalDieuKienVouchers}
+                    />
                   </ModalFormItem>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Ngày tạo:</FormSpan>
+                    <FormSpan>Ngày tạo voucher:</FormSpan>
                     <FormInput
                       type="date"
-                      onChange={(e) => setthuLacModalNgayTao(e.target.value)}
-                      value={thuLacModalNgayTao}
+                      onChange={(e) => setVouchersModalNgayTaoVouchers(e.target.value)}
+                      value={VouchersModalNgayTaoVouchers}
                     />
                   </ModalFormItem>
-                </div>
-                <div style={{ display: "flex" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc tỉnh:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setthuLacModalMaThanhPho(e.target.value);
-                      }}
-                    >
-                      <FormOption value="">-- Chọn thành phố --</FormOption>
-                      {mangTinhThanhPhoUpdate.map((tinhthanhpho, key) => {
-                        if (
-                          tinhthanhpho.tenthanhpho === thuLacModalTenThanhPho
-                        ) {
-                          return (
-                            <FormOption
-                              value={tinhthanhpho.mathanhpho}
-                              selected
-                            >
-                              {" "}
-                              {tinhthanhpho.tenthanhpho}{" "}
-                            </FormOption>
-                          );
-                        } else {
-                          return (
-                            <FormOption value={tinhthanhpho.mathanhpho}>
-                              {" "}
-                              {tinhthanhpho.tenthanhpho}{" "}
-                            </FormOption>
-                          );
-                        }
-                      })}
-                    </FormSelect>
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc huyện:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setthuLacModalMaQuanHuyen(e.target.value);
-                      }}
-                    >
-                      {mangQuanHuyenUpdate.length > 0 ? (
-                        mangQuanHuyenUpdate.map((quanhuyen, key) => {
-                          if (
-                            quanhuyen.tenquanhuyen === thuLacModalTenQuanHuyen
-                          ) {
-                            return (
-                              <FormOption
-                                value={quanhuyen.maquanhuyen}
-                                selected
-                              >
-                                {" "}
-                                {quanhuyen.tenquanhuyen}{" "}
-                              </FormOption>
-                            );
-                          } else {
-                            return (
-                              <FormOption value={quanhuyen.maquanhuyen}>
-                                {" "}
-                                {quanhuyen.tenquanhuyen}{" "}
-                              </FormOption>
-                            );
-                          }
-                        })
-                      ) : (
-                        <FormOption value="">
-                          -- Bạn chưa chọn Thành phố --{" "}
-                        </FormOption>
-                      )}
-                    </FormSelect>
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Thuộc xã:</FormSpan>
-                    <FormSelect
-                      onChange={(e) => {
-                        setthuLacModalMaXa(e.target.value);
-                      }}
-                    >
-                      {mangXaPhuongThiTranUpdate.length > 0 ? (
-                        mangXaPhuongThiTranUpdate.map((xaphuong, key) => {
-                          if (xaphuong.tenxa === thuLacModalTenXa) {
-                            return (
-                              <FormOption value={xaphuong.maxa} selected>
-                                {" "}
-                                {xaphuong.tenxa}{" "}
-                              </FormOption>
-                            );
-                          } else {
-                            return (
-                              <FormOption value={xaphuong.maxa}>
-                                {" "}
-                                {xaphuong.tenxa}{" "}
-                              </FormOption>
-                            );
-                          }
-                        })
-                      ) : (
-                        <FormOption value="">
-                          -- Bạn chưa chọn Huyện{" "}
-                        </FormOption>
-                      )}
-                    </FormSelect>
-                  </ModalFormItem>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Email:</FormSpan>
+                    <FormSpan>Ngày hết hạn voucher:</FormSpan>
                     <FormInput
-                      type="email"
-                      onChange={(e) => setthuLacModalEmailLienHe(e.target.value)}
-                      value={thuLacModalEmailLienHe}
-                    />
-                  </ModalFormItem>
-                  <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Số điện thoại:</FormSpan>
-                    <FormInput
-                      type="text"
-                      onChange={(e) => setthuLacModalSdtLienHe(e.target.value)}
-                      value={thuLacModalSdtLienHe}
+                      type="date"
+                      onChange={(e) => setVouchersModalNgayHetHanVouchers(e.target.value)}
+                      value={VouchersModalNgayHetHanVouchers}
                     />
                   </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Địa chỉ:</FormSpan>
+                    <FormSpan>Giá voucher giảm được:</FormSpan>
                     <FormInput
                       type="text"
                       onChange={(e) =>
-                        setthuLacModalDiaChiLienHe(e.target.value)
+                        setVouchersModalGiaVouchers(e.target.value)
                       }
-                      value={thuLacModalDiaChiLienHe}
+                      value={VouchersModalGiaVouchers}
+                    />
+                  </ModalFormItem>
+                  <ModalFormItem style={{ flex: "1" }}>
+                    <FormSpan>Số lượng voucher:</FormSpan>
+                    <FormInput
+                      type="number"
+                      min="1"
+                      onChange={(e) =>
+                        setVouchersModalSoLuongVouchers(e.target.value)
+                      }
+                      value={VouchersModalSoLuongVouchers}
                     />
                   </ModalFormItem>
                 </div>
                 <div style={{ display: "flex" }}>
                   <ModalFormItem style={{ flex: "1" }}>
-                    <FormSpan>Đặc điểm:</FormSpan>
+                    <FormSpan>Mô tả voucher:</FormSpan>
                     <FormTextArea
                       rows="4"
                       cols="50"
-                      onChange={(e) => setthuLacModalDacDiem(e.target.value)}
-                      placeholder="Nhập vào đặc điểm thị vouchers"
-                      value={thuLacModalDacDiem}
+                      onChange={(e) => setVouchersModalMoTaVouchers(e.target.value)}
+                      placeholder="Nhập vào mô tả của vouchers"
+                      value={VouchersModalMoTaVouchers}
                     />
                   </ModalFormItem>
                 </div>
-                <ModalFormItem>
-                  {/* <FormSpan>Hình ảnh:</FormSpan> */}
-                  <ImageWrapper>
-                    {thuLacModalHinhAnhThuLacChange != "" ? ( //Khi mảng hình có hình thì hiện các hình trong mảng
-                      <ChiTietHinhAnh src={thuLacModalHinhAnhThuLacChange} />
-                    ) : (
-                      //Khi mảng hình trống thì hiện No Available Image
-                      <ChiTietHinhAnh src={thuLacModalHinhAnhThuLac} />
-                    )}
-                  </ImageWrapper>
-                  <FormLabel>
-                    <Label htmlFor="imageInput">
-                      <ButtonImageContainer>
-                        <ButtonImage>
-                          <AddPhotoAlternateIcon />
-                          Thêm hình ảnh
-                        </ButtonImage>
-                      </ButtonImageContainer>
-                    </Label>
-                    <FormInput
-                      type="file"
-                      onChange={(e) => handleChangeImg(e.target.files[0])}
-                      id="imageInput"
-                      style={{ display: "none" }}
-                    />
-                  </FormLabel>
-                </ModalFormItem>
               </ModalForm>
               <ButtonUpdate>
                 <ButtonContainer>
                   <ButtonClick
-                    // onClick={() => handleCapNhatThuCung({
-                    //     mathucung: thucung.mathucung,
-                    //     madanhmucmoi: thuCungModalMaDanhMuc,
-                    //     tenthucungmoi: thuCungModalTenThuCung,
-                    //     gioitinhthucungmoi: thuCungModalGioiTinhThuCung,
-                    //     tuoithucungmoi: thuCungModalTuoiThuCung,
-                    //     datiemchungmoi: thuCungModalDaTiemChung,
-                    //     baohanhsuckhoemoi: thuCungModalBaoHanhSucKhoe,
-                    //     tieudemoi: thuCungModalTieuDe,
-                    //     motamoi: thuCungModalMoTa,
-                    //     ghichumoi: thuCungModalGhiChu,
-                    //     soluongmoi: thuCungModalSoLuong,
-                    //     giabanmoi: thuCungModalGiaBan,
-                    //     giamgiamoi: thuCungModalGiamGia,
-                    //     thucungmodalhinganhchange: thuCungModalHinhAnhChange,
-                    //     thucungmodalhinhanh: thuCungModalHinhAnh,
-                    // })}
                     onClick={() => {
-                      handleCapNhatThuLac({
-                        mathulac: thuLacModalMaThuLac,
-                        tenthulacmoi: thuLacModalTenThuLac,
-                        trangthaithucungmoi: thuLacModalTrangThaiThuCung,
-                        dacdiemmoi: thuLacModalDacDiem,
-                        maxamoi: thuLacModalMaXa,
-                        hotenlienhemoi: thuLacModalHoTenLienHe,
-                        emaillienhemoi: thuLacModalEmailLienHe,
-                        sdtlienhemoi: thuLacModalSdtLienHe,
-                        diachilienhemoi: thuLacModalDiaChiLienHe,
-                        ngaytaomoi: thuLacModalNgayTao,
-                        hinhanhthulacmoi: thuLacModalHinhAnhThuLac,
-                        hinhanhthulacmoichange: thuLacModalHinhAnhThuLacChange,
+                      handleCapNhatVouchers({
+                        mavoucher: VouchersModalMaVouchers,
+                        codevouchermoi: VouchersModalCodeVouchers,
+                        tenvouchermoi: VouchersModalTenVouchers,
+                        dieukienvouchermoi: VouchersModalDieuKienVouchers,
+                        soluongvouchermoi: VouchersModalSoLuongVouchers,
+                        tinhtrangvouchermoi: VouchersModalTinhTrangVouchers,
+                        motavouchermoi: VouchersModalMoTaVouchers,
+                        giavouchermoi: VouchersModalGiaVouchers,
+                        ngaytaovouchermoi: VouchersModalNgayTaoVouchers,
+                        ngayhethanvouchermoi: VouchersModalNgayHetHanVouchers,
                       });
                     }}
                   >
@@ -1725,7 +1090,7 @@ const Modal = ({
                 <h2>
                   Bạn muốn xóa vouchers có mã{" "}
                   <span style={{ color: `var(--color-primary)` }}>
-                    {vouchers.mathulac}
+                    {vouchers.mavoucher}
                   </span>{" "}
                   này?
                 </h2>
@@ -1736,7 +1101,7 @@ const Modal = ({
                   <ButtonContainer>
                     <ButtonClick
                       onClick={() => {
-                        handleXoaThuLac({ mathulac: vouchers.mathulac });
+                        handleXoaVouchers({ mavoucher: vouchers.mavoucher });
                       }}
                     >
                       Đồng ý

@@ -160,7 +160,7 @@ const DonHangRight = ({ reRenderData, setReRenderData }) => {
     <Container>
       <RightTop />
       <SalesAnalytics>
-        <H2>Orders Analytics</H2>
+        <H2>Phân tích đơn hàng</H2>
         <Item className="online">
           <Icon>
             <CategoryOutlined />

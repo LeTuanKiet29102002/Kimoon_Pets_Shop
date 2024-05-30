@@ -309,18 +309,20 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
             try {
                 const vouchersres = await axios.post("http://localhost:3001/api/vouchers/getVouchers", {});
                 console.log("check thu vouchers: ", vouchersres);
-
-                getVouchers(vouchersres.data);
+                setVouchers(vouchersres.data);
+                // Xử lý dữ liệu vouchersres.data tại đây
+                // ví dụ: setState hoặc bất kỳ hành động nào bạn muốn thực hiện với dữ liệu
             } catch (err) {
                 console.log("Lỗi lấy Vouchers: ", err);
             }
         }
         getVouchers();
     }, [reRenderData]);
+    
     useEffect(() => {
         const timVouchers = async () => {
             try {
-                const ketquares = await axios.post("http://localhost:3001/api/vouchers/findVouchers", { tenvoucher: timkiem });
+                const ketquares = await axios.post("http://localhost:3001/api/vouchers/findVouchers", { codevoucher: timkiem });
                 setVouchers(ketquares.data);
                 console.log("Kết quả tìm trong effect: ", ketquares.data);
             } catch (err) {
@@ -335,12 +337,12 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
     // Modal
     const [showModal, setShowModal] = useState(false);
     const [typeModal, setTypeModal] = useState("")
-    const [thuLacModal, setThuLacModal] = useState(null);
+    const [vouchersModal, setVouchersModal] = useState(null);
 
     const openModal = (modal) => {
         setShowModal(prev => !prev);
         setTypeModal(modal.type);
-        setThuLacModal(modal.vouchers);
+        setVouchersModal(modal.vouchers);
     }
 
     // ===== TOAST =====
@@ -377,8 +379,8 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
                         )}
                     </Td>
                     <Td>{vouchersitem.giavoucher}</Td>
-                    <Td>{vouchersitem.ngaytaovoucher}</Td>
-                    <Td>{vouchersitem.ngayhethanvoucher}</Td>
+                    <Td>{vouchersitem.ngaytaovoucher.substring(0, 10)}</Td>
+                    <Td>{vouchersitem.ngayhethanvoucher.substring(0, 10)}</Td>
                     <Td className="info">
                         <ButtonInfo
                             onClick={() => openModal({ type: "chitietvouchers", vouchers: vouchersitem })}
@@ -498,8 +500,8 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
                                             )}
                                         </Td>
                                         <Td>{vouchersitem.giavoucher}</Td>
-                                        <Td>{vouchersitem.ngaytaovoucher}</Td>
-                                        <Td>{vouchersitem.ngayhethanvoucher}</Td>
+                                        <Td>{vouchersitem.ngaytaovoucher.substring(0, 10)}</Td>
+                                        <Td>{vouchersitem.ngayhethanvoucher.substring(0, 10)}</Td>
                                         <Td className="info">
                                             <ButtonInfo
                                                 onClick={() => openModal({ type: "chitietvouchers", vouchers: vouchersitem })}
@@ -516,14 +518,14 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
                                                     <>
                                                         <Td className="warning">
                                                             <ButtonFix
-                                                                onClick={() => openModal({ type: "chinhsuathulac", vouchers: vouchersitem })}
+                                                                onClick={() => openModal({ type: "chinhsuavouchers", vouchers: vouchersitem })}
                                                             >
                                                                 <DriveFileRenameOutlineOutlined />
                                                             </ButtonFix>
                                                         </Td>
                                                         <Td className="primary">
                                                             <ButtonDelete
-                                                                onClick={() => openModal({ type: "xoathulac", vouchers: vouchersitem })}
+                                                                onClick={() => openModal({ type: "xoavouchers", vouchers: vouchersitem })}
                                                             >
                                                                 <DeleteSweepOutlined />
                                                             </ButtonDelete>
@@ -574,7 +576,7 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
                 showModal={showModal}   //state Đóng mở modal
                 setShowModal={setShowModal} //Hàm Đóng mở modal
                 type={typeModal}    //Loại modal
-                vouchers={thuLacModal}  //Dữ liệu bên trong modal
+                vouchers={vouchersModal}  //Dữ liệu bên trong modal
                 setReRenderData={setReRenderData}   //Hàm rerender khi dữ liệu thay đổi
                 handleClose={handleClose}   //Đóng tìm kiếm
                 showToastFromOut={showToastFromOut} //Hàm hiện toast
@@ -588,7 +590,6 @@ const VouchersMain = ({ reRenderData, setReRenderData }) => {
         </Container>
     );
 };
-
 
 
 export default VouchersMain;

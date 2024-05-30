@@ -223,8 +223,8 @@ const FeedBack = () => {
         <IconLeft src={Left} /><P1>Số lượng thú cưng đa dạng lên tới</P1><RunningNumberContainer>{numberPets}+</RunningNumberContainer>
         <IconRight src={Right} /><P1>Số lượng khách mua hàng lên tới</P1><RunningNumberContainer>{numberPerson}+</RunningNumberContainer>
       </HeaderContent>
-      <P2>Our customers say <strong>Excellent </strong>🌕🌕🌕🌕🌖
-        4.8 out of 5 based on 1,691 reviews</P2>
+      <P2>Khách hàng của chúng tôi nói <strong>xuất sắc </strong>🌕🌕🌕🌕🌖
+        4.8 trên 5 dựa trên 1.691 đánh giá</P2>
       <Slider className="slick-slider" {...settings}>
         {feedback.map((item, index) => (
           <ItemFeedBack key={index} className="item">

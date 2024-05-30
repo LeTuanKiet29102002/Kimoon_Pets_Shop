@@ -160,7 +160,7 @@ const DanhMucRight = ({ reRenderData, setReRenderData }) => {
     <Container>
       <RightTop />
       <SalesAnalytics>
-        <H2>Categories Analytics</H2>
+        <H2>Phân tích danh mục</H2>
         <Item className="online">
           <Icon>
             <CategoryOutlined />

@@ -87,7 +87,7 @@ router.post('/payment', async (req, res) => {
     amount: totalAmount,
     description: `Kimoon Pets - Payment for the order #${transID} by ${user.hotennguoimua}`,
     bank_code: '',
-    callback_url: 'https://dbdb-2001-ee0-1a57-6420-8070-17e6-f8a0-45b8.ngrok-free.app/api/zalopay/callback',
+    callback_url: 'https://eec0-113-185-54-224.ngrok-free.app/api/zalopay/callback',
   };
 
   console.log('check order:', order);

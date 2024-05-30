@@ -164,7 +164,7 @@ const VouchersRight = ({ reRenderData, setReRenderData }) => {
     <Container>
       <RightTop />
       <SalesAnalytics>
-        <H2>Vouchers Analytics</H2>
+        <H2>Phân tích vouchers</H2>
         <Item className="online">
           <Icon>
             <CategoryOutlined />

@@ -301,7 +301,7 @@ const Right = () => {
       {/* END OF TOP */}
 
       <RecentUpdates>
-        <H2>Recent Updates</H2>
+        <H2>Cập nhật gần đây</H2>
         <Updates>
           {adminLog
             ? adminLog.map((log, key) => {
@@ -324,7 +324,7 @@ const Right = () => {
       {/* END OF RECENT UPDATES */}
 
       <SalesAnalytics>
-        <H2>Sales Analytics</H2>
+        <H2>Phân tích bán hàng</H2>
         <Item className="online">
           <Icon>
             <ShoppingCart />

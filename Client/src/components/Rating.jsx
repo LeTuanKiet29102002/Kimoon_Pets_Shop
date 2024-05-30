@@ -306,6 +306,7 @@ const RatingStar = () => {
     const toastRef = useRef(null);  // useRef có thể gọi các hàm bên trong của Toast
     // bằng các dom event, javascript, ...
 
+
     const showToastFromOut = (dataShow) => {
         console.log("showToastFromOut da chay", dataShow);
         setDataToast(dataShow);
@@ -334,34 +335,24 @@ const RatingStar = () => {
     const [value, setValue] = useState(0);
     const [hover, setHover] = useState(-1);
 
-    useEffect(() => {
-        const getRateFeedBack = async () => {
-            try {
-                const res = await axios.post(
-                    "http://localhost:3001/api/feedback/getFeedback", {}
-                );
-                setRateFeedBack(res.data);
-                // Clear interval nếu intervalId tồn tại
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    setIntervalId(null); // Đặt lại intervalId
-                }
-            } catch (err) {
-                console.log("Error occurred:", err);
+    const getRateFeedBack = async () => {
+        try {
+            const res = await axios.post(
+                "http://localhost:3001/api/feedback/getFeedback", {}
+            );
+            setRateFeedBack(res.data);
+            // Clear interval nếu intervalId tồn tại
+            if (intervalId) {
+                clearInterval(intervalId);
+                setIntervalId(null); // Đặt lại intervalId
             }
-        };
+        } catch (err) {
+            console.log("Error occurred:", err);
+        }
+    };
 
+    useEffect(() => {
         getRateFeedBack();
-        // const id = setInterval(() => {
-        //     getRateFeedBack();
-        // }, 3000); // Thực hiện gọi lại mỗi 3 giây, bạn có thể điều chỉnh thời gian tùy ý
-        // setIntervalId(id); // Lưu trữ intervalId
-
-        // return () => {
-        //     if (id) {
-        //         clearInterval(id);
-        //     }
-        // };
     }, []);
 
     useEffect(() => {
@@ -381,27 +372,10 @@ const RatingStar = () => {
         };
 
         getRate();
-        // const id = setInterval(() => {
-        //     getRate();
-        // }, 3000); // Thực hiện gọi lại mỗi 3 giây, bạn có thể điều chỉnh thời gian tùy ý
-        // setIntervalId(id); // Lưu trữ intervalId
+    }, [rateFeedBack]); // Đặt dependency là mathucung để useEffect chạy lại khi mathucung thay đổi
 
-        // return () => {
-        //     if (id) {
-        //         clearInterval(id);
-        //     }
-        // };
-        // Gọi hàm getRate mỗi khi mathucung thay đổi
-        // getRate();
-
-        // // Đảm bảo cập nhật dữ liệu mỗi khi mathucung thay đổi
-        // const intervalId = setInterval(() => {
-        //     getRate();
-        // }, 3000); // Thực hiện gọi lại mỗi 5 giây, bạn có thể điều chỉnh thời gian tùy ý
-
-        // // Clear interval khi component unmount
-        // return () => clearInterval(intervalId);
-    }, [mathucung]); // Đặt dependency là mathucung để useEffect chạy lại khi mathucung thay đổi
+    useEffect(() => {
+    }, [rateFeedBack]);
 
     useEffect(() => {
         const getNumberRate = async () => {
@@ -418,19 +392,9 @@ const RatingStar = () => {
                 console.log("Error occurred:", err);
             }
         };
-        // getNumberRate();
-        getNumberRate();
-        // const id = setInterval(() => {
-        //     getNumberRate();
-        // }, 3000); // Thực hiện gọi lại mỗi 3 giây, bạn có thể điều chỉnh thời gian tùy ý
-        // setIntervalId(id); // Lưu trữ intervalId
 
-        // return () => {
-        //     if (id) {
-        //         clearInterval(id);
-        //     }
-        // };
-    }, [mathucung]);
+        getNumberRate();
+    }, [rateFeedBack]);
 
     console.log("check All Rating", rateFeedBack);
 
@@ -509,7 +473,7 @@ const RatingStar = () => {
                     }
                 );
                 console.log("KQ trả về update: ", insertfeedbackres);
-                // setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
+                
                 // setShowModal((prev) => !prev);
                 const dataShow = {
                     message:
@@ -517,10 +481,10 @@ const RatingStar = () => {
                     type: "success",
                 };
                 showToastFromOut(dataShow);
+                getRateFeedBack();
                 setShowModal(false);
             } catch (err) {
                 console.log("Lỗi insert: ", err);
-                // setReRenderData((prev) => !prev); //Render lại csdl ở Compo cha là - DanhMucMain & DanhMucRight.jsx
                 // setShowModal((prev) => !prev);
                 const dataShow = {
                     message: "Đã có lỗi khi thêm feedback ",
@@ -596,6 +560,7 @@ const RatingStar = () => {
                         mathucungmoi,
                     });
                     console.log("KQ trả về update: ", resupdate);
+                    getRateFeedBack()
                     setShowModalEdit(false);
                     const dataShow = {
                         message: "Thay đổi feedback có mã " + feedback_id + " thành công!",
@@ -684,6 +649,7 @@ const RatingStar = () => {
                 console.log('check is user:', isUserRate);
                 if (isUserRate) {
                     const resDelete = await axios.post("http://localhost:3001/api/feedback/deleteFeedBack", { feedback_id, mathucung, manguoimua });
+                    getRateFeedBack();
                     const dataShow = {
                         message: "Bạn đã xóa comment thành công",
                         type: "success",
@@ -696,6 +662,8 @@ const RatingStar = () => {
                             message: "Bạn đã xóa comment thành công",
                             type: "success",
                         };
+                        getRateFeedBack();
+                        // setReRenderData((prev) => !prev);
                         showToastFromOut(dataShow); //Hiện toast thông báo
                     } else {
                         // Nếu không có dữ liệu trả về hoặc dữ liệu trả về rỗng, giữ nguyên danh sách bình luận hiện tại
@@ -704,6 +672,7 @@ const RatingStar = () => {
                             message: "Bạn đã xóa comment thành công",
                             type: "success",
                         };
+                        // setReRenderData((prev) => !prev);
                         showToastFromOut(dataShow); //Hiện toast thông báo
                     }
                 } else {
@@ -732,7 +701,7 @@ const RatingStar = () => {
 
 
     return (
-        <Container>
+        <Container >
             <H4>Đánh giá thú cưng {numberRate ? numberRate.tenthucung : ''}</H4>
             {
                 user ?

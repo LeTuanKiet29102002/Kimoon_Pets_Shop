@@ -324,7 +324,7 @@ const ThuCungRight = ({ reRenderData, setReRenderData }) => {
     <Container>
       <RightTop />
       <SalesAnalytics>
-        <H2>Pets Analytics</H2>
+        <H2>Phân tích thú cưng</H2>
         <Item className="online">
           <Icon>
             <CategoryOutlined />
